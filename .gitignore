@@ -1,0 +1,52 @@
+# ---- Java / Maven (backend) ----
+target/
+*.class
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+.factorypath
+
+# ---- Node / React (web-frontend) ----
+node_modules/
+dist/
+build/
+.vite/
+.env
+.env.local
+
+# ---- Python (ai-service) ----
+venv/
+__pycache__/
+*.pyc
+.env
+.pytest_cache/
+
+# ---- Flutter / Dart (mobile) ----
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+build/
+*.g.dart
+
+# ---- Android / Kotlin (native mobile) ----
+local.properties
+.gradle/
+/captures
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# ---- IDE / Editör ----
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# ---- Genel ----
+*.log
+.env

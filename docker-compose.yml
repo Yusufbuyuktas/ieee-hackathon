@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: ergene-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ergene_db
+      POSTGRES_USER: ergene_user
+      POSTGRES_PASSWORD: ergene_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # HAPI FHIR imajı varsayılan olarak kendi içinde H2 veritabanı kullanır.
+  # Hackathon kapsamında bu yeterli, ayrıca Postgres'e bağlamaya gerek yok.
+  hapi-fhir:
+    image: hapiproject/hapi:latest
+    container_name: ergene-fhir
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+
+  # Hazırlık aşamasında backend/Dockerfile sadece /health endpoint'ini
+  # ayağa kaldıran minimal bir Spring Boot iskeleti olmalı.
+  backend:
+    build:
+      context: ./backend
+    container_name: ergene-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ergene_db
+      SPRING_DATASOURCE_USERNAME: ergene_user
+      SPRING_DATASOURCE_PASSWORD: ergene_pass
+      FHIR_SERVER_URL: http://hapi-fhir:8080/fhir
+    depends_on:
+      - postgres
+      - hapi-fhir
+
+  # Hazırlık aşamasında ai-service/Dockerfile sadece /health endpoint'ini
+  # ayağa kaldıran minimal bir FastAPI iskeleti olmalı.
+  ai-service:
+    build:
+      context: ./ai-service
+    container_name: ergene-ai
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
