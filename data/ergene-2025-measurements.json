@@ -1,0 +1,2117 @@
+[
+  {
+    "measurement_id": "ERG-2025-ST1-AS-WAT",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.004,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.27,
+      "ec_us_cm": 1961,
+      "tds_mg_l": 961.3,
+      "salinity_psu": 1.047,
+      "do_mg_l": 1.33
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-AS-WAT",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.002,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.88,
+      "ec_us_cm": 680.9,
+      "tds_mg_l": 334.1,
+      "salinity_psu": 0.382,
+      "do_mg_l": 9.79
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-AS-WAT",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.004,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.93,
+      "ec_us_cm": 905.9,
+      "tds_mg_l": 444.4,
+      "salinity_psu": 0.495,
+      "do_mg_l": 2.87
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-AS-WAT",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.004,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.32,
+      "ec_us_cm": 1212,
+      "tds_mg_l": 594.2,
+      "salinity_psu": 0.652,
+      "do_mg_l": 0.816
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-AS-WAT",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.005,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.47,
+      "ec_us_cm": 1639,
+      "tds_mg_l": 803.7,
+      "salinity_psu": 0.876,
+      "do_mg_l": 4.32
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-CU-WAT",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.001,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.27,
+      "ec_us_cm": 1961,
+      "tds_mg_l": 961.3,
+      "salinity_psu": 1.047,
+      "do_mg_l": 1.33
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-CU-WAT",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.0008,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.88,
+      "ec_us_cm": 680.9,
+      "tds_mg_l": 334.1,
+      "salinity_psu": 0.382,
+      "do_mg_l": 9.79
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-CU-WAT",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.001,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.93,
+      "ec_us_cm": 905.9,
+      "tds_mg_l": 444.4,
+      "salinity_psu": 0.495,
+      "do_mg_l": 2.87
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-CU-WAT",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.0001,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.32,
+      "ec_us_cm": 1212,
+      "tds_mg_l": 594.2,
+      "salinity_psu": 0.652,
+      "do_mg_l": 0.816
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-CU-WAT",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.003,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.47,
+      "ec_us_cm": 1639,
+      "tds_mg_l": 803.7,
+      "salinity_psu": 0.876,
+      "do_mg_l": 4.32
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-CR-WAT",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.001,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.27,
+      "ec_us_cm": 1961,
+      "tds_mg_l": 961.3,
+      "salinity_psu": 1.047,
+      "do_mg_l": 1.33
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-CR-WAT",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.88,
+      "ec_us_cm": 680.9,
+      "tds_mg_l": 334.1,
+      "salinity_psu": 0.382,
+      "do_mg_l": 9.79
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-CR-WAT",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.93,
+      "ec_us_cm": 905.9,
+      "tds_mg_l": 444.4,
+      "salinity_psu": 0.495,
+      "do_mg_l": 2.87
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-CR-WAT",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.001,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.32,
+      "ec_us_cm": 1212,
+      "tds_mg_l": 594.2,
+      "salinity_psu": 0.652,
+      "do_mg_l": 0.816
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-CR-WAT",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.001,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.47,
+      "ec_us_cm": 1639,
+      "tds_mg_l": 803.7,
+      "salinity_psu": 0.876,
+      "do_mg_l": 4.32
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-ZN-WAT",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.0214,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.27,
+      "ec_us_cm": 1961,
+      "tds_mg_l": 961.3,
+      "salinity_psu": 1.047,
+      "do_mg_l": 1.33
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-ZN-WAT",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.0003,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.88,
+      "ec_us_cm": 680.9,
+      "tds_mg_l": 334.1,
+      "salinity_psu": 0.382,
+      "do_mg_l": 9.79
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-ZN-WAT",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.0002,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.93,
+      "ec_us_cm": 905.9,
+      "tds_mg_l": 444.4,
+      "salinity_psu": 0.495,
+      "do_mg_l": 2.87
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-ZN-WAT",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.0006,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.32,
+      "ec_us_cm": 1212,
+      "tds_mg_l": 594.2,
+      "salinity_psu": 0.652,
+      "do_mg_l": 0.816
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-ZN-WAT",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.0003,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.47,
+      "ec_us_cm": 1639,
+      "tds_mg_l": 803.7,
+      "salinity_psu": 0.876,
+      "do_mg_l": 4.32
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-CD-WAT",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": 0.0001,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.27,
+      "ec_us_cm": 1961,
+      "tds_mg_l": 961.3,
+      "salinity_psu": 1.047,
+      "do_mg_l": 1.33
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-CD-WAT",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.88,
+      "ec_us_cm": 680.9,
+      "tds_mg_l": 334.1,
+      "salinity_psu": 0.382,
+      "do_mg_l": 9.79
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-CD-WAT",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.93,
+      "ec_us_cm": 905.9,
+      "tds_mg_l": 444.4,
+      "salinity_psu": 0.495,
+      "do_mg_l": 2.87
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-CD-WAT",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.32,
+      "ec_us_cm": 1212,
+      "tds_mg_l": 594.2,
+      "salinity_psu": 0.652,
+      "do_mg_l": 0.816
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-CD-WAT",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.47,
+      "ec_us_cm": 1639,
+      "tds_mg_l": 803.7,
+      "salinity_psu": 0.876,
+      "do_mg_l": 4.32
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-NI-WAT",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "nickel",
+    "parameter_symbol": "Ni",
+    "value": 0.0106,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.27,
+      "ec_us_cm": 1961,
+      "tds_mg_l": 961.3,
+      "salinity_psu": 1.047,
+      "do_mg_l": 1.33
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-NI-WAT",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "nickel",
+    "parameter_symbol": "Ni",
+    "value": 0.0023,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.88,
+      "ec_us_cm": 680.9,
+      "tds_mg_l": 334.1,
+      "salinity_psu": 0.382,
+      "do_mg_l": 9.79
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-NI-WAT",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "nickel",
+    "parameter_symbol": "Ni",
+    "value": 0.0034,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.93,
+      "ec_us_cm": 905.9,
+      "tds_mg_l": 444.4,
+      "salinity_psu": 0.495,
+      "do_mg_l": 2.87
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-NI-WAT",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "nickel",
+    "parameter_symbol": "Ni",
+    "value": 0.0074,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.32,
+      "ec_us_cm": 1212,
+      "tds_mg_l": 594.2,
+      "salinity_psu": 0.652,
+      "do_mg_l": 0.816
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-NI-WAT",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "nickel",
+    "parameter_symbol": "Ni",
+    "value": 0.0051,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.47,
+      "ec_us_cm": 1639,
+      "tds_mg_l": 803.7,
+      "salinity_psu": 0.876,
+      "do_mg_l": 4.32
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-PB-WAT",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0005,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.27,
+      "ec_us_cm": 1961,
+      "tds_mg_l": 961.3,
+      "salinity_psu": 1.047,
+      "do_mg_l": 1.33
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-PB-WAT",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0003,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.88,
+      "ec_us_cm": 680.9,
+      "tds_mg_l": 334.1,
+      "salinity_psu": 0.382,
+      "do_mg_l": 9.79
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-PB-WAT",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0003,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.93,
+      "ec_us_cm": 905.9,
+      "tds_mg_l": 444.4,
+      "salinity_psu": 0.495,
+      "do_mg_l": 2.87
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-PB-WAT",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0001,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.32,
+      "ec_us_cm": 1212,
+      "tds_mg_l": 594.2,
+      "salinity_psu": 0.652,
+      "do_mg_l": 0.816
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-PB-WAT",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0002,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.47,
+      "ec_us_cm": 1639,
+      "tds_mg_l": 803.7,
+      "salinity_psu": 0.876,
+      "do_mg_l": 4.32
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-MN-WAT",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "manganese",
+    "parameter_symbol": "Mn",
+    "value": 0.312,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.27,
+      "ec_us_cm": 1961,
+      "tds_mg_l": 961.3,
+      "salinity_psu": 1.047,
+      "do_mg_l": 1.33
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-MN-WAT",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "manganese",
+    "parameter_symbol": "Mn",
+    "value": 0.006,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.88,
+      "ec_us_cm": 680.9,
+      "tds_mg_l": 334.1,
+      "salinity_psu": 0.382,
+      "do_mg_l": 9.79
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-MN-WAT",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "manganese",
+    "parameter_symbol": "Mn",
+    "value": 0.278,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.93,
+      "ec_us_cm": 905.9,
+      "tds_mg_l": 444.4,
+      "salinity_psu": 0.495,
+      "do_mg_l": 2.87
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-MN-WAT",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "manganese",
+    "parameter_symbol": "Mn",
+    "value": 0.318,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.32,
+      "ec_us_cm": 1212,
+      "tds_mg_l": 594.2,
+      "salinity_psu": 0.652,
+      "do_mg_l": 0.816
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-MN-WAT",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "manganese",
+    "parameter_symbol": "Mn",
+    "value": 0.035,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.47,
+      "ec_us_cm": 1639,
+      "tds_mg_l": 803.7,
+      "salinity_psu": 0.876,
+      "do_mg_l": 4.32
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-FE-WAT",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.085,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.27,
+      "ec_us_cm": 1961,
+      "tds_mg_l": 961.3,
+      "salinity_psu": 1.047,
+      "do_mg_l": 1.33
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-FE-WAT",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.014,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.88,
+      "ec_us_cm": 680.9,
+      "tds_mg_l": 334.1,
+      "salinity_psu": 0.382,
+      "do_mg_l": 9.79
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-FE-WAT",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.103,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.93,
+      "ec_us_cm": 905.9,
+      "tds_mg_l": 444.4,
+      "salinity_psu": 0.495,
+      "do_mg_l": 2.87
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-FE-WAT",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.032,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.32,
+      "ec_us_cm": 1212,
+      "tds_mg_l": 594.2,
+      "salinity_psu": 0.652,
+      "do_mg_l": 0.816
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-FE-WAT",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.032,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6",
+    "water_quality": {
+      "ph": 7.47,
+      "ec_us_cm": 1639,
+      "tds_mg_l": 803.7,
+      "salinity_psu": 0.876,
+      "do_mg_l": 4.32
+    }
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-AS-SED",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.16,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-AS-SED",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.02,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-AS-SED",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.13,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-AS-SED",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.26,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-AS-SED",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.33,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-CU-SED",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.52,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-CU-SED",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.21,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-CU-SED",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 1.55,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-CU-SED",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 3.01,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-CU-SED",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 158.58,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-CR-SED",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.33,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-CR-SED",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.04,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-CR-SED",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.32,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-CR-SED",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 2.22,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-CR-SED",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 9.66,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-ZN-SED",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 5.95,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-ZN-SED",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.64,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-ZN-SED",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 5.08,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-ZN-SED",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 4.13,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-ZN-SED",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 8.52,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-CD-SED",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": 0.01,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-CD-SED",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/kg",
+    "below_detection_limit": true,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-CD-SED",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": 0.1,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-CD-SED",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": 0.01,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-CD-SED",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": 0.17,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-NI-SED",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "nickel",
+    "parameter_symbol": "Ni",
+    "value": 1.96,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-NI-SED",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "nickel",
+    "parameter_symbol": "Ni",
+    "value": 0.18,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-NI-SED",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "nickel",
+    "parameter_symbol": "Ni",
+    "value": 0.51,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-NI-SED",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "nickel",
+    "parameter_symbol": "Ni",
+    "value": 1.89,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-NI-SED",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "nickel",
+    "parameter_symbol": "Ni",
+    "value": 109.35,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-PB-SED",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.75,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-PB-SED",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.16,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-PB-SED",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.84,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-PB-SED",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 1.12,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-PB-SED",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 1.27,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-MN-SED",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "manganese",
+    "parameter_symbol": "Mn",
+    "value": 90.78,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-MN-SED",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "manganese",
+    "parameter_symbol": "Mn",
+    "value": 5.8,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-MN-SED",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "manganese",
+    "parameter_symbol": "Mn",
+    "value": 19.69,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-MN-SED",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "manganese",
+    "parameter_symbol": "Mn",
+    "value": 13.75,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-MN-SED",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "manganese",
+    "parameter_symbol": "Mn",
+    "value": 38.49,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST1-FE-SED",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.18,
+      "lon": 27.77
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 123.38,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST2-FE-SED",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.27,
+      "lon": 27.85
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 28.62,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST3-FE-SED",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.28,
+      "lon": 27.99
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 177.11,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST4-FE-SED",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.159,
+      "lon": 27.803
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 322.0,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  },
+  {
+    "measurement_id": "ERG-2025-ST5-FE-SED",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.03,
+      "lon": 26.38
+    },
+    "coordinate_source": "approximated_from_figure",
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 533.09,
+    "unit": "mg/kg",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "sediment",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 6"
+  }
+]

@@ -6,33 +6,104 @@ Durum sütununu (`Taslak` / `Onaylandı` / `Değişti`) güncel tutun.
 
 ---
 
+
+## Ortak Tanımlar
+
+### `parameter` — geçerli değerler
+| `parameter` | Sembol |
+|---|---|
+| `arsenic` | As |
+| `copper` | Cu |
+| `iron` | Fe |
+| `zinc` | Zn |
+| `chromium` | Cr |
+| `cadmium` | Cd |
+| `lead` | Pb |
+| `nickel` | Ni |
+| `manganese` | Mn |
+
+
+> **Birim sabit değil, `sample_type`'a bağlıdır:**
+> - `groundwater` / `surface_water` → **mg/L**
+> - `sediment` → **mg/kg**
+> Backend, `unit` alanını `sample_type`'a göre doğrulamalı (mg/kg değeri "surface_water" ile
+> gelirse reddedilmeli).
+> ve backend enum'u birlikte güncellenir.
+
+### `sample_type` — geçerli değerler
+`groundwater` · `surface_water` · `sediment`
+
+
+### `source_type` — geçerli değerler
+`literature` (yayınlanmış makaleden) · `simulated` (bizim ürettiğimiz) · `sensor` · `citizen`
+
+### BDL (Below Detection Limit) kuralı
+Cihazın tespit limitinin altında kalan ölçümlerde `value: null` ve
+`below_detection_limit: true` gönderilir. **Bu sıfır anlamına gelmez.**
+Backend bu kayıtları eşik karşılaştırmasına ve ortalama hesabına DAHİL ETMEZ.
+
+
+
 ## 1. Gözlem Gönderme (Sensör / Mock Veri)
-**Durum:** Taslak
+**Durum:** Güncellendi — gerçek veri setine göre
 **Endpoint:** `POST /api/observations`
 **Kim çağırır:** Mock veri üreten script / manuel test
 
 Request:
 ```json
 {
-  "location_name": "Ergene Nehri - Çorlu Mevkii",
-  "coordinates": { "lat": 41.1592, "lon": 27.8033 },
-  "timestamp": "2026-08-18T10:00:00+03:00",
-  "parameter": "arsenic",
-  "value": 15.2,
-  "unit": "µg/L",
-  "source_type": "sensor"
+  "location_name": "Ergene Havzasi - Kuyu 9",
+  "coordinates": { "lat": 41.271667, "lon": 27.9725 },
+  "timestamp": "2013-05-15T10:00:00+03:00",
+  "parameter": "chromium",
+  "value": 0.1,
+  "unit": "mg/L",
+  "below_detection_limit": false,
+  "sample_type": "groundwater",
+  "source_type": "literature",
+  "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
 }
 ```
+
+### Ek alanlar
+- `method` (string) — örn. `"ICP-MS (Agilent 7700)"`
+- `station_no` (integer, opsiyonel)
+- `coordinates` — artık **nullable** olabilir (bazı literatür kaynaklarında sayısal koordinat yok)
+- `coordinate_source` (string, opsiyonel) — örn. `"approximated_from_figure"`, koordinatın
+  nereden geldiğini işaretler
+- `water_quality` (obje, opsiyonel, sadece su örneklerinde) —
+  `{ ph, ec_us_cm, tds_mg_l, salinity_psu, do_mg_l }`
+
+
+
+BDL örneği (kadmiyum tüm kuyularda BDL çıkmıştır):
+```json
+{
+  "location_name": "Ergene Havzasi - Kuyu 9",
+  "coordinates": { "lat": 41.271667, "lon": 27.9725 },
+  "timestamp": "2013-05-15T10:00:00+03:00",
+  "parameter": "cadmium",
+  "value": null,
+  "unit": "mg/L",
+  "below_detection_limit": true,
+  "sample_type": "groundwater",
+  "source_type": "literature"
+}
+```
+
 Response `201 Created`:
 ```json
 {
   "id": "erg-obs-2026-0347",
   "fhir_observation_id": "erg-obs-2026-0347",
-  "risk_flagged": true
+  "risk_flagged": true,
+  "exceeded_standards": ["TS_2005", "WHO_2006"]
 }
 ```
+> `exceeded_standards`: hangi standartların aşıldığını listeler. Hiçbiri aşılmadıysa boş dizi,
+> BDL kayıtlarında da boş dizi (`risk_flagged: false`).
 
----
+--- 
 
 ## 2. Vatandaş Bildirimi Gönderme
 **Durum:** Taslak
@@ -61,15 +132,27 @@ Response `201 Created`:
 ---
 
 ## 3. Gözlemleri Listeleme (Dashboard için)
-**Durum:** Taslak
-**Endpoint:** `GET /api/observations?location=ergene-corlu&from=2026-01-01&to=2026-08-18`
+**Durum:** güncellendi
+**Endpoint:** `GET /api/observations?parameter=chromium&from=2013-01-01&to=2026-12-31`
 **Kim çağırır:** Web dashboard
 
 Response `200 OK`:
 ```json
 {
   "results": [
-    { "timestamp": "2026-08-18T10:00:00+03:00", "parameter": "arsenic", "value": 15.2, "unit": "µg/L", "source_type": "sensor", "risk_flagged": true }
+    {
+      "id": "erg-2013-w09-cr",
+      "location_name": "Ergene Havzasi - Kuyu 9",
+      "coordinates": { "lat": 41.271667, "lon": 27.9725 },
+      "timestamp": "2013-05-15T10:00:00+03:00",
+      "parameter": "chromium",
+      "value": 0.1,
+      "unit": "mg/L",
+      "below_detection_limit": false,
+      "sample_type": "groundwater",
+      "source_type": "literature",
+      "risk_flagged": true
+    }
   ]
 }
 ```
@@ -77,17 +160,22 @@ Response `200 OK`:
 ---
 
 ## 4. Risk Durumu Sorgulama
-**Durum:** Taslak
-**Endpoint:** `GET /api/risk-status?location=ergene-corlu`
+**Durum:** güncellendi
+**Endpoint:** `GET /api/risk-status?location=ergene-kuyu-09`
 **Kim çağırır:** Web dashboard, mock hastane paneli
 
 Response `200 OK`:
 ```json
 {
-  "location": "ergene-corlu",
+  "location": "ergene-kuyu-09",
   "current_risk_level": "high",
-  "reason": "Ölçülen arsenik değeri (15.2 µg/L), WHO içme suyu rehber değerini (10 µg/L) aşıyor.",
-  "last_updated": "2026-08-18T10:00:00+03:00"
+  "parameter": "chromium",
+  "value": 0.1,
+  "unit": "mg/L",
+  "threshold": 0.05,
+  "standard": "WHO_2006",
+  "reason": "Olculen krom degeri (0.1 mg/L), WHO (2006) icme suyu rehber degerini (0.05 mg/L) asiyor.",
+  "last_updated": "2013-05-15T10:00:00+03:00"
 }
 ```
 
@@ -115,6 +203,47 @@ Response `200 OK`:
 ```
 
 ---
+
+## 6. Sağlık Riski Değerlendirmesi Gönderme (Literatürden)
+**Durum:** Taslak
+**Endpoint:** `POST /api/risk-assessments`
+
+Request:
+```json
+{
+  "location_name": "St 2 - koy ici, sanayiden uzak",
+  "station_no": 2,
+  "timestamp": "2025-05-15T10:00:00+03:00",
+  "carcinogenic_risk": { "child": 1.097609, "adult": 1.015173 },
+  "total_hazard_index": { "child": 3.050103, "adult": 2.58 },
+  "source_type": "literature",
+  "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
+}
+```
+Response `201 Created`:
+```json
+{ "id": "erg-2025-st2-hra", "fhir_riskassessment_id": "erg-2025-st2-hra" }
+```
+
+---
+
+
+## Eşik Değerleri Referansı (mg/L)
+
+Kaynak: Arkoç (2014), Tablo 2 — TS (2005), WHO (2006), EPA (2013)
+
+| Metal | TS 2005 | WHO 2006 | EPA 2013 |
+|---|---|---|---|
+| copper | 2 | 2 | 1.3 |
+| iron | 0.2 | 0.3 | 0.3 |
+| zinc | — | 3 | 5 |
+| chromium | 0.05 | 0.05 | 0.1 |
+| cadmium | 0.005 | 0.003 | 0.005 |
+| lead | 0.01 | 0.01 | 0.015 |
+
+> `zinc` için TS standardında değer tanımlı değil — backend bu durumda o standardı
+> karşılaştırmaya dahil etmez (null kontrolü gerekir).
+
 
 ## Doldurulacak Açık Sorular
 - [ ] `category` alanı için kesin değer listesi netleşti mi? (bulanik / kirli_renk_degisimi / balik_olumu / kotu_koku / diger)

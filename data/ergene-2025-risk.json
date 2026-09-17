@@ -1,0 +1,87 @@
+[
+  {
+    "assessment_id": "ERG-2025-ST1-HRA",
+    "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+    "station_no": 1,
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "carcinogenic_risk": {
+      "child": 0.83199,
+      "adult": 0.647042
+    },
+    "total_hazard_index": {
+      "child": 92.37241,
+      "adult": 78.5
+    },
+    "basis_note": "Kanserojen risk As ve Ni uzerinden; kanserojen olmayan risk Zn, Mn, Fe, Cu, Cr uzerinden hesaplanmistir (USEPA 2004).",
+    "source_type": "literature",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
+  },
+  {
+    "assessment_id": "ERG-2025-ST2-HRA",
+    "location_name": "St 2 - koy ici, sanayiden uzak",
+    "station_no": 2,
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "carcinogenic_risk": {
+      "child": 1.097609,
+      "adult": 1.015173
+    },
+    "total_hazard_index": {
+      "child": 3.050103,
+      "adult": 2.58
+    },
+    "basis_note": "Kanserojen risk As ve Ni uzerinden; kanserojen olmayan risk Zn, Mn, Fe, Cu, Cr uzerinden hesaplanmistir (USEPA 2004).",
+    "source_type": "literature",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
+  },
+  {
+    "assessment_id": "ERG-2025-ST3-HRA",
+    "location_name": "St 3 - organize sanayi bolgesi icinde",
+    "station_no": 3,
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "carcinogenic_risk": {
+      "child": 0.756519,
+      "adult": 0.326737
+    },
+    "total_hazard_index": {
+      "child": 74.22873,
+      "adult": 63.1
+    },
+    "basis_note": "Kanserojen risk As ve Ni uzerinden; kanserojen olmayan risk Zn, Mn, Fe, Cu, Cr uzerinden hesaplanmistir (USEPA 2004).",
+    "source_type": "literature",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
+  },
+  {
+    "assessment_id": "ERG-2025-ST4-HRA",
+    "location_name": "St 4 - organize sanayi bolgesi icinde",
+    "station_no": 4,
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "carcinogenic_risk": {
+      "child": 1.038769,
+      "adult": 0.521373
+    },
+    "total_hazard_index": {
+      "child": 94.73613,
+      "adult": 80.5
+    },
+    "basis_note": "Kanserojen risk As ve Ni uzerinden; kanserojen olmayan risk Zn, Mn, Fe, Cu, Cr uzerinden hesaplanmistir (USEPA 2004).",
+    "source_type": "literature",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
+  },
+  {
+    "assessment_id": "ERG-2025-ST5-HRA",
+    "location_name": "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)",
+    "station_no": 5,
+    "timestamp": "2025-05-15T10:00:00+03:00",
+    "carcinogenic_risk": {
+      "child": 0.603169,
+      "adult": 0.472429
+    },
+    "total_hazard_index": {
+      "child": 21.15246,
+      "adult": 17.0
+    },
+    "basis_note": "Kanserojen risk As ve Ni uzerinden; kanserojen olmayan risk Zn, Mn, Fe, Cu, Cr uzerinden hesaplanmistir (USEPA 2004).",
+    "source_type": "literature",
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
+  }
+]
