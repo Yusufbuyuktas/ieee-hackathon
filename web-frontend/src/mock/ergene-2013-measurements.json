@@ -1,0 +1,2918 @@
+[
+  {
+    "measurement_id": "ERG-2013-W01-CU",
+    "location_name": "Ergene Havzasi - Kuyu 1",
+    "coordinates": {
+      "lat": 41.270556,
+      "lon": 27.635833
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.0021,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 315,
+    "ph": 8.2,
+    "ec_us_cm": 1550,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W01-FE",
+    "location_name": "Ergene Havzasi - Kuyu 1",
+    "coordinates": {
+      "lat": 41.270556,
+      "lon": 27.635833
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 315,
+    "ph": 8.2,
+    "ec_us_cm": 1550,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W01-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 1",
+    "coordinates": {
+      "lat": 41.270556,
+      "lon": 27.635833
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.03,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 315,
+    "ph": 8.2,
+    "ec_us_cm": 1550,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W01-CR",
+    "location_name": "Ergene Havzasi - Kuyu 1",
+    "coordinates": {
+      "lat": 41.270556,
+      "lon": 27.635833
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 315,
+    "ph": 8.2,
+    "ec_us_cm": 1550,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W01-CD",
+    "location_name": "Ergene Havzasi - Kuyu 1",
+    "coordinates": {
+      "lat": 41.270556,
+      "lon": 27.635833
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 315,
+    "ph": 8.2,
+    "ec_us_cm": 1550,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W01-PB",
+    "location_name": "Ergene Havzasi - Kuyu 1",
+    "coordinates": {
+      "lat": 41.270556,
+      "lon": 27.635833
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 315,
+    "ph": 8.2,
+    "ec_us_cm": 1550,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W02-CU",
+    "location_name": "Ergene Havzasi - Kuyu 2",
+    "coordinates": {
+      "lat": 41.231944,
+      "lon": 27.662222
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.0028,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 270,
+    "ph": 7.0,
+    "ec_us_cm": 481,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W02-FE",
+    "location_name": "Ergene Havzasi - Kuyu 2",
+    "coordinates": {
+      "lat": 41.231944,
+      "lon": 27.662222
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 270,
+    "ph": 7.0,
+    "ec_us_cm": 481,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W02-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 2",
+    "coordinates": {
+      "lat": 41.231944,
+      "lon": 27.662222
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.05,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 270,
+    "ph": 7.0,
+    "ec_us_cm": 481,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W02-CR",
+    "location_name": "Ergene Havzasi - Kuyu 2",
+    "coordinates": {
+      "lat": 41.231944,
+      "lon": 27.662222
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 270,
+    "ph": 7.0,
+    "ec_us_cm": 481,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W02-CD",
+    "location_name": "Ergene Havzasi - Kuyu 2",
+    "coordinates": {
+      "lat": 41.231944,
+      "lon": 27.662222
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 270,
+    "ph": 7.0,
+    "ec_us_cm": 481,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W02-PB",
+    "location_name": "Ergene Havzasi - Kuyu 2",
+    "coordinates": {
+      "lat": 41.231944,
+      "lon": 27.662222
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 270,
+    "ph": 7.0,
+    "ec_us_cm": 481,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W03-CU",
+    "location_name": "Ergene Havzasi - Kuyu 3",
+    "coordinates": {
+      "lat": 41.146111,
+      "lon": 27.658056
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.008,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 208,
+    "ph": 8.0,
+    "ec_us_cm": 570,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W03-FE",
+    "location_name": "Ergene Havzasi - Kuyu 3",
+    "coordinates": {
+      "lat": 41.146111,
+      "lon": 27.658056
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.063,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 208,
+    "ph": 8.0,
+    "ec_us_cm": 570,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W03-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 3",
+    "coordinates": {
+      "lat": 41.146111,
+      "lon": 27.658056
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.03,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 208,
+    "ph": 8.0,
+    "ec_us_cm": 570,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W03-CR",
+    "location_name": "Ergene Havzasi - Kuyu 3",
+    "coordinates": {
+      "lat": 41.146111,
+      "lon": 27.658056
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.027,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 208,
+    "ph": 8.0,
+    "ec_us_cm": 570,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W03-CD",
+    "location_name": "Ergene Havzasi - Kuyu 3",
+    "coordinates": {
+      "lat": 41.146111,
+      "lon": 27.658056
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 208,
+    "ph": 8.0,
+    "ec_us_cm": 570,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W03-PB",
+    "location_name": "Ergene Havzasi - Kuyu 3",
+    "coordinates": {
+      "lat": 41.146111,
+      "lon": 27.658056
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0002,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 208,
+    "ph": 8.0,
+    "ec_us_cm": 570,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W04-CU",
+    "location_name": "Ergene Havzasi - Kuyu 4",
+    "coordinates": {
+      "lat": 41.206944,
+      "lon": 27.74
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.004,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 294,
+    "ph": 7.1,
+    "ec_us_cm": 835,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W04-FE",
+    "location_name": "Ergene Havzasi - Kuyu 4",
+    "coordinates": {
+      "lat": 41.206944,
+      "lon": 27.74
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 294,
+    "ph": 7.1,
+    "ec_us_cm": 835,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W04-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 4",
+    "coordinates": {
+      "lat": 41.206944,
+      "lon": 27.74
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.02,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 294,
+    "ph": 7.1,
+    "ec_us_cm": 835,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W04-CR",
+    "location_name": "Ergene Havzasi - Kuyu 4",
+    "coordinates": {
+      "lat": 41.206944,
+      "lon": 27.74
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 294,
+    "ph": 7.1,
+    "ec_us_cm": 835,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W04-CD",
+    "location_name": "Ergene Havzasi - Kuyu 4",
+    "coordinates": {
+      "lat": 41.206944,
+      "lon": 27.74
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 294,
+    "ph": 7.1,
+    "ec_us_cm": 835,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W04-PB",
+    "location_name": "Ergene Havzasi - Kuyu 4",
+    "coordinates": {
+      "lat": 41.206944,
+      "lon": 27.74
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 294,
+    "ph": 7.1,
+    "ec_us_cm": 835,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W05-CU",
+    "location_name": "Ergene Havzasi - Kuyu 5",
+    "coordinates": {
+      "lat": 41.308611,
+      "lon": 27.786944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.01,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 281,
+    "ph": 7.41,
+    "ec_us_cm": 1468,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W05-FE",
+    "location_name": "Ergene Havzasi - Kuyu 5",
+    "coordinates": {
+      "lat": 41.308611,
+      "lon": 27.786944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 281,
+    "ph": 7.41,
+    "ec_us_cm": 1468,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W05-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 5",
+    "coordinates": {
+      "lat": 41.308611,
+      "lon": 27.786944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.04,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 281,
+    "ph": 7.41,
+    "ec_us_cm": 1468,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W05-CR",
+    "location_name": "Ergene Havzasi - Kuyu 5",
+    "coordinates": {
+      "lat": 41.308611,
+      "lon": 27.786944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.002,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 281,
+    "ph": 7.41,
+    "ec_us_cm": 1468,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W05-CD",
+    "location_name": "Ergene Havzasi - Kuyu 5",
+    "coordinates": {
+      "lat": 41.308611,
+      "lon": 27.786944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 281,
+    "ph": 7.41,
+    "ec_us_cm": 1468,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W05-PB",
+    "location_name": "Ergene Havzasi - Kuyu 5",
+    "coordinates": {
+      "lat": 41.308611,
+      "lon": 27.786944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0007,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 281,
+    "ph": 7.41,
+    "ec_us_cm": 1468,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W06-CU",
+    "location_name": "Ergene Havzasi - Kuyu 6",
+    "coordinates": {
+      "lat": 41.200278,
+      "lon": 27.835
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.004,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 285,
+    "ph": 7.32,
+    "ec_us_cm": 487,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W06-FE",
+    "location_name": "Ergene Havzasi - Kuyu 6",
+    "coordinates": {
+      "lat": 41.200278,
+      "lon": 27.835
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 285,
+    "ph": 7.32,
+    "ec_us_cm": 487,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W06-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 6",
+    "coordinates": {
+      "lat": 41.200278,
+      "lon": 27.835
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.04,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 285,
+    "ph": 7.32,
+    "ec_us_cm": 487,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W06-CR",
+    "location_name": "Ergene Havzasi - Kuyu 6",
+    "coordinates": {
+      "lat": 41.200278,
+      "lon": 27.835
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.006,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 285,
+    "ph": 7.32,
+    "ec_us_cm": 487,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W06-CD",
+    "location_name": "Ergene Havzasi - Kuyu 6",
+    "coordinates": {
+      "lat": 41.200278,
+      "lon": 27.835
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 285,
+    "ph": 7.32,
+    "ec_us_cm": 487,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W06-PB",
+    "location_name": "Ergene Havzasi - Kuyu 6",
+    "coordinates": {
+      "lat": 41.200278,
+      "lon": 27.835
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 285,
+    "ph": 7.32,
+    "ec_us_cm": 487,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W07-CU",
+    "location_name": "Ergene Havzasi - Kuyu 7",
+    "coordinates": {
+      "lat": 41.170278,
+      "lon": 27.780556
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.005,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 293,
+    "ph": 7.0,
+    "ec_us_cm": 1280,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W07-FE",
+    "location_name": "Ergene Havzasi - Kuyu 7",
+    "coordinates": {
+      "lat": 41.170278,
+      "lon": 27.780556
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 293,
+    "ph": 7.0,
+    "ec_us_cm": 1280,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W07-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 7",
+    "coordinates": {
+      "lat": 41.170278,
+      "lon": 27.780556
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.96,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 293,
+    "ph": 7.0,
+    "ec_us_cm": 1280,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W07-CR",
+    "location_name": "Ergene Havzasi - Kuyu 7",
+    "coordinates": {
+      "lat": 41.170278,
+      "lon": 27.780556
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 293,
+    "ph": 7.0,
+    "ec_us_cm": 1280,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W07-CD",
+    "location_name": "Ergene Havzasi - Kuyu 7",
+    "coordinates": {
+      "lat": 41.170278,
+      "lon": 27.780556
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 293,
+    "ph": 7.0,
+    "ec_us_cm": 1280,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W07-PB",
+    "location_name": "Ergene Havzasi - Kuyu 7",
+    "coordinates": {
+      "lat": 41.170278,
+      "lon": 27.780556
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 293,
+    "ph": 7.0,
+    "ec_us_cm": 1280,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W08-CU",
+    "location_name": "Ergene Havzasi - Kuyu 8",
+    "coordinates": {
+      "lat": 41.315,
+      "lon": 27.985556
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.007,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 300,
+    "ph": 6.56,
+    "ec_us_cm": 470,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W08-FE",
+    "location_name": "Ergene Havzasi - Kuyu 8",
+    "coordinates": {
+      "lat": 41.315,
+      "lon": 27.985556
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 300,
+    "ph": 6.56,
+    "ec_us_cm": 470,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W08-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 8",
+    "coordinates": {
+      "lat": 41.315,
+      "lon": 27.985556
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.04,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 300,
+    "ph": 6.56,
+    "ec_us_cm": 470,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W08-CR",
+    "location_name": "Ergene Havzasi - Kuyu 8",
+    "coordinates": {
+      "lat": 41.315,
+      "lon": 27.985556
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.002,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 300,
+    "ph": 6.56,
+    "ec_us_cm": 470,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W08-CD",
+    "location_name": "Ergene Havzasi - Kuyu 8",
+    "coordinates": {
+      "lat": 41.315,
+      "lon": 27.985556
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 300,
+    "ph": 6.56,
+    "ec_us_cm": 470,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W08-PB",
+    "location_name": "Ergene Havzasi - Kuyu 8",
+    "coordinates": {
+      "lat": 41.315,
+      "lon": 27.985556
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 300,
+    "ph": 6.56,
+    "ec_us_cm": 470,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W09-CU",
+    "location_name": "Ergene Havzasi - Kuyu 9",
+    "coordinates": {
+      "lat": 41.271667,
+      "lon": 27.9725
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.004,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 300,
+    "ph": 6.1,
+    "ec_us_cm": 683,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W09-FE",
+    "location_name": "Ergene Havzasi - Kuyu 9",
+    "coordinates": {
+      "lat": 41.271667,
+      "lon": 27.9725
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 300,
+    "ph": 6.1,
+    "ec_us_cm": 683,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W09-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 9",
+    "coordinates": {
+      "lat": 41.271667,
+      "lon": 27.9725
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.05,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 300,
+    "ph": 6.1,
+    "ec_us_cm": 683,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W09-CR",
+    "location_name": "Ergene Havzasi - Kuyu 9",
+    "coordinates": {
+      "lat": 41.271667,
+      "lon": 27.9725
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.1,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 300,
+    "ph": 6.1,
+    "ec_us_cm": 683,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W09-CD",
+    "location_name": "Ergene Havzasi - Kuyu 9",
+    "coordinates": {
+      "lat": 41.271667,
+      "lon": 27.9725
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 300,
+    "ph": 6.1,
+    "ec_us_cm": 683,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W09-PB",
+    "location_name": "Ergene Havzasi - Kuyu 9",
+    "coordinates": {
+      "lat": 41.271667,
+      "lon": 27.9725
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 300,
+    "ph": 6.1,
+    "ec_us_cm": 683,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W10-CU",
+    "location_name": "Ergene Havzasi - Kuyu 10",
+    "coordinates": {
+      "lat": 41.298056,
+      "lon": 27.956944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.004,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 308,
+    "ph": 7.2,
+    "ec_us_cm": 723,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W10-FE",
+    "location_name": "Ergene Havzasi - Kuyu 10",
+    "coordinates": {
+      "lat": 41.298056,
+      "lon": 27.956944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 308,
+    "ph": 7.2,
+    "ec_us_cm": 723,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W10-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 10",
+    "coordinates": {
+      "lat": 41.298056,
+      "lon": 27.956944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.033,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 308,
+    "ph": 7.2,
+    "ec_us_cm": 723,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W10-CR",
+    "location_name": "Ergene Havzasi - Kuyu 10",
+    "coordinates": {
+      "lat": 41.298056,
+      "lon": 27.956944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.006,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 308,
+    "ph": 7.2,
+    "ec_us_cm": 723,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W10-CD",
+    "location_name": "Ergene Havzasi - Kuyu 10",
+    "coordinates": {
+      "lat": 41.298056,
+      "lon": 27.956944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 308,
+    "ph": 7.2,
+    "ec_us_cm": 723,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W10-PB",
+    "location_name": "Ergene Havzasi - Kuyu 10",
+    "coordinates": {
+      "lat": 41.298056,
+      "lon": 27.956944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 308,
+    "ph": 7.2,
+    "ec_us_cm": 723,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W11-CU",
+    "location_name": "Ergene Havzasi - Kuyu 11",
+    "coordinates": {
+      "lat": 41.341667,
+      "lon": 28.039167
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 251,
+    "ph": 7.8,
+    "ec_us_cm": 987,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W11-FE",
+    "location_name": "Ergene Havzasi - Kuyu 11",
+    "coordinates": {
+      "lat": 41.341667,
+      "lon": 28.039167
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 251,
+    "ph": 7.8,
+    "ec_us_cm": 987,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W11-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 11",
+    "coordinates": {
+      "lat": 41.341667,
+      "lon": 28.039167
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.026,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 251,
+    "ph": 7.8,
+    "ec_us_cm": 987,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W11-CR",
+    "location_name": "Ergene Havzasi - Kuyu 11",
+    "coordinates": {
+      "lat": 41.341667,
+      "lon": 28.039167
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.04,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 251,
+    "ph": 7.8,
+    "ec_us_cm": 987,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W11-CD",
+    "location_name": "Ergene Havzasi - Kuyu 11",
+    "coordinates": {
+      "lat": 41.341667,
+      "lon": 28.039167
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 251,
+    "ph": 7.8,
+    "ec_us_cm": 987,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W11-PB",
+    "location_name": "Ergene Havzasi - Kuyu 11",
+    "coordinates": {
+      "lat": 41.341667,
+      "lon": 28.039167
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 251,
+    "ph": 7.8,
+    "ec_us_cm": 987,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W12-CU",
+    "location_name": "Ergene Havzasi - Kuyu 12",
+    "coordinates": {
+      "lat": 41.344722,
+      "lon": 27.608889
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.008,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 306,
+    "ph": 7.9,
+    "ec_us_cm": 434,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W12-FE",
+    "location_name": "Ergene Havzasi - Kuyu 12",
+    "coordinates": {
+      "lat": 41.344722,
+      "lon": 27.608889
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 306,
+    "ph": 7.9,
+    "ec_us_cm": 434,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W12-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 12",
+    "coordinates": {
+      "lat": 41.344722,
+      "lon": 27.608889
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.005,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 306,
+    "ph": 7.9,
+    "ec_us_cm": 434,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W12-CR",
+    "location_name": "Ergene Havzasi - Kuyu 12",
+    "coordinates": {
+      "lat": 41.344722,
+      "lon": 27.608889
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 306,
+    "ph": 7.9,
+    "ec_us_cm": 434,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W12-CD",
+    "location_name": "Ergene Havzasi - Kuyu 12",
+    "coordinates": {
+      "lat": 41.344722,
+      "lon": 27.608889
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 306,
+    "ph": 7.9,
+    "ec_us_cm": 434,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W12-PB",
+    "location_name": "Ergene Havzasi - Kuyu 12",
+    "coordinates": {
+      "lat": 41.344722,
+      "lon": 27.608889
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.002,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 306,
+    "ph": 7.9,
+    "ec_us_cm": 434,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W13-CU",
+    "location_name": "Ergene Havzasi - Kuyu 13",
+    "coordinates": {
+      "lat": 41.201389,
+      "lon": 27.474167
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.0021,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 250,
+    "ph": 7.6,
+    "ec_us_cm": 523,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W13-FE",
+    "location_name": "Ergene Havzasi - Kuyu 13",
+    "coordinates": {
+      "lat": 41.201389,
+      "lon": 27.474167
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 250,
+    "ph": 7.6,
+    "ec_us_cm": 523,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W13-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 13",
+    "coordinates": {
+      "lat": 41.201389,
+      "lon": 27.474167
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.02,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 250,
+    "ph": 7.6,
+    "ec_us_cm": 523,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W13-CR",
+    "location_name": "Ergene Havzasi - Kuyu 13",
+    "coordinates": {
+      "lat": 41.201389,
+      "lon": 27.474167
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": 0.09,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 250,
+    "ph": 7.6,
+    "ec_us_cm": 523,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W13-CD",
+    "location_name": "Ergene Havzasi - Kuyu 13",
+    "coordinates": {
+      "lat": 41.201389,
+      "lon": 27.474167
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 250,
+    "ph": 7.6,
+    "ec_us_cm": 523,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W13-PB",
+    "location_name": "Ergene Havzasi - Kuyu 13",
+    "coordinates": {
+      "lat": 41.201389,
+      "lon": 27.474167
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.002,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 250,
+    "ph": 7.6,
+    "ec_us_cm": 523,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W14-CU",
+    "location_name": "Ergene Havzasi - Kuyu 14",
+    "coordinates": {
+      "lat": 41.155833,
+      "lon": 27.514444
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.006,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 297,
+    "ph": 8.5,
+    "ec_us_cm": 763,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W14-FE",
+    "location_name": "Ergene Havzasi - Kuyu 14",
+    "coordinates": {
+      "lat": 41.155833,
+      "lon": 27.514444
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 297,
+    "ph": 8.5,
+    "ec_us_cm": 763,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W14-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 14",
+    "coordinates": {
+      "lat": 41.155833,
+      "lon": 27.514444
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.014,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 297,
+    "ph": 8.5,
+    "ec_us_cm": 763,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W14-CR",
+    "location_name": "Ergene Havzasi - Kuyu 14",
+    "coordinates": {
+      "lat": 41.155833,
+      "lon": 27.514444
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 297,
+    "ph": 8.5,
+    "ec_us_cm": 763,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W14-CD",
+    "location_name": "Ergene Havzasi - Kuyu 14",
+    "coordinates": {
+      "lat": 41.155833,
+      "lon": 27.514444
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 297,
+    "ph": 8.5,
+    "ec_us_cm": 763,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W14-PB",
+    "location_name": "Ergene Havzasi - Kuyu 14",
+    "coordinates": {
+      "lat": 41.155833,
+      "lon": 27.514444
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 297,
+    "ph": 8.5,
+    "ec_us_cm": 763,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W15-CU",
+    "location_name": "Ergene Havzasi - Kuyu 15",
+    "coordinates": {
+      "lat": 41.2975,
+      "lon": 27.545278
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.003,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 331,
+    "ph": 7.0,
+    "ec_us_cm": 343,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W15-FE",
+    "location_name": "Ergene Havzasi - Kuyu 15",
+    "coordinates": {
+      "lat": 41.2975,
+      "lon": 27.545278
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 331,
+    "ph": 7.0,
+    "ec_us_cm": 343,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W15-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 15",
+    "coordinates": {
+      "lat": 41.2975,
+      "lon": 27.545278
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.03,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 331,
+    "ph": 7.0,
+    "ec_us_cm": 343,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W15-CR",
+    "location_name": "Ergene Havzasi - Kuyu 15",
+    "coordinates": {
+      "lat": 41.2975,
+      "lon": 27.545278
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 331,
+    "ph": 7.0,
+    "ec_us_cm": 343,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W15-CD",
+    "location_name": "Ergene Havzasi - Kuyu 15",
+    "coordinates": {
+      "lat": 41.2975,
+      "lon": 27.545278
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 331,
+    "ph": 7.0,
+    "ec_us_cm": 343,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W15-PB",
+    "location_name": "Ergene Havzasi - Kuyu 15",
+    "coordinates": {
+      "lat": 41.2975,
+      "lon": 27.545278
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 331,
+    "ph": 7.0,
+    "ec_us_cm": 343,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W16-CU",
+    "location_name": "Ergene Havzasi - Kuyu 16",
+    "coordinates": {
+      "lat": 41.176111,
+      "lon": 27.73
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.007,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 321,
+    "ph": 7.8,
+    "ec_us_cm": 386,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W16-FE",
+    "location_name": "Ergene Havzasi - Kuyu 16",
+    "coordinates": {
+      "lat": 41.176111,
+      "lon": 27.73
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.01,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 321,
+    "ph": 7.8,
+    "ec_us_cm": 386,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W16-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 16",
+    "coordinates": {
+      "lat": 41.176111,
+      "lon": 27.73
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.007,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 321,
+    "ph": 7.8,
+    "ec_us_cm": 386,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W16-CR",
+    "location_name": "Ergene Havzasi - Kuyu 16",
+    "coordinates": {
+      "lat": 41.176111,
+      "lon": 27.73
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 321,
+    "ph": 7.8,
+    "ec_us_cm": 386,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W16-CD",
+    "location_name": "Ergene Havzasi - Kuyu 16",
+    "coordinates": {
+      "lat": 41.176111,
+      "lon": 27.73
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 321,
+    "ph": 7.8,
+    "ec_us_cm": 386,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W16-PB",
+    "location_name": "Ergene Havzasi - Kuyu 16",
+    "coordinates": {
+      "lat": 41.176111,
+      "lon": 27.73
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 321,
+    "ph": 7.8,
+    "ec_us_cm": 386,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W17-CU",
+    "location_name": "Ergene Havzasi - Kuyu 17",
+    "coordinates": {
+      "lat": 41.135556,
+      "lon": 27.806944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": 0.005,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 268,
+    "ph": 8.2,
+    "ec_us_cm": 549,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W17-FE",
+    "location_name": "Ergene Havzasi - Kuyu 17",
+    "coordinates": {
+      "lat": 41.135556,
+      "lon": 27.806944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 268,
+    "ph": 8.2,
+    "ec_us_cm": 549,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W17-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 17",
+    "coordinates": {
+      "lat": 41.135556,
+      "lon": 27.806944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.021,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 268,
+    "ph": 8.2,
+    "ec_us_cm": 549,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W17-CR",
+    "location_name": "Ergene Havzasi - Kuyu 17",
+    "coordinates": {
+      "lat": 41.135556,
+      "lon": 27.806944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 268,
+    "ph": 8.2,
+    "ec_us_cm": 549,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W17-CD",
+    "location_name": "Ergene Havzasi - Kuyu 17",
+    "coordinates": {
+      "lat": 41.135556,
+      "lon": 27.806944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 268,
+    "ph": 8.2,
+    "ec_us_cm": 549,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W17-PB",
+    "location_name": "Ergene Havzasi - Kuyu 17",
+    "coordinates": {
+      "lat": 41.135556,
+      "lon": 27.806944
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0009,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 268,
+    "ph": 8.2,
+    "ec_us_cm": 549,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W18-CU",
+    "location_name": "Ergene Havzasi - Kuyu 18",
+    "coordinates": {
+      "lat": 41.113889,
+      "lon": 27.698611
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "copper",
+    "parameter_symbol": "Cu",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 1e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 296,
+    "ph": 8.0,
+    "ec_us_cm": 565,
+    "thresholds_mg_l": {
+      "TS_2005": 2,
+      "WHO_2006": 2,
+      "EPA_2013": 1.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W18-FE",
+    "location_name": "Ergene Havzasi - Kuyu 18",
+    "coordinates": {
+      "lat": 41.113889,
+      "lon": 27.698611
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "iron",
+    "parameter_symbol": "Fe",
+    "value": 0.001,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.01,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 296,
+    "ph": 8.0,
+    "ec_us_cm": 565,
+    "thresholds_mg_l": {
+      "TS_2005": 0.2,
+      "WHO_2006": 0.3,
+      "EPA_2013": 0.3
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W18-ZN",
+    "location_name": "Ergene Havzasi - Kuyu 18",
+    "coordinates": {
+      "lat": 41.113889,
+      "lon": 27.698611
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "zinc",
+    "parameter_symbol": "Zn",
+    "value": 0.03,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "detection_limit": 0.0005,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 296,
+    "ph": 8.0,
+    "ec_us_cm": 565,
+    "thresholds_mg_l": {
+      "TS_2005": null,
+      "WHO_2006": 3,
+      "EPA_2013": 5
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W18-CR",
+    "location_name": "Ergene Havzasi - Kuyu 18",
+    "coordinates": {
+      "lat": 41.113889,
+      "lon": 27.698611
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "chromium",
+    "parameter_symbol": "Cr",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-05,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 296,
+    "ph": 8.0,
+    "ec_us_cm": 565,
+    "thresholds_mg_l": {
+      "TS_2005": 0.05,
+      "WHO_2006": 0.05,
+      "EPA_2013": 0.1
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W18-CD",
+    "location_name": "Ergene Havzasi - Kuyu 18",
+    "coordinates": {
+      "lat": 41.113889,
+      "lon": 27.698611
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 5e-06,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 296,
+    "ph": 8.0,
+    "ec_us_cm": 565,
+    "thresholds_mg_l": {
+      "TS_2005": 0.005,
+      "WHO_2006": 0.003,
+      "EPA_2013": 0.005
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  },
+  {
+    "measurement_id": "ERG-2013-W18-PB",
+    "location_name": "Ergene Havzasi - Kuyu 18",
+    "coordinates": {
+      "lat": 41.113889,
+      "lon": 27.698611
+    },
+    "timestamp": "2013-05-15T10:00:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": null,
+    "unit": "mg/L",
+    "below_detection_limit": true,
+    "detection_limit": 0.0001,
+    "method": "ICP-ES / ICP-MS",
+    "source_type": "literature",
+    "sample_type": "groundwater",
+    "well_depth_m": 296,
+    "ph": 8.0,
+    "ec_us_cm": 565,
+    "thresholds_mg_l": {
+      "TS_2005": 0.01,
+      "WHO_2006": 0.01,
+      "EPA_2013": 0.015
+    },
+    "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
+  }
+]
