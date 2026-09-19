@@ -15,6 +15,7 @@ public class RiskAssessmentListItemDto {
     private RiskValuesDto carcinogenicRisk;
     private RiskValuesDto totalHazardIndex;
     private String riskLevel;
+    private boolean sourceConcludedHighRisk;
     private String basisNote;
     private String sourceType;
     private String citation;

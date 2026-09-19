@@ -35,6 +35,8 @@ public class DataSeeder implements CommandLineRunner {
         objectMapper.registerModule(new JavaTimeModule());
         seedObservations("ergene-2013-measurements.json");
         seedObservations("ergene-2025-measurements.json");
+        seedObservations("ergene-2021-measurements.json");
+        seedRisks("ergene-2021-risk.json");
         seedRisks("ergene-2025-risk.json");
     }
 

@@ -29,6 +29,9 @@ public class RiskAssessmentService {
         if (request.getTimestamp() == null || request.getLocationName() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "location_name and timestamp are required");
         }
+        if (request.getSourceConcludedHighRisk() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "source_concluded_high_risk is required");
+        }
 
         SourceType sourceType;
 
@@ -41,6 +44,7 @@ public class RiskAssessmentService {
         RiskAssessmentEntity entity = new RiskAssessmentEntity(id, request.getLocationName(),request.getTimestamp(), sourceType);
 
         entity.setStationNo(request.getStationNo());
+        entity.setSourceConcludedHighRisk(request.getSourceConcludedHighRisk());
         entity.setBasisNote(request.getBasisNote());
         entity.setCitation(request.getCitation());
 
@@ -80,12 +84,14 @@ public class RiskAssessmentService {
             return new RiskAssessmentListItemDto(entity.getId(), entity.getLocationName(), entity.getStationNo(),
                 entity.getAssessedAt(), carcinogenicRisk, totalHazardIndex,
                 entity.getRiskLevel() == null ? null : entity.getRiskLevel().name().toLowerCase(),
-                entity.getBasisNote(), entity.getSourceType().name().toLowerCase(), entity.getCitation(),
+                Boolean.TRUE.equals(entity.getSourceConcludedHighRisk()), entity.getBasisNote(),
+                entity.getSourceType().name().toLowerCase(), entity.getCitation(),
                 entity.getFhirRiskAssessmentId());
         }
 
     private boolean isHigh(RiskAssessmentEntity entity) {
-        return (entity.getCarcinogenicRiskChild() != null && entity.getCarcinogenicRiskChild() > 1.0)
-                || (entity.getCarcinogenicRiskAdult() != null && entity.getCarcinogenicRiskAdult() > 1.0);
+        return Boolean.TRUE.equals(entity.getSourceConcludedHighRisk())
+            || (entity.getTotalHazardIndexChild() != null && entity.getTotalHazardIndexChild() > 1.0)
+            || (entity.getTotalHazardIndexAdult() != null && entity.getTotalHazardIndexAdult() > 1.0);
     }
 }

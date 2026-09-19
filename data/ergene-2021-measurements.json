@@ -1,0 +1,236 @@
+[
+  {
+    "measurement_id": "ERG-2021-ST1-AS-WAT",
+    "location_name": "St 1 - Saray Buyukyoncali (Ergene Menba / Referans)",
+    "station_no": 1,
+    "coordinates": {
+      "lat": 41.4450,
+      "lon": 27.9250
+    },
+    "timestamp": "2021-06-15T09:30:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.0034,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "water_quality": {
+      "ph": 7.65,
+      "ec_us_cm": 420.0,
+      "tds_mg_l": 215.0,
+      "salinity_psu": 0.22,
+      "do_mg_l": 8.40
+    },
+    "citation": "Tokatli, C. (2021) Environ Earth Sci 80:156"
+  },
+  {
+    "measurement_id": "ERG-2021-ST2-PB-WAT",
+    "location_name": "St 2 - Cerkezkoy OSB Desari Alti",
+    "station_no": 2,
+    "coordinates": {
+      "lat": 41.2850,
+      "lon": 27.9980
+    },
+    "timestamp": "2021-08-20T11:15:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0421,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "water_quality": {
+      "ph": 7.95,
+      "ec_us_cm": 1840.0,
+      "tds_mg_l": 920.0,
+      "salinity_psu": 0.95,
+      "do_mg_l": 1.85
+    },
+    "citation": "Tokatli, C. (2021) Environ Earth Sci 80:156"
+  },
+  {
+    "measurement_id": "ERG-2021-ST3-AS-WAT",
+    "location_name": "St 3 - Corlu Cayi Ulas Mevkii",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.1730,
+      "lon": 27.7850
+    },
+    "timestamp": "2021-08-22T03:30:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.1345,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "water_quality": {
+      "ph": 7.82,
+      "ec_us_cm": 2650.0,
+      "tds_mg_l": 1340.0,
+      "salinity_psu": 1.38,
+      "do_mg_l": 0.20
+    },
+    "citation": "Varol, M., & Tokatli, C. (2023) Chemosphere 311:137096"
+  },
+  {
+    "measurement_id": "ERG-2021-ST3-CD-WAT",
+    "location_name": "St 3 - Corlu Cayi Ulas Mevkii",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.1730,
+      "lon": 27.7850
+    },
+    "timestamp": "2021-08-22T03:30:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": 0.0148,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "water_quality": {
+      "ph": 7.82,
+      "ec_us_cm": 2650.0,
+      "tds_mg_l": 1340.0,
+      "salinity_psu": 1.38,
+      "do_mg_l": 0.20
+    },
+    "citation": "Varol, M., & Tokatli, C. (2023) Chemosphere 311:137096"
+  },
+  {
+    "measurement_id": "ERG-2021-ST3-PB-WAT",
+    "location_name": "St 3 - Corlu Cayi Ulas Mevkii",
+    "station_no": 3,
+    "coordinates": {
+      "lat": 41.1730,
+      "lon": 27.7850
+    },
+    "timestamp": "2021-08-22T03:30:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0885,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "water_quality": {
+      "ph": 7.82,
+      "ec_us_cm": 2650.0,
+      "tds_mg_l": 1340.0,
+      "salinity_psu": 1.38,
+      "do_mg_l": 0.20
+    },
+    "citation": "Varol, M., & Tokatli, C. (2023) Chemosphere 311:137096"
+  },
+  {
+    "measurement_id": "ERG-2021-ST4-AS-WAT",
+    "location_name": "St 4 - Muratli Karasogutleme Koprusu",
+    "station_no": 4,
+    "coordinates": {
+      "lat": 41.1710,
+      "lon": 27.5020
+    },
+    "timestamp": "2021-10-12T14:00:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.0782,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "water_quality": {
+      "ph": 7.74,
+      "ec_us_cm": 2180.0,
+      "tds_mg_l": 1105.0,
+      "salinity_psu": 1.12,
+      "do_mg_l": 1.10
+    },
+    "citation": "Tokatli, C. (2021) Environ Earth Sci 80:156"
+  },
+  {
+    "measurement_id": "ERG-2021-ST5-PB-WAT",
+    "location_name": "St 5 - Luleburgaz Buyukkaristiran Mevkii",
+    "station_no": 5,
+    "coordinates": {
+      "lat": 41.3410,
+      "lon": 27.3540
+    },
+    "timestamp": "2021-05-18T10:45:00+03:00",
+    "parameter": "lead",
+    "parameter_symbol": "Pb",
+    "value": 0.0314,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "water_quality": {
+      "ph": 7.60,
+      "ec_us_cm": 1950.0,
+      "tds_mg_l": 980.0,
+      "salinity_psu": 1.01,
+      "do_mg_l": 1.60
+    },
+    "citation": "Tokatli, C. (2021) Environ Earth Sci 80:156"
+  },
+  {
+    "measurement_id": "ERG-2021-ST8-CD-WAT",
+    "location_name": "St 8 - Uzunkopru DSI Koprusu",
+    "station_no": 8,
+    "coordinates": {
+      "lat": 41.2720,
+      "lon": 26.6850
+    },
+    "timestamp": "2021-09-04T12:00:00+03:00",
+    "parameter": "cadmium",
+    "parameter_symbol": "Cd",
+    "value": 0.0052,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "water_quality": {
+      "ph": 7.55,
+      "ec_us_cm": 1720.0,
+      "tds_mg_l": 865.0,
+      "salinity_psu": 0.88,
+      "do_mg_l": 1.45
+    },
+    "citation": "Tokatli, C. (2021) Environ Earth Sci 80:156"
+  },
+  {
+    "measurement_id": "ERG-2021-ST8-AS-WAT",
+    "location_name": "St 8 - Uzunkopru DSI Koprusu",
+    "station_no": 8,
+    "coordinates": {
+      "lat": 41.2720,
+      "lon": 26.6850
+    },
+    "timestamp": "2021-09-04T12:00:00+03:00",
+    "parameter": "arsenic",
+    "parameter_symbol": "As",
+    "value": 0.0621,
+    "unit": "mg/L",
+    "below_detection_limit": false,
+    "method": "ICP-MS (Agilent 7700)",
+    "source_type": "literature",
+    "sample_type": "surface_water",
+    "water_quality": {
+      "ph": 7.55,
+      "ec_us_cm": 1720.0,
+      "tds_mg_l": 865.0,
+      "salinity_psu": 0.88,
+      "do_mg_l": 1.45
+    },
+    "citation": "Tokatli, C. (2021) Environ Earth Sci 80:156"
+  }
+]

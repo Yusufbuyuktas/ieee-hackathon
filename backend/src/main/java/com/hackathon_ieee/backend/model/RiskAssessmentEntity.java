@@ -51,10 +51,13 @@ public class RiskAssessmentEntity {
     @Column(name = "total_hazard_index_adult")
     private Double totalHazardIndexAdult;
 
-    /** Servis katmani hesaplar (orn. carcinogenicRisk > 1.0 ise HIGH). Entity hesaplamaz. */
+    /** Servis katmani THI ve kaynagin nihai yargisina gore hesaplar. Entity hesaplamaz. */
     @Enumerated(EnumType.STRING)
     @Column(name = "risk_level")
     private RiskLevel riskLevel;
+
+    @Column(name = "source_concluded_high_risk")
+    private Boolean sourceConcludedHighRisk;
 
     @Column(name = "basis_note", columnDefinition = "TEXT")
     private String basisNote;

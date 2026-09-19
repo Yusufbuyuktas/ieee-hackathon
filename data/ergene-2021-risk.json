@@ -1,0 +1,74 @@
+[
+  {
+    "assessment_id": "ERG-2021-ST1-HRA",
+    "location_name": "St 1 - Saray Buyukyoncali (Ergene Menba / Referans)",
+    "station_no": 1,
+    "timestamp": "2021-06-15T09:30:00+03:00",
+    "carcinogenic_risk": {
+      "child": 0.00000215,
+      "adult": 0.00000184
+    },
+    "total_hazard_index": {
+      "child": 0.3824,
+      "adult": 0.2415
+    },
+    "basis_note": "Kanserojen risk As uzerinden; kanserojen olmayan risk (HI) Zn, Mn, Fe, Cu, Cr ve Pb uzerinden oral tuketim senaryosuna gore hesaplanmistir (USEPA 2004). HI < 1 olup kabul edilebilir risk duzeyindedir.",
+    "source_concluded_high_risk": false,
+    "source_type": "literature",
+    "citation": "Tokatli, C. (2021) Environ Earth Sci 80:156"
+  },
+  {
+    "assessment_id": "ERG-2021-ST3-HRA",
+    "location_name": "St 3 - Corlu Cayi Ulas Mevkii",
+    "station_no": 3,
+    "timestamp": "2021-08-22T03:30:00+03:00",
+    "carcinogenic_risk": {
+      "child": 0.001842,
+      "adult": 0.001265
+    },
+    "total_hazard_index": {
+      "child": 12.4512,
+      "adult": 7.824
+    },
+    "basis_note": "Kanserojen risk As ve Cr(VI) uzerinden; kanserojen olmayan risk As, Cd, Pb, Ni ve Cr uzerinden oral alim (ingestion) ve dermal temas dikkate alinarak hesaplanmistir (USEPA). Kanser riski 1.0E-04 guvenlik esigini asmis, HI > 1 ile ciddi toksik maruziyet tespit edilmistir.",
+    "source_concluded_high_risk": true,
+    "source_type": "literature",
+    "citation": "Varol, M., & Tokatli, C. (2023) Chemosphere 311:137096"
+  },
+  {
+    "assessment_id": "ERG-2021-ST4-HRA",
+    "location_name": "St 4 - Muratli Karasogutleme Koprusu",
+    "station_no": 4,
+    "timestamp": "2021-10-12T14:00:00+03:00",
+    "carcinogenic_risk": {
+      "child": 0.000742,
+      "adult": 0.000518
+    },
+    "total_hazard_index": {
+      "child": 6.852,
+      "adult": 4.3015
+    },
+    "basis_note": "Kanserojen risk As ve Ni uzerinden; kanserojen olmayan risk As, Cd, Pb, Cu ve Zn uzerinden hesaplanmistir. Yuzey suyunun tarimsal sulamada ve evsel kullanimda olusturdugu karsinojenik risk esik degerin uzerindedir.",
+    "source_concluded_high_risk": true,
+    "source_type": "literature",
+    "citation": "Tokatli, C. (2021) Environ Earth Sci 80:156"
+  },
+  {
+    "assessment_id": "ERG-2021-ST8-HRA",
+    "location_name": "St 8 - Uzunkopru DSI Koprusu",
+    "station_no": 8,
+    "timestamp": "2021-09-04T12:00:00+03:00",
+    "carcinogenic_risk": {
+      "child": 0.000485,
+      "adult": 0.00032
+    },
+    "total_hazard_index": {
+      "child": 4.1205,
+      "adult": 2.654
+    },
+    "basis_note": "Kanserojen risk As uzerinden; kanserojen olmayan risk As, Cd, Pb ve Cr uzerinden hesaplanmistir. Celtik sulamasinda kullanilan nehir suyundan kaynaklanan dermal ve kazara yutma maruziyet riskleri modellenmistir (HI > 1).",
+    "source_concluded_high_risk": true,
+    "source_type": "literature",
+    "citation": "Tokatli, C. (2021) Environ Earth Sci 80:156"
+  }
+]

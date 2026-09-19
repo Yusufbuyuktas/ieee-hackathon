@@ -214,6 +214,16 @@ Response `200 OK`:
 **Durum:** Taslak
 **Endpoint:** `POST /api/risk-assessments`
 
+### Zorunlu ek alan
+- `source_concluded_high_risk` (boolean) — kaynağın kendi metninde veya
+  `basis_note` alanında belirttiği nihai risk yargısı. Backend bu değeri hesaplamaz;
+  request'te gönderilen değeri saklar.
+
+> `carcinogenic_risk` değerleri kaynaklar arasında tutarlı bir ölçekte değildir ve
+> backend tarafından otomatik eşik karşılaştırmasına tabi tutulmaz. `risk_level`,
+> `total_hazard_index.child > 1.0` veya `total_hazard_index.adult > 1.0` ya da
+> `source_concluded_high_risk: true` ise `high`, aksi halde `normal` olur.
+
 Request:
 ```json
 {
@@ -222,6 +232,7 @@ Request:
   "timestamp": "2025-05-15T10:00:00+03:00",
   "carcinogenic_risk": { "child": 1.097609, "adult": 1.015173 },
   "total_hazard_index": { "child": 3.050103, "adult": 2.58 },
+  "source_concluded_high_risk": true,
   "source_type": "literature",
   "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
 }
@@ -253,6 +264,7 @@ Response `200 OK`:
       "carcinogenic_risk": { "child": 1.097609, "adult": 1.015173 },
       "total_hazard_index": { "child": 3.050103, "adult": 2.58 },
       "risk_level": "high",
+      "source_concluded_high_risk": true,
       "basis_note": "Kanserojen risk As ve Ni uzerinden hesaplanmistir.",
       "source_type": "literature",
       "citation": "Aydin et al. (2026), Table 9",

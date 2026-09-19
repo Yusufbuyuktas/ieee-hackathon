@@ -17,6 +17,7 @@ public class RiskAssessmentCreateRequest {
     private OffsetDateTime timestamp;
     private RiskValuesDto carcinogenicRisk;
     private RiskValuesDto totalHazardIndex;
+    private Boolean sourceConcludedHighRisk;
     private String basisNote;
     private String sourceType;
     private String citation;
