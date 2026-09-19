@@ -24,7 +24,7 @@ public class RiskStatusController {
     @GetMapping
     public RiskStatusResponse get(@RequestParam String location) {
         ObservationEntity entity = observationRepository.findAll().stream()
-                .filter(observation -> matchesLocation(location, observation.getLocationName()))
+                .filter(observation -> location.equals(observation.getLocationName()))
                 .filter(ObservationEntity::isRiskFlagged)
                 .max(Comparator.comparing(ObservationEntity::getObservedAt))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "risk status not found"));
@@ -38,12 +38,4 @@ public class RiskStatusController {
                 entity.getUnit(), standard.getValue(), standard.getKey().name(),
                 "Olculen " + entity.getParameter().name().toLowerCase() + " degeri esik degerini asiyor.", entity.getObservedAt());
     }
-
-        private boolean matchesLocation(String requested, String actual) {
-                if (requested.equals(actual)) return true;
-                String normalized = actual.toLowerCase()
-                        .replace("ergene havzasi - ", "ergene-")
-                        .replace(" ", "-");
-                return requested.toLowerCase().replace("-0", "-").equals(normalized);
-        }
 }

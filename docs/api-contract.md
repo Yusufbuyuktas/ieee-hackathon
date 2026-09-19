@@ -160,9 +160,15 @@ Response `200 OK`:
 ---
 
 ## 4. Risk Durumu Sorgulama
-**Durum:** güncellendi
-**Endpoint:** `GET /api/risk-status?location=ergene-kuyu-09`
+**Durum:** güncellendi — location eşleştirme kuralı netleştirildi
+**Endpoint:** `GET /api/risk-status?location=Ergene%20Havzasi%20-%20Kuyu%209`
 **Kim çağırır:** Web dashboard, mock hastane paneli
+
+> **KURAL:** `location` parametresi, `/api/locations` veya `/api/observations`
+> yanıtlarından alınan `location_name` değeriyle **birebir (case-sensitive)**
+> eşleşmelidir. Frontend bu değeri kendi üretmemeli/tahmin etmemeli — sadece daha
+> önce API'den aldığı bir değeri geri göndermelidir. Boşluk ve özel karakterler için
+> `URLSearchParams`/`encodeURIComponent` kullanılmalıdır.
 
 Response `200 OK`:
 ```json
@@ -224,6 +230,37 @@ Response `201 Created`:
 ```json
 { "id": "erg-2025-st2-hra", "fhir_riskassessment_id": "erg-2025-st2-hra" }
 ```
+
+---
+
+## 7. Bilinen Konumları Listeleme (yeni)
+**Durum:** Taslak
+**Endpoint:** `GET /api/locations`
+**Kim çağırır:** Web dashboard (harita/filtre dropdown'ı için), mobil (opsiyonel)
+
+Response `200 OK`:
+```json
+{
+  "locations": [
+    {
+      "location_name": "Ergene Havzasi - Kuyu 9",
+      "station_no": 9,
+      "sample_types": ["groundwater"],
+      "coordinates": { "lat": 41.271667, "lon": 27.9725 }
+    },
+    {
+      "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+      "station_no": 1,
+      "sample_types": ["surface_water", "sediment"],
+      "coordinates": { "lat": 41.18, "lon": 27.77 }
+    }
+  ]
+}
+```
+
+`location_name` değerleri veritabanındaki gözlemlerden gelir. Frontend bu değerleri
+kendi üretmemeli veya tahmin etmemeli; `/api/locations` ya da `/api/observations`
+yanıtından aldığı değeri `/api/risk-status` çağrısında olduğu gibi geri göndermelidir.
 
 ---
 
