@@ -14,7 +14,6 @@ DOI: 10.1007/s13762-026-07424-6
 
 - `ergene-2025-measurements.json` — 90 kayıt (5 istasyon × 9 element × 2 ortam)
 - `ergene-2025-risk.json` — 5 kayıt (istasyon başına insan sağlığı risk değerlendirmesi)
-- `generate2025.py` — dönüşüm script'i
 
 ---
 
@@ -33,12 +32,10 @@ DOI: 10.1007/s13762-026-07424-6
 ## ⚠️ Dikkat Edilmesi Gerekenler
 
 ### 1. Koordinatlar makalede sayısal olarak verilmemiş
-İstasyonlar sadece harita üzerinde (Şekil 1) gösterilmiş, lat/lon değerleri yazılmamış.
-JSON'da `"coordinates": null` bırakıldı — **uydurulmadı**.
 Haritayı gösteren bölge tanımları metinden alındı (St 1 yağ fabrikası yanı, St 2 köy içi,
 St 3-4 OSB içi, St 5 Adasarhanlı yakını).
-Harita üzerinden yaklaşık koordinat okuyup ekleyebilirsiniz — o zaman
-`"coordinate_source": "approximated_from_figure"` gibi bir alan ekleyip şeffaf olun.
+Harita üzerinden yaklaşık koordinat okundu
+`"coordinate_source": "approximated_from_figure"` gibi bir alan eklendi.
 
 ### 2. "0" değerleri BDL olarak işlendi
 Makale bazı ölçümler için 0 mg/L yazmış ama metinde "tespit edilmedi" diye açıklamış
@@ -63,12 +60,6 @@ ile nehir suyu farklı şeyler. Jüri bunu sorabilir.
 Anlatı şöyle kurulabilir: *"Havza iki farklı su kaynağı açısından da izlenmeli — sistemimiz
 her iki veri tipini de aynı standartta (FHIR) saklayabiliyor."*
 
-### 4. Yeni elementler için eşik değeri henüz YOK
-Arsenik, nikel ve mangan için içme suyu eşik değerleri **bu iki makalenin hiçbirinde
-tablo halinde verilmemiş**. Uydurma değer yazmayın.
-Backend'in eşik tablosuna eklemeden önce WHO/TS/EPA rehber değerlerini ayrıca doğrulayın.
-(Arsenik için yaygın bilinen WHO değeri 10 µg/L = 0.01 mg/L'dir, ancak güncel haliyle
-teyit edilmeli.)
 
 ### 5. Sediman ölçümleri farklı birimde
 Su mg/L, sediman mg/kg. **Aynı grafikte gösterilemez, aynı eşikle karşılaştırılamaz.**

@@ -233,7 +233,38 @@ Response `201 Created`:
 
 ---
 
-## 7. Bilinen Konumları Listeleme (yeni)
+## 7. Sağlık Riski Değerlendirmelerini Listeleme (Dashboard için)
+**Durum:** Taslak
+**Endpoint:** `GET /api/risk-assessments?location=St%202%20-%20koy%20ici,%20sanayiden%20uzak`
+**Kim çağırır:** Web dashboard, mock hastane paneli
+
+`location` opsiyoneldir. Verilirse `location_name` ile birebir (case-sensitive)
+eşleşir. Verilmezse tüm kayıtlar `timestamp` alanına göre yeniden eskiye döner.
+
+Response `200 OK`:
+```json
+{
+  "results": [
+    {
+      "id": "ERG-2025-ST2-HRA",
+      "location_name": "St 2 - koy ici, sanayiden uzak",
+      "station_no": 2,
+      "timestamp": "2025-05-15T10:00:00+03:00",
+      "carcinogenic_risk": { "child": 1.097609, "adult": 1.015173 },
+      "total_hazard_index": { "child": 3.050103, "adult": 2.58 },
+      "risk_level": "high",
+      "basis_note": "Kanserojen risk As ve Ni uzerinden hesaplanmistir.",
+      "source_type": "literature",
+      "citation": "Aydin et al. (2026), Table 9",
+      "fhir_risk_assessment_id": "1001"
+    }
+  ]
+}
+```
+
+---
+
+## 8. Bilinen Konumları Listeleme (yeni)
 **Durum:** Taslak
 **Endpoint:** `GET /api/locations`
 **Kim çağırır:** Web dashboard (harita/filtre dropdown'ı için), mobil (opsiyonel)

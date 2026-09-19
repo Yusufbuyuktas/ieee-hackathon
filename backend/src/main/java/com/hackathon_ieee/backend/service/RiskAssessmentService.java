@@ -1,6 +1,7 @@
 package com.hackathon_ieee.backend.service;
 
 import com.hackathon_ieee.backend.dto.RiskAssessmentCreateRequest;
+import com.hackathon_ieee.backend.dto.RiskAssessmentListItemDto;
 import com.hackathon_ieee.backend.dto.RiskAssessmentResponse;
 import com.hackathon_ieee.backend.enums.RiskLevel;
 import com.hackathon_ieee.backend.enums.SourceType;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +61,28 @@ public class RiskAssessmentService {
 
         return new RiskAssessmentResponse(entity.getId(), entity.getFhirRiskAssessmentId());
     }
+
+        public List<RiskAssessmentListItemDto> findAll(String location) {
+            List<RiskAssessmentEntity> entities = location == null || location.isBlank()
+                ? repository.findAllByOrderByAssessedAtDesc()
+                : repository.findByLocationNameOrderByAssessedAtDesc(location);
+
+            return entities.stream().map(this::toListItem).toList();
+        }
+
+        private RiskAssessmentListItemDto toListItem(RiskAssessmentEntity entity) {
+            RiskAssessmentListItemDto.RiskValuesDto carcinogenicRisk = new RiskAssessmentListItemDto.RiskValuesDto(
+                    entity.getCarcinogenicRiskChild(), entity.getCarcinogenicRiskAdult());
+
+            RiskAssessmentListItemDto.RiskValuesDto totalHazardIndex = new RiskAssessmentListItemDto.RiskValuesDto(
+                    entity.getTotalHazardIndexChild(), entity.getTotalHazardIndexAdult());
+
+            return new RiskAssessmentListItemDto(entity.getId(), entity.getLocationName(), entity.getStationNo(),
+                entity.getAssessedAt(), carcinogenicRisk, totalHazardIndex,
+                entity.getRiskLevel() == null ? null : entity.getRiskLevel().name().toLowerCase(),
+                entity.getBasisNote(), entity.getSourceType().name().toLowerCase(), entity.getCitation(),
+                entity.getFhirRiskAssessmentId());
+        }
 
     private boolean isHigh(RiskAssessmentEntity entity) {
         return (entity.getCarcinogenicRiskChild() != null && entity.getCarcinogenicRiskChild() > 1.0)
