@@ -17,9 +17,11 @@ import {
 export default function App() {
   const [activeTab, setActiveTab] = useState('monitoring');
   const [selectedParameter, setSelectedParameter] = useState('arsenic');
+  const [sampleType, setSampleType] = useState('surface_water'); // 'surface_water' | 'sediment'
 
-  const metrics = useMemo(() => getDashboardMetrics(selectedParameter), [selectedParameter]);
-  const trendData = useMemo(() => getTrendData(selectedParameter), [selectedParameter]);
+  // Veri katmanı hesaplamaları (sampleType duyarlı)
+  const metrics = useMemo(() => getDashboardMetrics(selectedParameter, sampleType), [selectedParameter, sampleType]);
+  const trendData = useMemo(() => getTrendData(selectedParameter, sampleType), [selectedParameter, sampleType]);
   const measurements = useMemo(() => getAllMeasurements(), []);
   const citizenReports = useMemo(() => getCitizenReports(), []);
 
@@ -34,16 +36,21 @@ export default function App() {
           <div className="space-y-6">
             <AlertBanner metrics={metrics} selectedParameter={selectedParameter} />
             <KpiCards metrics={metrics} selectedParameter={selectedParameter} />
+            
             <ErgeneMap
               measurements={measurements}
               citizenReports={citizenReports}
               selectedParameter={selectedParameter}
             />
+
             <TrendChart
               trendData={trendData}
               selectedParameter={selectedParameter}
               onParameterChange={setSelectedParameter}
+              sampleType={sampleType}
+              onSampleTypeChange={setSampleType}
             />
+
             <RecentObservations
               measurements={measurements}
               citizenReports={citizenReports}

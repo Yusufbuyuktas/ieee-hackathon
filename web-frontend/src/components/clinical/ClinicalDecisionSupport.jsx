@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { mockPatients } from '../../mock/mockPatients';
 import { THRESHOLDS } from '../../constants/apiContract';
+import { getPatientRegionalMeasurements } from '../../utils/geoMatching';
 import {
   Stethoscope,
   User,
@@ -22,7 +23,6 @@ export default function ClinicalDecisionSupport({ measurements }) {
   const [showFhirModal, setShowFhirModal] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Dışarı tıklandığında açılır menüyü kapat
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -33,7 +33,6 @@ export default function ClinicalDecisionSupport({ measurements }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Hasta arama filtresi (İsim, ID veya İlçe bazlı)
   const filteredPatients = mockPatients.filter((p) => {
     const term = searchTerm.toLowerCase();
     return (
@@ -43,17 +42,26 @@ export default function ClinicalDecisionSupport({ measurements }) {
     );
   });
 
-  // Seçili hastanın yaşadığı ilçeye ait çevre ölçümleri
-  const regionalMeasurements = measurements.filter((m) =>
-    m.location_name.toLowerCase().includes(selectedPatient.district.toLowerCase())
-  );
+  // HİBRİT EŞLEŞTİRME MOTORU: 0 kayıt dönmesi imkansız hale getirildi
+  const regionalMeasurements = getPatientRegionalMeasurements(selectedPatient, measurements);
 
-  const arsenicData = regionalMeasurements.find(
-    (m) => m.parameter === 'arsenic' && !m.below_detection_limit
-  );
-  const isHighRisk = arsenicData && arsenicData.isExceeded;
+  // Hastanın anamnezine göre şüpheli parametreyi belirle (varsayılan: arsenic)
+  const targetParam = selectedPatient.suspected_exposure || 'arsenic';
+  const paramThreshold = THRESHOLDS[targetParam] || THRESHOLDS.arsenic;
 
-  // HL7 FHIR RiskAssessment Formatında JSON Üretici
+  // Bölgedeki ilgili parametre ölçümleri
+  const paramMeasurements = regionalMeasurements.filter(m => m.parameter === targetParam);
+
+  // Varsa eşik aşımı olan en kritik ölçümü, yoksa ilk geçerli ölçümü seç
+  const targetObservation =
+    paramMeasurements.find(m => !m.below_detection_limit && m.isExceeded) ||
+    paramMeasurements.find(m => !m.below_detection_limit) ||
+    paramMeasurements[0] ||
+    regionalMeasurements[0];
+
+  const isHighRisk = Boolean(targetObservation?.isExceeded);
+
+  // HL7 FHIR RiskAssessment JSON Üretici
   const generateFhirRiskAssessment = () => {
     return {
       resourceType: "RiskAssessment",
@@ -66,14 +74,14 @@ export default function ClinicalDecisionSupport({ measurements }) {
       occurrenceDateTime: new Date().toISOString(),
       basis: [
         {
-          reference: `Observation/${arsenicData ? arsenicData.id : 'obs-erg-corlu'}`,
-          display: `Ergene Nehri ${selectedPatient.district} Su Kalite Ölçümü`
+          reference: `Observation/${targetObservation ? targetObservation.id : 'obs-erg-corlu'}`,
+          display: targetObservation?.location_name || `Ergene Havzası ${selectedPatient.district} Ölçümü`
         }
       ],
       prediction: [
         {
           outcome: {
-            text: "Kronik Arsenik ve Ağır Metal Maruziyeti Riski"
+            text: `Kronik ${paramThreshold.label} Maruziyeti Riski`
           },
           qualitativeRisk: {
             coding: [
@@ -85,8 +93,8 @@ export default function ClinicalDecisionSupport({ measurements }) {
             ]
           },
           rationale: isHighRisk
-            ? `Hastanın ikamet ettiği ${selectedPatient.district} bölgesindeki arsenik seviyesi (${arsenicData?.value} mg/L), DSÖ içme suyu sınırını (0.01 mg/L) aşmaktadır. Klinisyenin malignite ve toksisite açısından ileri tetkik yapması önerilir.`
-            : "Bölgedeki ölçümler DSÖ ve ulusal sağlık standartları dahilindedir."
+            ? `Hastanın ikamet ettiği ${selectedPatient.district} havzasındaki ${paramThreshold.label} seviyesi (${targetObservation?.value} ${targetObservation?.unit}), DSÖ güvenli sınırını (${paramThreshold.who} mg/L) aşmaktadır. Bildirilen semptomlar çevresel maruziyetle örtüşmektedir.`
+            : `Bölgedeki ölçümler DSÖ ve ulusal sağlık standartları dahilindedir (${targetObservation?.value ?? 'BDL'} ${targetObservation?.unit || 'mg/L'}).`
         }
       ]
     };
@@ -95,7 +103,7 @@ export default function ClinicalDecisionSupport({ measurements }) {
   return (
     <div className="space-y-6">
       
-      {/* Üst Yönetim ve Ölçeklenebilir Hasta Arama Barı */}
+      {/* Üst Yönetim ve Hasta Arama Barı */}
       <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-30">
         <div>
           <div className="flex items-center space-x-2">
@@ -112,7 +120,7 @@ export default function ClinicalDecisionSupport({ measurements }) {
           </p>
         </div>
 
-        {/* Arama Destekli Dropdown / Combobox */}
+        {/* Combobox */}
         <div className="relative w-full md:w-80" ref={dropdownRef}>
           <label className="block text-[11px] text-slate-400 mb-1 font-medium">Aktif Hasta Dosyası:</label>
           <button
@@ -132,17 +140,14 @@ export default function ClinicalDecisionSupport({ measurements }) {
             <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180 text-cyan-400' : ''}`} />
           </button>
 
-          {/* Açılır Menü Penceresi */}
           {isDropdownOpen && (
             <div className="absolute right-0 mt-2 w-full md:w-96 bg-slate-900 border border-slate-700/80 rounded-xl shadow-2xl overflow-hidden z-50">
-              
-              {/* Filtre / Arama Kutusu */}
               <div className="p-2.5 border-b border-slate-800 bg-slate-950/60">
                 <div className="relative">
                   <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
                   <input
                     type="text"
-                    placeholder="İsim, ID (PAT-...) veya ilçe ara..."
+                    placeholder="İsim, ID veya ilçe ara..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full bg-slate-800/80 border border-slate-700 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
@@ -151,51 +156,39 @@ export default function ClinicalDecisionSupport({ measurements }) {
                 </div>
               </div>
 
-              {/* Scroll Edilebilir Hasta Listesi (100+ hasta için hazır) */}
               <div className="max-h-64 overflow-y-auto divide-y divide-slate-800/60">
-                {filteredPatients.length === 0 ? (
-                  <div className="p-4 text-center text-xs text-slate-500">
-                    Aramanızla eşleşen hasta bulunamadı.
-                  </div>
-                ) : (
-                  filteredPatients.map((p) => {
-                    const isSelected = selectedPatient.id === p.id;
-                    return (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => {
-                          setSelectedPatient(p);
-                          setIsDropdownOpen(false);
-                          setSearchTerm('');
-                        }}
-                        className={`w-full p-3 text-left flex items-center justify-between hover:bg-slate-800/60 transition-colors text-xs ${
-                          isSelected ? 'bg-cyan-500/10 border-l-2 border-cyan-500' : ''
-                        }`}
-                      >
-                        <div className="space-y-0.5">
-                          <div className="flex items-center space-x-2">
-                            <span className="font-semibold text-white">{p.name}</span>
-                            <span className="text-[10px] font-mono text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">
-                              {p.id}
-                            </span>
-                          </div>
-                          <div className="text-[11px] text-slate-400 flex items-center space-x-2">
-                            <span>{p.gender}, {p.age} yaş</span>
-                            <span>•</span>
-                            <span className="text-cyan-400">{p.district} ({p.neighborhood})</span>
-                          </div>
+                {filteredPatients.map((p) => {
+                  const isSelected = selectedPatient.id === p.id;
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedPatient(p);
+                        setIsDropdownOpen(false);
+                        setSearchTerm('');
+                      }}
+                      className={`w-full p-3 text-left flex items-center justify-between hover:bg-slate-800/60 transition-colors text-xs ${
+                        isSelected ? 'bg-cyan-500/10 border-l-2 border-cyan-500' : ''
+                      }`}
+                    >
+                      <div className="space-y-0.5">
+                        <div className="flex items-center space-x-2">
+                          <span className="font-semibold text-white">{p.name}</span>
+                          <span className="text-[10px] font-mono text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">
+                            {p.id}
+                          </span>
                         </div>
-                        {isSelected && <Check className="w-4 h-4 text-cyan-400 shrink-0 ml-2" />}
-                      </button>
-                    );
-                  })
-                )}
-              </div>
-
-              {/* Alt Bilgi */}
-              <div className="p-2 bg-slate-950/80 border-t border-slate-800 text-[10px] text-slate-500 text-center">
-                Toplam {mockPatients.length} kayıtlı hasta • Elektronik Sağlık Kaydı (EHR)
+                        <div className="text-[11px] text-slate-400 flex items-center space-x-2">
+                          <span>{p.gender}, {p.age} yaş</span>
+                          <span>•</span>
+                          <span className="text-cyan-400">{p.district}</span>
+                        </div>
+                      </div>
+                      {isSelected && <Check className="w-4 h-4 text-cyan-400 shrink-0 ml-2" />}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -205,7 +198,7 @@ export default function ClinicalDecisionSupport({ measurements }) {
       {/* İki Kolonlu PoC Sahnesi */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* SOL KOLON: Elektronik Sağlık Kaydı (EHR) */}
+        {/* SOL: EHR Hasta Kartı */}
         <div className="lg:col-span-5 bg-slate-900/80 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
@@ -223,7 +216,6 @@ export default function ClinicalDecisionSupport({ measurements }) {
               </span>
             </div>
 
-            {/* İkamet ve Demografik Detaylar */}
             <div className="space-y-3 text-xs">
               <div className="flex items-center space-x-2 text-slate-300 bg-slate-800/50 p-2.5 rounded-xl border border-slate-800">
                 <MapPin className="w-4 h-4 text-cyan-400 shrink-0" />
@@ -244,7 +236,6 @@ export default function ClinicalDecisionSupport({ measurements }) {
                 </div>
               </div>
 
-              {/* Vital Bulgular */}
               <div className="grid grid-cols-3 gap-2 pt-2">
                 <div className="bg-slate-950/40 p-2 rounded-lg border border-slate-800/80 text-center">
                   <div className="text-[10px] text-slate-400">Tansiyon</div>
@@ -268,7 +259,7 @@ export default function ClinicalDecisionSupport({ measurements }) {
           </div>
         </div>
 
-        {/* SAĞ KOLON: Çevresel Maruziyet & Otomatik Risk Önerisi (One Health) */}
+        {/* SAĞ: Çevresel Maruziyet & Otomatik Alarm */}
         <div className="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
@@ -277,28 +268,31 @@ export default function ClinicalDecisionSupport({ measurements }) {
                 <h3 className="text-sm font-bold text-white">Bölgesel Çevresel Maruziyet Analizi</h3>
               </div>
               <span className="text-xs text-slate-400">
-                Konum: <strong className="text-white">{selectedPatient.district} Havzası</strong>
+                Eşleşen İstasyon Sayısı: <strong className="text-cyan-400">{regionalMeasurements.length}</strong>
               </span>
             </div>
 
-            {/* Otomatik Risk Uyarı Kutusu */}
+            {/* Otomatik Risk Uyarı Kartı */}
             {isHighRisk ? (
               <div className="bg-rose-950/40 border border-rose-500/50 rounded-xl p-4 mb-4 text-rose-200">
                 <div className="flex items-start space-x-3">
                   <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
                   <div>
                     <h4 className="text-xs font-bold text-white uppercase tracking-wider">
-                      Otomatik Hekim Uyarısı: Kronik Arsenik Maruziyeti
+                      Otomatik Hekim Uyarısı: Kronik {paramThreshold.label} Maruziyeti
                     </h4>
                     <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                      Hastanın yaşadığı <strong className="text-white">{selectedPatient.district}</strong> bölgesinde ölçülen arsenik değeri (<span className="font-mono text-rose-300 font-bold">{arsenicData?.value} mg/L</span>), DSÖ içme suyu güvenli sınırının (<span className="font-mono">{THRESHOLDS.arsenic.who} mg/L</span>) üzerindedir. Bildirilen hiperkeratoz ve solunum şikayetleri kronik arsenik toksisitesiyle uyumludur.
+                      Hastanın ikamet ettiği bölgedeki en yakın ölçüm noktasında (<span className="text-white font-medium">{targetObservation?.location_name}</span>) ölçülen {paramThreshold.label} değeri (<span className="font-mono text-rose-300 font-bold">{targetObservation?.value} {targetObservation?.unit}</span>), DSÖ içme suyu güvenli sınırının (<span className="font-mono">{paramThreshold.who} mg/L</span>) üzerindedir. Bildirilen semptomlar kronik toksisiteyle doğrudan uyumludur.
                     </p>
                     <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
                       <span className="bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded border border-rose-500/40 font-mono">
-                        Ölçüm: {arsenicData?.value} mg/L
+                        Değer: {targetObservation?.value} {targetObservation?.unit}
                       </span>
                       <span className="bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">
-                        Metot: ICP-MS
+                        Metot: {targetObservation?.method || 'ICP-MS'}
+                      </span>
+                      <span className="bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">
+                        İstasyon: {targetObservation?.id}
                       </span>
                     </div>
                   </div>
@@ -311,7 +305,7 @@ export default function ClinicalDecisionSupport({ measurements }) {
                   <div>
                     <h4 className="text-xs font-bold text-white">Çevresel Ağır Metal Riski Saptanmadı</h4>
                     <p className="text-xs text-slate-300 mt-1">
-                      {selectedPatient.district} bölgesindeki mevcut ölçümler DSÖ ve ulusal sınırların altındadır.
+                      {selectedPatient.district} havzasındaki ölçümler DSÖ ve ulusal sınırların altındadır.
                     </p>
                   </div>
                 </div>
@@ -320,11 +314,16 @@ export default function ClinicalDecisionSupport({ measurements }) {
 
             {/* Bölgedeki Ölçüm Parametreleri Özeti */}
             <div className="bg-slate-950/50 p-3.5 rounded-xl border border-slate-800/80">
-              <h4 className="text-xs font-semibold text-white mb-2">Bölgedeki Su Kalitesi Özet Tablosu</h4>
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-xs font-semibold text-white">Bölgedeki İlgili İstasyon Ölçümleri</h4>
+                <span className="text-[10px] text-slate-400">İlk {Math.min(regionalMeasurements.length, 4)} kayıt</span>
+              </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                 {regionalMeasurements.slice(0, 4).map((m) => (
                   <div key={m.id} className="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                    <div className="text-[10px] text-slate-400 uppercase">{m.parameter}</div>
+                    <div className="text-[10px] text-slate-400 uppercase truncate" title={m.location_name}>
+                      {m.parameter}
+                    </div>
                     <div className="font-mono text-white font-semibold">
                       {m.below_detection_limit ? 'BDL' : `${m.value} ${m.unit}`}
                     </div>
@@ -341,7 +340,6 @@ export default function ClinicalDecisionSupport({ measurements }) {
             </div>
           </div>
 
-          {/* Aksiyon Barı & FHIR Butonu */}
           <div className="mt-5 pt-3 border-t border-slate-800 flex items-center justify-between">
             <span className="text-xs text-slate-400">HL7 FHIR R4 Standardı Karar Destek Çıktısı</span>
             <button
@@ -356,7 +354,7 @@ export default function ClinicalDecisionSupport({ measurements }) {
 
       </div>
 
-      {/* FHIR JSON Görüntüleme Modalı */}
+      {/* FHIR Modal */}
       {showFhirModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-5 shadow-2xl flex flex-col max-h-[85vh]">

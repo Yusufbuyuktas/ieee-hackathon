@@ -1,23 +1,21 @@
 import { THRESHOLDS, evaluateRisk } from '../constants/apiContract';
 import { mockCitizenReports } from '../mock/citizenReports';
 
-// 2013 ve 2025 verilerini güvenli import et (dosya yoksa boş diziye düşer)
 let raw2013 = [];
 let raw2025 = [];
 
 try {
   raw2013 = (await import('../mock/ergene-2013-measurements.json')).default;
 } catch (e) {
-  console.warn("2013 veri seti src/mock/ altında bulunamadı, boş dizi kullanılıyor.");
+  console.warn("2013 veri seti bulunamadı.");
 }
 
 try {
   raw2025 = (await import('../mock/ergene-2025-measurements.json')).default;
 } catch (e) {
-  console.warn("2025 veri seti src/mock/ altında bulunamadı, boş dizi kullanılıyor.");
+  console.warn("2025 veri seti bulunamadı.");
 }
 
-// Bütün ölçümleri tekilleştir ve normalize et
 export const getAllMeasurements = () => {
   const combined = [
     ...(Array.isArray(raw2013) ? raw2013 : []),
@@ -26,7 +24,8 @@ export const getAllMeasurements = () => {
 
   return combined.map((item, index) => {
     const isBDL = item.below_detection_limit === true || item.value === null || item.value === undefined;
-    const risk = evaluateRisk(item.parameter, item.value, isBDL);
+    const sampleType = item.sample_type || (item.unit === 'mg/kg' ? 'sediment' : 'surface_water');
+    const risk = evaluateRisk(item.parameter, item.value, isBDL, sampleType);
 
     return {
       id: item.measurement_id || `MEAS-${index + 1}`,
@@ -35,8 +34,8 @@ export const getAllMeasurements = () => {
       location_name: item.location_name || "Ergene Havzası Ölçüm Noktası",
       coordinates: item.coordinates || null,
       parameter: item.parameter || 'arsenic',
-      sample_type: item.sample_type || 'surface_water',
-      unit: item.unit || 'mg/L',
+      sample_type: sampleType,
+      unit: item.unit || risk.unit,
       value: isBDL ? null : Number(item.value),
       below_detection_limit: isBDL,
       method: item.method || 'ICP-MS',
@@ -48,11 +47,16 @@ export const getAllMeasurements = () => {
   });
 };
 
-// Dashboard KPI Metrikleri
-export const getDashboardMetrics = (parameter = 'arsenic') => {
-  const measurements = getAllMeasurements().filter(m => m.parameter === parameter);
+// Dashboard KPI Metrikleri (sampleType filtreli)
+export const getDashboardMetrics = (parameter = 'arsenic', sampleType = 'surface_water') => {
+  const all = getAllMeasurements();
   
-  // Sadece sayısal değeri olan (BDL olmayan) kayıtlar üzerinden istatistik
+  // Numune türüne göre filtrele (su vs sediment)
+  const measurements = all.filter(m => 
+    m.parameter === parameter && 
+    (sampleType === 'all' ? true : m.sample_type === sampleType)
+  );
+
   const validMeasurements = measurements.filter(m => !m.below_detection_limit && m.value !== null);
   const bdlCount = measurements.filter(m => m.below_detection_limit).length;
   const exceededCount = validMeasurements.filter(m => m.isExceeded).length;
@@ -61,7 +65,7 @@ export const getDashboardMetrics = (parameter = 'arsenic') => {
   const maxValue = values.length > 0 ? Math.max(...values) : 0;
   const avgValue = values.length > 0 ? (values.reduce((a, b) => a + b, 0) / values.length) : 0;
 
-  const currentThreshold = THRESHOLDS[parameter]?.who || 0.01;
+  const currentThreshold = sampleType === 'sediment' ? null : (THRESHOLDS[parameter]?.who || null);
 
   return {
     totalMeasurements: measurements.length,
@@ -71,28 +75,28 @@ export const getDashboardMetrics = (parameter = 'arsenic') => {
     maxValue: maxValue.toFixed(4),
     avgValue: avgValue.toFixed(4),
     threshold: currentThreshold,
-    unit: 'mg/L',
+    unit: sampleType === 'sediment' ? 'mg/kg' : 'mg/L',
     isCritical: exceededCount > 0,
-    citizenReportsCount: mockCitizenReports.length
+    citizenReportsCount: mockCitizenReports.length,
+    sampleType
   };
 };
 
-// Trend Grafiği İçin Zaman Serisi Verisi (Yıllara / Lokasyonlara Göre)
-export const getTrendData = (parameter = 'arsenic') => {
-  const measurements = getAllMeasurements()
-    .filter(m => m.parameter === parameter)
-    .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-
-  return measurements.map(m => ({
-    label: `${m.location_name.substring(0, 15)}... (${m.year})`,
-    location: m.location_name,
-    year: m.year,
-    date: m.timestamp.split('T')[0],
-    value: m.below_detection_limit ? null : m.value,
-    isBDL: m.below_detection_limit,
-    threshold: THRESHOLDS[parameter]?.who || 0.01
-  }));
+// Trend Grafiği (sampleType filtreli)
+export const getTrendData = (parameter = 'arsenic', sampleType = 'surface_water') => {
+  return getAllMeasurements()
+    .filter(m => m.parameter === parameter && (sampleType === 'all' ? true : m.sample_type === sampleType))
+    .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+    .map(m => ({
+      label: `${m.location_name.substring(0, 14)}.. (${m.year})`,
+      location: m.location_name,
+      year: m.year,
+      date: m.timestamp.split('T')[0],
+      value: m.below_detection_limit ? null : m.value,
+      isBDL: m.below_detection_limit,
+      unit: m.unit,
+      threshold: sampleType === 'sediment' ? null : (THRESHOLDS[parameter]?.who || null)
+    }));
 };
 
-// Vatandaş Bildirimleri Servisi
 export const getCitizenReports = () => mockCitizenReports;

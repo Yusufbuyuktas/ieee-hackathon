@@ -1,13 +1,15 @@
 import React from 'react';
-import { Activity, ShieldAlert, Waves, Stethoscope, FileJson } from 'lucide-react';
+import { Activity, Waves, Stethoscope, FileJson } from 'lucide-react';
 
 export default function Header({ activeTab, setActiveTab }) {
+  const isMockMode = import.meta.env.VITE_USE_MOCK !== 'false';
+
   return (
     <header className="bg-slate-900/90 border-b border-slate-800 sticky top-0 z-50 backdrop-blur">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
-          {/* Logo & Proje Başlığı */}
+          {/* Logo & Başlık */}
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
               <Waves className="w-6 h-6 animate-pulse" />
@@ -23,7 +25,7 @@ export default function Header({ activeTab, setActiveTab }) {
             </div>
           </div>
 
-          {/* Sekme Butonları */}
+          {/* Sekmeler */}
           <nav className="flex space-x-2">
             <button
               onClick={() => setActiveTab('monitoring')}
@@ -62,12 +64,19 @@ export default function Header({ activeTab, setActiveTab }) {
             </button>
           </nav>
 
-          {/* Sistem Durum Rozeti */}
+          {/* Dinamik Ortam Rozeti */}
           <div className="flex items-center space-x-3 text-xs">
-            <div className="flex items-center space-x-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-full">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span>FHIR Server: Online</span>
-            </div>
+            {isMockMode ? (
+              <div className="flex items-center space-x-1.5 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-2.5 py-1 rounded-full">
+                <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
+                <span>Mod: Literatür Veri Havuzu</span>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-full">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>Canlı API / FHIR Online</span>
+              </div>
+            )}
           </div>
 
         </div>
