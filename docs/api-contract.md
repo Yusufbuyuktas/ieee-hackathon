@@ -42,6 +42,53 @@ Cihazın tespit limitinin altında kalan ölçümlerde `value: null` ve
 `below_detection_limit: true` gönderilir. **Bu sıfır anlamına gelmez.**
 Backend bu kayıtları eşik karşılaştırmasına ve ortalama hesabına DAHİL ETMEZ.
 
+### Veri kaynaklari ve karsilastirma kurallari
+
+- `data/ergene-2013-measurements.json`: 108 yeraltı suyu (`groundwater`) olcumu,
+  18 kuyu x 6 metal. Bu kayitlar 2021 ve 2025 nehir suyu kayitlariyla tek trend
+  serisinde birlestirilmemelidir.
+- `data/ergene-2021-measurements.json`: 9 nehir suyu (`surface_water`) olcumu.
+- `data/ergene-2021-risk.json`: 4 hazir literatur risk degerlendirmesi.
+- `data/ergene-2025-measurements.json`: 90 nehir suyu ve sediman olcumu,
+  5 istasyon x 9 element x 2 ortam.
+- `data/ergene-2025-risk.json`: 5 hazir literatur risk degerlendirmesi.
+- 2013 yeraltı suyu, 2021/2025 nehir suyu ve sediman kayitlari ayni fiziksel ortam
+  veya ayni birim degildir; frontend bunlari ayri seri/filtre olarak gostermelidir.
+- 2013 ve 2021 koordinatlari kaynak/varsayim sinirlarina tabidir. 2025 koordinatlari
+  sekil üzerinden yaklasiktir ve `coordinate_source` ile isaretlenir.
+
+### Frontend entegrasyon kurallari
+
+- Frontend location, parameter, sample type veya source type degerlerini kendi
+  uretmez/tahmin etmez; API response'larindan aldigi degerleri kullanir.
+- Konum dropdown'i icin `GET /api/locations` kullanilir. Secilen `location_name`,
+  `GET /api/risk-status` ve `GET /api/risk-assessments` isteklerinde degistirilmeden
+  gonderilir. Query string icin `URLSearchParams` veya `encodeURIComponent` kullanilir.
+- `station_no` 2013 kayitlarinda null olabilir; frontend bunu istasyon numarasi varmis
+  gibi varsaymamalidir.
+- `coordinates` null olabilir. Harita, koordinati olmayan kayitlari atlamali veya
+  koordinatsiz olarak gostermelidir.
+- `GET /api/observations` response'u `location_name`, `coordinates`, `timestamp`,
+  `parameter`, `value`, `unit`, `below_detection_limit`, `sample_type`, `source_type`
+  ve `risk_flagged` alanlarini verir. Kaynak JSON metadata alanlari bu response'a
+  otomatik olarak eklenmez.
+- `GET /api/risk-assessments` response'u hazir CR/THI degerlerini, `risk_level` ve
+  `source_concluded_high_risk` alanlarini verir. CR yeniden hesaplanmaz.
+- Observation request'indeki `water_quality` alani su an kabul edilir; ancak mevcut
+  MVP response DTO'sunda donulmez ve ayri sorgulanabilir kolon olarak saklanmaz.
+
+### FHIR MVP sinirlari
+
+- Backend FHIR'a ham JSON ile Observation ve RiskAssessment POST eder.
+- Observation icin LOINC kodu uydurulmaz; `code.text` kullanilir.
+- FHIR sunucusunun dondugu `id`, ilgili entity'deki `fhir_observation_id` veya
+  `fhir_risk_assessment_id` alanina yazilir. Bu ID, uygulamanin `measurement_id` veya
+  `assessment_id` degeriyle ayni olmak zorunda degildir.
+- FHIR entegrasyonu basarisiz olsa bile MVP'de lokal DB kaydi korunur ve FHIR ID null
+  kalabilir; frontend bu alanin nullable olabilecegini kabul etmelidir.
+- `POST /api/citizen-reports` ve AI `POST /validate-photo` bu MVP backend'inde henuz
+  uygulanmamistir; contract'ta taslak olarak tutulmaktadir.
+
 
 
 ## 1. Gözlem Gönderme (Sensör / Mock Veri)
@@ -173,7 +220,7 @@ Response `200 OK`:
 Response `200 OK`:
 ```json
 {
-  "location": "ergene-kuyu-09",
+  "location": "Ergene Havzasi - Kuyu 9",
   "current_risk_level": "high",
   "parameter": "chromium",
   "value": 0.1,
@@ -211,7 +258,7 @@ Response `200 OK`:
 ---
 
 ## 6. Sağlık Riski Değerlendirmesi Gönderme (Literatürden)
-**Durum:** Taslak
+**Durum:** Onaylandı
 **Endpoint:** `POST /api/risk-assessments`
 
 ### Zorunlu ek alan
@@ -245,7 +292,7 @@ Response `201 Created`:
 ---
 
 ## 7. Sağlık Riski Değerlendirmelerini Listeleme (Dashboard için)
-**Durum:** Taslak
+**Durum:** Onaylandı
 **Endpoint:** `GET /api/risk-assessments?location=St%202%20-%20koy%20ici,%20sanayiden%20uzak`
 **Kim çağırır:** Web dashboard, mock hastane paneli
 
@@ -277,7 +324,7 @@ Response `200 OK`:
 ---
 
 ## 8. Bilinen Konumları Listeleme (yeni)
-**Durum:** Taslak
+**Durum:** Onaylandı
 **Endpoint:** `GET /api/locations`
 **Kim çağırır:** Web dashboard (harita/filtre dropdown'ı için), mobil (opsiyonel)
 
