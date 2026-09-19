@@ -13,8 +13,9 @@
       "adult": 78.5
     },
     "basis_note": "Kanserojen risk As ve Ni uzerinden; kanserojen olmayan risk Zn, Mn, Fe, Cu, Cr uzerinden hesaplanmistir (USEPA 2004).",
+    "source_concluded_high_risk": true,
     "source_type": "literature",
-    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9 + Results section"
   },
   {
     "assessment_id": "ERG-2025-ST2-HRA",
@@ -30,8 +31,9 @@
       "adult": 2.58
     },
     "basis_note": "Kanserojen risk As ve Ni uzerinden; kanserojen olmayan risk Zn, Mn, Fe, Cu, Cr uzerinden hesaplanmistir (USEPA 2004).",
+    "source_concluded_high_risk": true,
     "source_type": "literature",
-    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9 + Results section"
   },
   {
     "assessment_id": "ERG-2025-ST3-HRA",
@@ -47,8 +49,9 @@
       "adult": 63.1
     },
     "basis_note": "Kanserojen risk As ve Ni uzerinden; kanserojen olmayan risk Zn, Mn, Fe, Cu, Cr uzerinden hesaplanmistir (USEPA 2004).",
+    "source_concluded_high_risk": true,
     "source_type": "literature",
-    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9 + Results section"
   },
   {
     "assessment_id": "ERG-2025-ST4-HRA",
@@ -64,8 +67,9 @@
       "adult": 80.5
     },
     "basis_note": "Kanserojen risk As ve Ni uzerinden; kanserojen olmayan risk Zn, Mn, Fe, Cu, Cr uzerinden hesaplanmistir (USEPA 2004).",
+    "source_concluded_high_risk": true,
     "source_type": "literature",
-    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9 + Results section"
   },
   {
     "assessment_id": "ERG-2025-ST5-HRA",
@@ -81,7 +85,8 @@
       "adult": 17.0
     },
     "basis_note": "Kanserojen risk As ve Ni uzerinden; kanserojen olmayan risk Zn, Mn, Fe, Cu, Cr uzerinden hesaplanmistir (USEPA 2004).",
+    "source_concluded_high_risk": true,
     "source_type": "literature",
-    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
+    "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9 + Results section"
   }
 ]

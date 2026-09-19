@@ -42,6 +42,53 @@ Cihazın tespit limitinin altında kalan ölçümlerde `value: null` ve
 `below_detection_limit: true` gönderilir. **Bu sıfır anlamına gelmez.**
 Backend bu kayıtları eşik karşılaştırmasına ve ortalama hesabına DAHİL ETMEZ.
 
+### Veri kaynaklari ve karsilastirma kurallari
+
+- `data/ergene-2013-measurements.json`: 108 yeraltı suyu (`groundwater`) olcumu,
+  18 kuyu x 6 metal. Bu kayitlar 2021 ve 2025 nehir suyu kayitlariyla tek trend
+  serisinde birlestirilmemelidir.
+- `data/ergene-2021-measurements.json`: 9 nehir suyu (`surface_water`) olcumu.
+- `data/ergene-2021-risk.json`: 4 hazir literatur risk degerlendirmesi.
+- `data/ergene-2025-measurements.json`: 90 nehir suyu ve sediman olcumu,
+  5 istasyon x 9 element x 2 ortam.
+- `data/ergene-2025-risk.json`: 5 hazir literatur risk degerlendirmesi.
+- 2013 yeraltı suyu, 2021/2025 nehir suyu ve sediman kayitlari ayni fiziksel ortam
+  veya ayni birim degildir; frontend bunlari ayri seri/filtre olarak gostermelidir.
+- 2013 ve 2021 koordinatlari kaynak/varsayim sinirlarina tabidir. 2025 koordinatlari
+  sekil üzerinden yaklasiktir ve `coordinate_source` ile isaretlenir.
+
+### Frontend entegrasyon kurallari
+
+- Frontend location, parameter, sample type veya source type degerlerini kendi
+  uretmez/tahmin etmez; API response'larindan aldigi degerleri kullanir.
+- Konum dropdown'i icin `GET /api/locations` kullanilir. Secilen `location_name`,
+  `GET /api/risk-status` ve `GET /api/risk-assessments` isteklerinde degistirilmeden
+  gonderilir. Query string icin `URLSearchParams` veya `encodeURIComponent` kullanilir.
+- `station_no` 2013 kayitlarinda null olabilir; frontend bunu istasyon numarasi varmis
+  gibi varsaymamalidir.
+- `coordinates` null olabilir. Harita, koordinati olmayan kayitlari atlamali veya
+  koordinatsiz olarak gostermelidir.
+- `GET /api/observations` response'u `location_name`, `coordinates`, `timestamp`,
+  `parameter`, `value`, `unit`, `below_detection_limit`, `sample_type`, `source_type`
+  ve `risk_flagged` alanlarini verir. Kaynak JSON metadata alanlari bu response'a
+  otomatik olarak eklenmez.
+- `GET /api/risk-assessments` response'u hazir CR/THI degerlerini, `risk_level` ve
+  `source_concluded_high_risk` alanlarini verir. CR yeniden hesaplanmaz.
+- Observation request'indeki `water_quality` alani su an kabul edilir; ancak mevcut
+  MVP response DTO'sunda donulmez ve ayri sorgulanabilir kolon olarak saklanmaz.
+
+### FHIR MVP sinirlari
+
+- Backend FHIR'a ham JSON ile Observation ve RiskAssessment POST eder.
+- Observation icin LOINC kodu uydurulmaz; `code.text` kullanilir.
+- FHIR sunucusunun dondugu `id`, ilgili entity'deki `fhir_observation_id` veya
+  `fhir_risk_assessment_id` alanina yazilir. Bu ID, uygulamanin `measurement_id` veya
+  `assessment_id` degeriyle ayni olmak zorunda degildir.
+- FHIR entegrasyonu basarisiz olsa bile MVP'de lokal DB kaydi korunur ve FHIR ID null
+  kalabilir; frontend bu alanin nullable olabilecegini kabul etmelidir.
+- `POST /api/citizen-reports` ve AI `POST /validate-photo` bu MVP backend'inde henuz
+  uygulanmamistir; contract'ta taslak olarak tutulmaktadir.
+
 
 
 ## 1. Gözlem Gönderme (Sensör / Mock Veri)
@@ -160,14 +207,20 @@ Response `200 OK`:
 ---
 
 ## 4. Risk Durumu Sorgulama
-**Durum:** güncellendi
-**Endpoint:** `GET /api/risk-status?location=ergene-kuyu-09`
+**Durum:** güncellendi — location eşleştirme kuralı netleştirildi
+**Endpoint:** `GET /api/risk-status?location=Ergene%20Havzasi%20-%20Kuyu%209`
 **Kim çağırır:** Web dashboard, mock hastane paneli
+
+> **KURAL:** `location` parametresi, `/api/locations` veya `/api/observations`
+> yanıtlarından alınan `location_name` değeriyle **birebir (case-sensitive)**
+> eşleşmelidir. Frontend bu değeri kendi üretmemeli/tahmin etmemeli — sadece daha
+> önce API'den aldığı bir değeri geri göndermelidir. Boşluk ve özel karakterler için
+> `URLSearchParams`/`encodeURIComponent` kullanılmalıdır.
 
 Response `200 OK`:
 ```json
 {
-  "location": "ergene-kuyu-09",
+  "location": "Ergene Havzasi - Kuyu 9",
   "current_risk_level": "high",
   "parameter": "chromium",
   "value": 0.1,
@@ -205,8 +258,18 @@ Response `200 OK`:
 ---
 
 ## 6. Sağlık Riski Değerlendirmesi Gönderme (Literatürden)
-**Durum:** Taslak
+**Durum:** Onaylandı
 **Endpoint:** `POST /api/risk-assessments`
+
+### Zorunlu ek alan
+- `source_concluded_high_risk` (boolean) — kaynağın kendi metninde veya
+  `basis_note` alanında belirttiği nihai risk yargısı. Backend bu değeri hesaplamaz;
+  request'te gönderilen değeri saklar.
+
+> `carcinogenic_risk` değerleri kaynaklar arasında tutarlı bir ölçekte değildir ve
+> backend tarafından otomatik eşik karşılaştırmasına tabi tutulmaz. `risk_level`,
+> `total_hazard_index.child > 1.0` veya `total_hazard_index.adult > 1.0` ya da
+> `source_concluded_high_risk: true` ise `high`, aksi halde `normal` olur.
 
 Request:
 ```json
@@ -216,6 +279,7 @@ Request:
   "timestamp": "2025-05-15T10:00:00+03:00",
   "carcinogenic_risk": { "child": 1.097609, "adult": 1.015173 },
   "total_hazard_index": { "child": 3.050103, "adult": 2.58 },
+  "source_concluded_high_risk": true,
   "source_type": "literature",
   "citation": "Aydin, G.B., Tas-Divrik, M., Atun, R. (2026) Int J Environ Sci Technol 23:621, Table 9"
 }
@@ -224,6 +288,69 @@ Response `201 Created`:
 ```json
 { "id": "erg-2025-st2-hra", "fhir_riskassessment_id": "erg-2025-st2-hra" }
 ```
+
+---
+
+## 7. Sağlık Riski Değerlendirmelerini Listeleme (Dashboard için)
+**Durum:** Onaylandı
+**Endpoint:** `GET /api/risk-assessments?location=St%202%20-%20koy%20ici,%20sanayiden%20uzak`
+**Kim çağırır:** Web dashboard, mock hastane paneli
+
+`location` opsiyoneldir. Verilirse `location_name` ile birebir (case-sensitive)
+eşleşir. Verilmezse tüm kayıtlar `timestamp` alanına göre yeniden eskiye döner.
+
+Response `200 OK`:
+```json
+{
+  "results": [
+    {
+      "id": "ERG-2025-ST2-HRA",
+      "location_name": "St 2 - koy ici, sanayiden uzak",
+      "station_no": 2,
+      "timestamp": "2025-05-15T10:00:00+03:00",
+      "carcinogenic_risk": { "child": 1.097609, "adult": 1.015173 },
+      "total_hazard_index": { "child": 3.050103, "adult": 2.58 },
+      "risk_level": "high",
+      "source_concluded_high_risk": true,
+      "basis_note": "Kanserojen risk As ve Ni uzerinden hesaplanmistir.",
+      "source_type": "literature",
+      "citation": "Aydin et al. (2026), Table 9",
+      "fhir_risk_assessment_id": "1001"
+    }
+  ]
+}
+```
+
+---
+
+## 8. Bilinen Konumları Listeleme (yeni)
+**Durum:** Onaylandı
+**Endpoint:** `GET /api/locations`
+**Kim çağırır:** Web dashboard (harita/filtre dropdown'ı için), mobil (opsiyonel)
+
+Response `200 OK`:
+```json
+{
+  "locations": [
+    {
+      "location_name": "Ergene Havzasi - Kuyu 9",
+      "station_no": 9,
+      "sample_types": ["groundwater"],
+      "coordinates": { "lat": 41.271667, "lon": 27.9725 }
+    },
+    {
+      "location_name": "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)",
+      "station_no": 1,
+      "sample_types": ["surface_water", "sediment"],
+      "coordinates": { "lat": 41.18, "lon": 27.77 }
+    }
+  ]
+}
+```
+
+`location_name` değerleri veritabanındaki gözlemlerden gelir. Frontend bu değerleri
+kendi üretmemeli veya tahmin etmemeli; `/api/locations` ya da `/api/observations`
+yanıtından aldığı değeri `/api/risk-status` çağrısında olduğu gibi geri göndermelidir.
 
 ---
 
@@ -248,5 +375,4 @@ Kaynak: Arkoç (2014), Tablo 2 — TS (2005), WHO (2006), EPA (2013)
 ## Doldurulacak Açık Sorular
 - [ ] `category` alanı için kesin değer listesi netleşti mi? (bulanik / kirli_renk_degisimi / balik_olumu / kotu_koku / diger)
 - [ ] Fotoğraf yükleme ayrı bir endpoint mi olacak (`POST /api/uploads`) yoksa mobil doğrudan bir dosya storage'a mı yükleyecek?
-- [ ] `parameter` alanı için kesin değer listesi (arsenic, cadmium, ... ) — veri kaynağı araştırmasına bağlı
 - [ ] Kimlik doğrulama var mı, yoksa hackathon MVP'sinde açık mı bırakılacak?

@@ -1,146 +1,65 @@
-# Ergene Havzası Ağır Metal Veri Seti
+# Ergene Havzasi 2013 Veri Seti
 
 ## Kaynak
 
-Arkoç, O. (2014). *Heavy Metal Concentrations of Groundwater in the East of Ergene Basin, Turkey.*
-Bulletin of Environmental Contamination and Toxicology, 93:429–433.
+Arkoc, O. (2014). *Heavy Metal Concentrations of Groundwater in the East of Ergene Basin, Turkey.*
+Bulletin of Environmental Contamination and Toxicology, 93:429-433.
 DOI: 10.1007/s00128-014-1347-x
 
-Veriler makalenin **Tablo 1** (ölçümler) ve **Tablo 2** (eşik değerleri) bölümlerinden aktarılmıştır.
+## Dosya ve kapsam
 
-## İçerik
+- Dosya: `data/ergene-2013-measurements.json`
+- 108 kayit: 18 kuyu x 6 metal
+- Ortam: `groundwater`
+- Birim: `mg/L`
+- Kaynak: `literature`
 
-- `ergene-measurements.json` — 108 kayıt (18 kuyu × 6 metal), API contract formatında
-- `ergene-measurements.csv` — aynı veri, düz tablo formatında
-- `generate.py` — dönüşümü yapan script (kaynak değerler script içinde açıkça görülebilir)
+Bu veri nehri degil, Ergene Havzasi'ndaki yeraltı suyu kuyularini temsil eder.
+Dashboard bu kayitlari 2025 ve 2021 nehir suyu kayitlariyla tek bir zaman serisinde
+birlestirmemelidir. Su ortami ve sediman verileri de ayni seride birlestirilmemelidir.
 
----
+## Veri kurallari
 
-## ⚠️ Ekibin Mutlaka Bilmesi Gerekenler
+- `value: null` ve `below_detection_limit: true` olan kayitlar BDL'dir; sifir degildir.
+- BDL kayitlari risk esigi karsilastirmasina dahil edilmez.
+- 2013 kayitlarinda tarih, makalede yalnızca Mayis 2013 olarak verildigi icin
+  `2013-05-15T10:00:00+03:00` varsayimiyla temsil edilir.
+- Koordinatlar PDF haritasindan ondalik dereceye donusturulmustur; kesinlikleri
+  veri kaynaginin sinirlari icinde degerlendirilmelidir.
+- `coordinate_source` bu veri setinde bulunmayabilir ve opsiyoneldir.
+- Kayitlarda `parameter_symbol`, `detection_limit`, `well_depth_m`, `ph` ve benzeri
+  kaynak metadata alanlari bulunabilir; backend request DTO'su bunlari API response'una
+  tasimaz. Frontend listeleme icin `/api/observations` response'unu kullanmalidir.
 
-Bu maddeler jüri sorularında karşınıza çıkabilir, önceden karar verin:
+## Esik ve risk
 
-### 1. Bu veri NEHİR suyu değil, YERALTI suyu
-Örnekler içme suyu amaçlı açılmış kuyulardan alınmış. Projeyi "Ergene Nehri izleme" diye
-sunuyorsanız bu bir tutarsızlık olur. İki seçenek:
-- Projeyi "Ergene Havzası su kalitesi izleme" olarak konumlandırın (önerilen), veya
-- `sample_type` alanını açıkça gösterip "şu an elimizde yeraltı suyu verisi var, sistem nehir
-  verisiyle de aynı şekilde çalışır" deyin.
+Su orneklerinde yalnizca `ThresholdConfig` icinde tanimli ve dogrulanmis esikler
+kullanilir. 2013 verisinde özellikle 9. ve 13. kuyudaki chromium degerleri su
+esiklerini asan orneklerdir. Sediman kurallari bu veri seti icin uygulanmaz.
 
-Veri setinde bunun için `"sample_type": "groundwater"` alanı eklendi.
+## Backend ve FHIR davranisi
 
-### 2. Bu makalede ARSENİK yok
-Ölçülen metaller: Cu (bakır), Fe (demir), Zn (çinko), Cr (krom), Cd (kadmiyum), Pb (kurşun).
-`docs/api-contract.md` dosyasındaki `parameter` alanı örneği `arsenic` idi — bunu bu 6 metale
-göre güncelleyin, veya arsenik için ayrı bir kaynak bulun.
+Seeder bu dosyayi `ObservationService.create()` uzerinden idempotent olarak yukler.
+Ayni `measurement_id` veritabaninda varsa kayit tekrar eklenmez.
 
-### 3. Sonuçlar büyük ölçüde TEMİZ çıkmış — bu aslında iyi bir hikaye
-Makaleye göre ölçülen metaller, krom hariç, tüm ulusal/uluslararası sınırların altında.
-Sadece **9. kuyu (Cr = 0.1 mg/L)** ve **13. kuyu (Cr = 0.09 mg/L)** TS ve WHO eşiğini (0.05 mg/L)
-aşıyor.
-
-Makale bunu, Çerkezköy/Çorlu arıtma tesislerinin devreye girmesine ve AB'nin 2005'teki krom
-kısıtlamasına bağlıyor. Ayrıca makale sonuç bölümünde **aylık örnekleme yapılmasını öneriyor.**
-
-Anlatınızı buna göre kurun: "Kirlilik tamamen bitmiş değil, ama yatırımlar işe yarıyor —
-bunu ancak sürekli izleme ile görebiliyoruz. Makalenin kendi önerisi de tam bu."
-Bu, "her yer zehirli" anlatısından hem daha dürüst hem bilimsel olarak daha savunulabilir.
-
-### 4. Birim mg/L (contract'ta µg/L yazıyordu)
-Kaynağa sadık kalmak için mg/L olarak bırakıldı. Dönüştürmek isterseniz: 1 mg/L = 1000 µg/L.
-Karar verip contract'ı güncelleyin, iki birim karışmasın.
-
-### 5. BDL (Below Detection Limit) kayıtları
-Bazı ölçümler cihazın tespit limitinin altında kalmış. JSON'da bunlar
-`"value": null, "below_detection_limit": true` olarak işaretlendi.
-**Bu 0 (sıfır) DEĞİLDİR** — "ölçülemeyecek kadar az" demektir. Backend'de bunları sıfır gibi
-işlemeyin, ortalama hesabına katmayın.
-Kadmiyum tüm kuyularda BDL çıkmış.
-
-### 6. Küçük tutarsızlıklar (makalenin kendisinde var)
-- Makale metninde "17 kuyudan örnek alındı" yazıyor ama Tablo 1'de 18 satır var. Tablo esas alındı.
-- Demir için tespit limiti 0.01 mg/L denmiş, ama birçok kuyuda 0.009 değeri raporlanmış
-  (limitin altında bir sayı). Kaynaktaki haliyle bırakıldı.
-- Örnekleme tarihi olarak sadece "Mayıs 2013" verilmiş, gün belirtilmemiş.
-  Veri setinde `2013-05-15T10:00:00+03:00` varsayıldı — bu bizim koyduğumuz bir varsayımdır.
-- Koordinatlar PDF'ten derece-dakika-saniye formatında okunup ondalık dereceye çevrildi.
-  Harita üzerinde bir kez gözle doğrulayın; PDF metin çıkarımı bu alanda hataya açıktır.
-
----
-
-## Örnek Kayıt (ham veri formatı)
-
-Eşiği aşan 9. kuyu krom ölçümü:
-
-```json
-{
-  "measurement_id": "ERG-2013-W09-CR",
-  "location_name": "Ergene Havzasi - Kuyu 9",
-  "coordinates": { "lat": 41.271667, "lon": 27.9725 },
-  "timestamp": "2013-05-15T10:00:00+03:00",
-  "parameter": "chromium",
-  "parameter_symbol": "Cr",
-  "value": 0.1,
-  "unit": "mg/L",
-  "below_detection_limit": false,
-  "detection_limit": 0.00005,
-  "method": "ICP-ES / ICP-MS",
-  "source_type": "literature",
-  "sample_type": "groundwater",
-  "well_depth_m": 300,
-  "ph": 6.1,
-  "ec_us_cm": 683,
-  "thresholds_mg_l": { "TS_2005": 0.05, "WHO_2006": 0.05, "EPA_2013": 0.1 },
-  "citation": "Arkoc, O. (2014) Bull Environ Contam Toxicol 93:429-433, Table 1"
-}
-```
-
-## Aynı Kaydın FHIR Observation Karşılığı
+Backend'in mevcut FHIR client'i `Observation` kaynagi icin su alanlari gonderir:
 
 ```json
 {
   "resourceType": "Observation",
-  "id": "erg-2013-w09-cr",
   "status": "final",
-  "category": [{
-    "coding": [{
-      "system": "http://terminology.hl7.org/CodeSystem/observation-category",
-      "code": "environmental",
-      "display": "Environmental"
-    }]
-  }],
-  "code": {
-    "text": "Su numunesinde krom konsantrasyonu"
-  },
-  "effectiveDateTime": "2013-05-15T10:00:00+03:00",
-  "valueQuantity": {
-    "value": 0.1,
-    "unit": "mg/L",
-    "system": "http://unitsofmeasure.org",
-    "code": "mg/L"
-  },
-  "subject": {
-    "reference": "Location/ergene-kuyu-09",
-    "display": "Ergene Havzasi - Kuyu 9"
-  },
-  "interpretation": [{
-    "coding": [{
-      "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
-      "code": "H",
-      "display": "High"
-    }]
-  }],
-  "referenceRange": [{
-    "high": { "value": 0.05, "unit": "mg/L" },
-    "text": "WHO (2006) icme suyu rehber degeri"
-  }]
+  "code": { "text": "chromium" },
+  "valueQuantity": { "value": 0.1, "unit": "mg/L" }
 }
 ```
 
-**LOINC notu:** `code` alanında hâlâ LOINC kodu yok, sadece `text` var. Çevresel su örneklerine
-özel LOINC kodları araştırılıp doğrulanmadan uydurma kod yazılmamalı. Doğrulanana kadar
-`code.text` ile devam etmek geçerli ve dürüst bir yaklaşım.
+LOINC kodu, subject, referenceRange ve interpretation uydurulmaz. BDL kayitlarinda
+`valueQuantity` gonderilmez; mevcut MVP FHIR akisinda deger alani bos birakilir.
 
-**BDL kayıtları için FHIR:** `valueQuantity` yerine `dataAbsentReason` kullanın
-(`"code": "not-performed"` yerine uygun olanı seçin), ya da `valueQuantity.comparator: "<"`
-ile tespit limitini verin. Sıfır yazmayın.
+## Frontend kullanimi
+
+- Tum gozlemler: `GET /api/observations`
+- 2013 filtresi: `GET /api/observations?from=2013-01-01&to=2013-12-31`
+- Location secimi: `GET /api/locations`
+- Location degeri frontend tarafindan uretilmez; API'den gelen `location_name` aynen
+  `GET /api/risk-status?location=...` icin geri gonderilir.

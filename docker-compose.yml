@@ -3,7 +3,7 @@ version: "3.8"
 services:
   postgres:
     image: postgres:16
-    container_name: ergene-postgres
+    container_name: ieee-hackathon-postgres
     restart: unless-stopped
     environment:
       POSTGRES_DB: ergene_db
@@ -18,7 +18,7 @@ services:
   # Hackathon kapsamında bu yeterli, ayrıca Postgres'e bağlamaya gerek yok.
   hapi-fhir:
     image: hapiproject/hapi:latest
-    container_name: ergene-fhir
+    container_name: ieee-hackathon-fhir
     restart: unless-stopped
     ports:
       - "8081:8080"
@@ -28,7 +28,7 @@ services:
   backend:
     build:
       context: ./backend
-    container_name: ergene-backend
+    container_name: ieee-hackathon-backend
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -37,6 +37,8 @@ services:
       SPRING_DATASOURCE_USERNAME: ergene_user
       SPRING_DATASOURCE_PASSWORD: ergene_pass
       FHIR_SERVER_URL: http://hapi-fhir:8080/fhir
+    volumes:
+      - ./data:/app/data:ro  
     depends_on:
       - postgres
       - hapi-fhir
@@ -46,7 +48,7 @@ services:
   ai-service:
     build:
       context: ./ai-service
-    container_name: ergene-ai
+    container_name: ieee-hackathon-ai
     restart: unless-stopped
     ports:
       - "8000:8000"
