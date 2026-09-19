@@ -1,0 +1,15 @@
+spring:
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    mapper:
+      accept-case-insensitive-enums: true
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/ergene_db}
+    username: ${SPRING_DATASOURCE_USERNAME:ergene_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:ergene_pass}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+fhir:
+  server-url: ${FHIR_SERVER_URL:http://localhost:8081/fhir}

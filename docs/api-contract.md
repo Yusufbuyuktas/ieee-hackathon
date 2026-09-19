@@ -248,5 +248,4 @@ Kaynak: Arkoç (2014), Tablo 2 — TS (2005), WHO (2006), EPA (2013)
 ## Doldurulacak Açık Sorular
 - [ ] `category` alanı için kesin değer listesi netleşti mi? (bulanik / kirli_renk_degisimi / balik_olumu / kotu_koku / diger)
 - [ ] Fotoğraf yükleme ayrı bir endpoint mi olacak (`POST /api/uploads`) yoksa mobil doğrudan bir dosya storage'a mı yükleyecek?
-- [ ] `parameter` alanı için kesin değer listesi (arsenic, cadmium, ... ) — veri kaynağı araştırmasına bağlı
 - [ ] Kimlik doğrulama var mı, yoksa hackathon MVP'sinde açık mı bırakılacak?
