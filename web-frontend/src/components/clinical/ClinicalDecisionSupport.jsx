@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { mockPatients } from '../../mock/mockPatients';
 import { THRESHOLDS } from '../../constants/apiContract';
 import {
@@ -8,26 +8,52 @@ import {
   AlertTriangle,
   ShieldCheck,
   FileCode,
-  CheckCircle2,
-  Activity,
+  Search,
+  ChevronDown,
   X,
-  ExternalLink
+  Activity,
+  Check
 } from 'lucide-react';
 
 export default function ClinicalDecisionSupport({ measurements }) {
   const [selectedPatient, setSelectedPatient] = useState(mockPatients[0]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showFhirModal, setShowFhirModal] = useState(false);
+  const dropdownRef = useRef(null);
 
-  // Hastanın yaşadığı ilçeye ait çevre ölçümlerini bul
-  const regionalMeasurements = measurements.filter(m =>
+  // Dışarı tıklandığında açılır menüyü kapat
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Hasta arama filtresi (İsim, ID veya İlçe bazlı)
+  const filteredPatients = mockPatients.filter((p) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      p.name.toLowerCase().includes(term) ||
+      p.id.toLowerCase().includes(term) ||
+      p.district.toLowerCase().includes(term)
+    );
+  });
+
+  // Seçili hastanın yaşadığı ilçeye ait çevre ölçümleri
+  const regionalMeasurements = measurements.filter((m) =>
     m.location_name.toLowerCase().includes(selectedPatient.district.toLowerCase())
   );
 
-  // Arsenik ve şüpheli parametre maruziyetini analiz et
-  const arsenicData = regionalMeasurements.find(m => m.parameter === 'arsenic' && !m.below_detection_limit);
+  const arsenicData = regionalMeasurements.find(
+    (m) => m.parameter === 'arsenic' && !m.below_detection_limit
+  );
   const isHighRisk = arsenicData && arsenicData.isExceeded;
 
-  // Hackathon Raporundaki HL7 FHIR RiskAssessment Formatında JSON Üretici
+  // HL7 FHIR RiskAssessment Formatında JSON Üretici
   const generateFhirRiskAssessment = () => {
     return {
       resourceType: "RiskAssessment",
@@ -69,8 +95,8 @@ export default function ClinicalDecisionSupport({ measurements }) {
   return (
     <div className="space-y-6">
       
-      {/* Üst Bilgilendirme Banner'ı */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Üst Yönetim ve Ölçeklenebilir Hasta Arama Barı */}
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-30">
         <div>
           <div className="flex items-center space-x-2">
             <Stethoscope className="w-5 h-5 text-rose-400" />
@@ -82,26 +108,97 @@ export default function ClinicalDecisionSupport({ measurements }) {
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Hastane klinik verileri ile Ergene Havzası HL7 FHIR çevresel gözlemleri entegre edilmiştir.
+            Hasta kayıtları ile Ergene Havzası çevresel izleme verilerinin entegre değerlendirmesi
           </p>
         </div>
 
-        {/* Hasta Seçim Butonları */}
-        <div className="flex items-center space-x-2">
-          <span className="text-xs text-slate-400 font-medium">Hasta:</span>
-          {mockPatients.map((p) => (
-            <button
-              key={p.id}
-              onClick={() => setSelectedPatient(p)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                selectedPatient.id === p.id
-                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-lg shadow-cyan-500/20'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'
-              }`}
-            >
-              {p.name} ({p.district})
-            </button>
-          ))}
+        {/* Arama Destekli Dropdown / Combobox */}
+        <div className="relative w-full md:w-80" ref={dropdownRef}>
+          <label className="block text-[11px] text-slate-400 mb-1 font-medium">Aktif Hasta Dosyası:</label>
+          <button
+            type="button"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="w-full bg-slate-800/90 border border-slate-700 hover:border-slate-600 text-left px-3.5 py-2 rounded-xl flex items-center justify-between text-xs text-white transition-colors focus:outline-none focus:border-cyan-500 shadow-sm"
+          >
+            <div className="flex items-center space-x-2.5 truncate">
+              <div className="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
+                <User className="w-3.5 h-3.5" />
+              </div>
+              <div className="truncate">
+                <span className="font-semibold text-white">{selectedPatient.name}</span>
+                <span className="text-slate-400 text-[11px] ml-1.5 font-mono">({selectedPatient.district})</span>
+              </div>
+            </div>
+            <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180 text-cyan-400' : ''}`} />
+          </button>
+
+          {/* Açılır Menü Penceresi */}
+          {isDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-full md:w-96 bg-slate-900 border border-slate-700/80 rounded-xl shadow-2xl overflow-hidden z-50">
+              
+              {/* Filtre / Arama Kutusu */}
+              <div className="p-2.5 border-b border-slate-800 bg-slate-950/60">
+                <div className="relative">
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+                  <input
+                    type="text"
+                    placeholder="İsim, ID (PAT-...) veya ilçe ara..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full bg-slate-800/80 border border-slate-700 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                    autoFocus
+                  />
+                </div>
+              </div>
+
+              {/* Scroll Edilebilir Hasta Listesi (100+ hasta için hazır) */}
+              <div className="max-h-64 overflow-y-auto divide-y divide-slate-800/60">
+                {filteredPatients.length === 0 ? (
+                  <div className="p-4 text-center text-xs text-slate-500">
+                    Aramanızla eşleşen hasta bulunamadı.
+                  </div>
+                ) : (
+                  filteredPatients.map((p) => {
+                    const isSelected = selectedPatient.id === p.id;
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedPatient(p);
+                          setIsDropdownOpen(false);
+                          setSearchTerm('');
+                        }}
+                        className={`w-full p-3 text-left flex items-center justify-between hover:bg-slate-800/60 transition-colors text-xs ${
+                          isSelected ? 'bg-cyan-500/10 border-l-2 border-cyan-500' : ''
+                        }`}
+                      >
+                        <div className="space-y-0.5">
+                          <div className="flex items-center space-x-2">
+                            <span className="font-semibold text-white">{p.name}</span>
+                            <span className="text-[10px] font-mono text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">
+                              {p.id}
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-slate-400 flex items-center space-x-2">
+                            <span>{p.gender}, {p.age} yaş</span>
+                            <span>•</span>
+                            <span className="text-cyan-400">{p.district} ({p.neighborhood})</span>
+                          </div>
+                        </div>
+                        {isSelected && <Check className="w-4 h-4 text-cyan-400 shrink-0 ml-2" />}
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+
+              {/* Alt Bilgi */}
+              <div className="p-2 bg-slate-950/80 border-t border-slate-800 text-[10px] text-slate-500 text-center">
+                Toplam {mockPatients.length} kayıtlı hasta • Elektronik Sağlık Kaydı (EHR)
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -277,7 +374,7 @@ export default function ClinicalDecisionSupport({ measurements }) {
             </div>
 
             <p className="text-xs text-slate-400 mb-2">
-              Aşağıdaki JSON, hastane sistemlerinin (EHR) doğrudan okuyabileceği uluslararası sağlık bilişimi standardında oluşturulmuştur:
+              Aşağıdaki JSON, hastane sistemlerinin (EHR) doğrudan okuyabileceği uluslararası sağlık bilişimi standardında oluşturulmuştur[cite: 1]:
             </p>
 
             <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 overflow-y-auto font-mono text-[11px] text-cyan-300 leading-relaxed flex-1">
