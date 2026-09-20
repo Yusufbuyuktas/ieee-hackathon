@@ -3,9 +3,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { resolveCoordinates } from './mapHelpers';
 import { THRESHOLDS } from '../../constants/apiContract';
-import { ShieldAlert, CheckCircle, Bot, Layers } from 'lucide-react';
+import { Bot } from 'lucide-react';
 
-// Harita ilk render olduğunda boyutunu netleştiren kontrolcü
 function MapResizer() {
   const map = useMap();
   useEffect(() => {
@@ -17,18 +16,17 @@ function MapResizer() {
   return null;
 }
 
-// Marker İkonları (Garantili görünüm için inline stiller ile desteklenmiştir)
 const createMarkerIcon = (type, isExceeded = false) => {
-  let bgColor = '#10b981'; // Güvenli: Yeşil
+  let bgColor = '#10b981';
   let pulseColor = 'rgba(16, 185, 129, 0.4)';
 
   if (type === 'station') {
     if (isExceeded) {
-      bgColor = '#f43f5e'; // Eşik aşıldı: Kırmızı
+      bgColor = '#f43f5e';
       pulseColor = 'rgba(244, 63, 94, 0.4)';
     }
   } else if (type === 'citizen') {
-    bgColor = '#06b6d4'; // Yurttaş: Cyan
+    bgColor = '#06b6d4';
     pulseColor = 'rgba(6, 182, 212, 0.4)';
   }
 
@@ -46,7 +44,7 @@ const createMarkerIcon = (type, isExceeded = false) => {
   });
 };
 
-export default function ErgeneMap({ measurements, citizenReports, selectedParameter }) {
+export default function ErgeneMap({ measurements, locations = [], citizenReports, selectedParameter }) {
   const [filter, setFilter] = useState('all');
   const currentThreshold = THRESHOLDS[selectedParameter];
 
@@ -54,7 +52,7 @@ export default function ErgeneMap({ measurements, citizenReports, selectedParame
     .filter(m => m.parameter === selectedParameter)
     .map(m => ({
       ...m,
-      geo: resolveCoordinates(m)
+      geo: resolveCoordinates(m, locations)
     }));
 
   const filteredStations = stations.filter(s => {
@@ -78,7 +76,6 @@ export default function ErgeneMap({ measurements, citizenReports, selectedParame
           <p className="text-xs text-slate-400">İstasyon ölçümleri ve sahadan bildirilen yurttaş gözlemleri</p>
         </div>
 
-        {/* Filtreleme Butonları */}
         <div className="flex items-center space-x-1.5 bg-slate-800/80 p-1 rounded-lg border border-slate-700">
           <button
             onClick={() => setFilter('all')}
@@ -107,7 +104,6 @@ export default function ErgeneMap({ measurements, citizenReports, selectedParame
         </div>
       </div>
 
-      {/* Harita */}
       <div className="h-[440px] w-full rounded-xl overflow-hidden border border-slate-800 relative z-10 bg-slate-950">
         <MapContainer
           center={[41.28, 27.55]}
@@ -117,14 +113,12 @@ export default function ErgeneMap({ measurements, citizenReports, selectedParame
         >
           <MapResizer />
 
-         {/* Her Ortamda Kesintisiz Çalışan Standart OpenStreetMap Katmanı */}
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
             maxZoom={18}
           />
 
-          {/* İstasyon Marker'ları */}
           {filteredStations.map((station) => (
             <Marker
               key={station.id}
@@ -132,17 +126,15 @@ export default function ErgeneMap({ measurements, citizenReports, selectedParame
               icon={createMarkerIcon('station', station.isExceeded)}
             >
               <Popup className="custom-dark-popup">
-                <div className="p-2 text-slate-100 text-xs min-w-[200px]">
+                <div className="p-2 text-slate-100 text-xs min-w-[210px]">
                   <div className="font-bold text-white mb-1">{station.location_name}</div>
                   
-                  {station.geo.isApproximate && (
-                    <div className="text-[10px] text-amber-400 mb-1 italic">
-                      * Literatür kaydı yaklaşık konumu
-                    </div>
-                  )}
+                  <div className="text-[10px] text-slate-400 mb-1">
+                    Ortam: <span className="text-cyan-300 uppercase">{station.sample_type}</span>
+                  </div>
 
                   <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-700">
-                    <span className="text-slate-400">{currentThreshold?.label}:</span>
+                    <span className="text-slate-400">{currentThreshold?.label || station.parameter}:</span>
                     {station.below_detection_limit ? (
                       <span className="text-amber-400 font-mono">Tespit Limiti Altı (BDL)</span>
                     ) : (
@@ -152,15 +144,16 @@ export default function ErgeneMap({ measurements, citizenReports, selectedParame
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] text-slate-400 mt-1">
-                    <span>DSÖ Sınırı:</span>
-                    <span className="font-mono">{currentThreshold?.who} {station.unit}</span>
-                  </div>
+                  {station.exceededStandards?.length > 0 && (
+                    <div className="mt-1.5 text-[10px] text-rose-300 font-mono">
+                      Aşılan: {station.exceededStandards.join(', ')}
+                    </div>
+                  )}
 
                   <div className="mt-2 text-[10px]">
                     {station.isExceeded ? (
                       <span className="bg-rose-500/20 text-rose-300 border border-rose-500/40 px-2 py-0.5 rounded block text-center font-bold">
-                        KRİTİK EŞİK AŞILDI
+                        RİSKLİ (EŞİK AŞILDI)
                       </span>
                     ) : (
                       <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded block text-center">
@@ -173,7 +166,6 @@ export default function ErgeneMap({ measurements, citizenReports, selectedParame
             </Marker>
           ))}
 
-          {/* Yurttaş Bilimi Marker'ları */}
           {showCitizen && citizenReports.map((report) => (
             <Marker
               key={report.id}
@@ -204,11 +196,6 @@ export default function ErgeneMap({ measurements, citizenReports, selectedParame
                   )}
 
                   <p className="text-slate-300 italic text-[11px] mb-2">"{report.note}"</p>
-
-                  <div className="text-[10px] text-slate-400 border-t border-slate-700 pt-1.5 flex justify-between">
-                    <span>Mobil Yurttaş Gözlemi</span>
-                    <span className="text-emerald-400 font-medium">Onaylandı</span>
-                  </div>
                 </div>
               </Popup>
             </Marker>
@@ -221,7 +208,7 @@ export default function ErgeneMap({ measurements, citizenReports, selectedParame
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1.5">
             <span className="w-3 h-3 rounded-full bg-rose-500 border border-slate-900 inline-block"></span>
-            <span>Eşik Aşan İstasyon (DSÖ Limit Üstü)</span>
+            <span>Eşik Aşan İstasyon (Backend Onaylı)</span>
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-3 h-3 rounded-full bg-emerald-500 border border-slate-900 inline-block"></span>
@@ -229,7 +216,7 @@ export default function ErgeneMap({ measurements, citizenReports, selectedParame
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-3 h-3 rounded-full bg-cyan-500 border border-slate-900 inline-block"></span>
-            <span>Yurttaş Bilimi Bildirimi (AI Doğrulanmış)</span>
+            <span>Yurttaş Bildirimi (AI Doğrulanmış)</span>
           </div>
         </div>
       </div>

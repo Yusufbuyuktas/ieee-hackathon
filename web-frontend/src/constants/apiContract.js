@@ -1,3 +1,11 @@
+/**
+ * UYARI: Bu dosyadaki risk fonksiyonları yalnızca MOCK veri modunda kullanılır.
+ * Gerçek API'den gelen veriler (GET /api/observations) zaten 'risk_flagged'
+ * ve 'exceeded_standards' alanlarını taşır; frontend riski yeniden hesaplamaz.
+ * 
+ * THRESHOLDS tablosu ise UI etiketleri ve grafik referans çizgileri için referans olarak tutulur.
+ */
+
 // Gerçek veri setindeki (2013-2025) 9 metal parametresi
 export const PARAMETERS = {
   ARSENIC: 'arsenic',
@@ -17,8 +25,8 @@ export const SAMPLE_TYPES = {
   SEDIMENT: 'sediment',
 };
 
-// Standart Eşik Değerleri (Yalnızca SU numuneleri için - mg/L)
-// Not: TS 2005, WHO ve EPA standartları su kalitesi limitleridir.
+// UI Gösterim ve Standart Referans Değerleri (Su numuneleri için - mg/L)
+// Kaynak: Arkoç (2014) Tablo 2 — TS 2005, WHO 2006, EPA 2013
 export const THRESHOLDS = {
   arsenic: { who: 0.01, ts: 0.01, epa: 0.01, label: 'Arsenik (As)' },
   cadmium: { who: 0.003, ts: 0.005, epa: 0.005, label: 'Kadmiyum (Cd)' },
@@ -28,14 +36,13 @@ export const THRESHOLDS = {
   lead: { who: 0.01, ts: 0.01, epa: 0.015, label: 'Kurşun (Pb)' },
   manganese: { who: 0.4, ts: 0.05, epa: 0.05, label: 'Mangan (Mn)' },
   nickel: { who: 0.07, ts: 0.02, epa: 0.1, label: 'Nikel (Ni)' },
-  zinc: { who: 3.0, ts: null, epa: 5.0, label: 'Çinko (Zn)' }, // TS tanımlı değil
+  zinc: { who: 3.0, ts: null, epa: 5.0, label: 'Çinko (Zn)' },
 };
 
 /**
- * Numune türüne (su vs sediment) ve tespit limitine göre bilimsel risk değerlendirmesi
+ * Yalnızca Mock Veri Fallback Fonksiyonu
  */
 export const evaluateRisk = (parameter, value, belowDetectionLimit = false, sampleType = 'surface_water') => {
-  // 1. Tespit Limiti Altı (BDL)
   if (belowDetectionLimit || value === null || value === undefined) {
     return {
       status: 'BDL',
@@ -46,19 +53,17 @@ export const evaluateRisk = (parameter, value, belowDetectionLimit = false, samp
     };
   }
 
-  // 2. Sediment (Dip Çamuru): DSÖ içme suyu sınırları doğrudan katı maddeye uygulanamaz
   if (sampleType === 'sediment') {
     return {
       status: 'SEDIMENT_REF',
       label: 'Sediment / Dip Çamuru',
       color: 'text-amber-400',
-      isExceeded: false, // Su eşiğiyle karıştırılmaz
+      isExceeded: false,
       unit: 'mg/kg',
       threshold: null
     };
   }
 
-  // 3. Su Numuneleri (surface_water, groundwater) - mg/L
   const threshold = THRESHOLDS[parameter]?.who ?? 0.01;
   const isExceeded = Number(value) > threshold;
 
