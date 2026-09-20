@@ -27,21 +27,27 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.hackathon_ieee.myapplication.ui.components.SubtlePanel
 
+private const val DEMO_EMAIL = "demo@rg.com"
+private const val DEMO_PASSWORD = "1234"
+
 @Composable
 fun LoginScreen(
     onSignIn: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var email by rememberSaveable {
-        mutableStateOf("")
+        mutableStateOf(DEMO_EMAIL)
     }
     var password by remember {
-        mutableStateOf("")
+        mutableStateOf(DEMO_PASSWORD)
     }
     var showEmailError by remember {
         mutableStateOf(false)
     }
     var showPasswordError by remember {
+        mutableStateOf(false)
+    }
+    var authenticationError by remember {
         mutableStateOf(false)
     }
 
@@ -83,6 +89,7 @@ fun LoginScreen(
                         onValueChange = {
                             email = it
                             showEmailError = false
+                            authenticationError = false
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Email") },
@@ -106,6 +113,7 @@ fun LoginScreen(
                         onValueChange = {
                             password = it
                             showPasswordError = false
+                            authenticationError = false
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Password") },
@@ -125,14 +133,29 @@ fun LoginScreen(
                         )
                     )
 
+                    if (authenticationError) {
+                        Text(
+                            text = "Incorrect email or password.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+
                     Button(
                         onClick = {
                             showEmailError = !isEmailValid
                             showPasswordError = password.isBlank()
 
                             if (isEmailValid && password.isNotBlank()) {
-                                onSignIn(normalizedEmail)
-                                password = ""
+                                if (
+                                    normalizedEmail == DEMO_EMAIL &&
+                                    password == DEMO_PASSWORD
+                                ) {
+                                    authenticationError = false
+                                    onSignIn(normalizedEmail)
+                                } else {
+                                    authenticationError = true
+                                }
                             }
                         },
                         modifier = Modifier.fillMaxWidth()

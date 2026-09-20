@@ -3,6 +3,7 @@ package com.hackathon_ieee.myapplication
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -20,6 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.hackathon_ieee.myapplication.feature.auth.LoginScreen
@@ -33,6 +35,7 @@ import com.hackathon_ieee.myapplication.feature.report.presentation.ReportFormSc
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportReviewScreen
 import com.hackathon_ieee.myapplication.ui.components.BottomDestination
 import com.hackathon_ieee.myapplication.ui.components.RiverBottomBar
+import com.hackathon_ieee.myapplication.ui.components.RiverGuardWordmark
 import com.hackathon_ieee.myapplication.ui.components.ThickBackIcon
 
 private const val HOME_SCREEN = "home"
@@ -121,16 +124,26 @@ fun OneAquaHealthApp() {
                 TopAppBar(
                     modifier = Modifier.height(100.dp),
                     title = {
-                        Text(
-                            text = when (currentScreen) {
-                                HOME_SCREEN -> "RiverGuard"
-                                MAP_SCREEN -> "Risk Map"
-                                PROFILE_SCREEN -> "Profile"
-                                MORE_SCREEN -> "More"
-                                REPORT_REVIEW_SCREEN -> "Review Report"
-                                else -> "New Report"
-                            }
-                        )
+                        if (
+                            currentScreen == HOME_SCREEN ||
+                            currentScreen == MAP_SCREEN ||
+                            currentScreen == PROFILE_SCREEN ||
+                            currentScreen == MORE_SCREEN
+                        ) {
+                            RiverGuardWordmark(
+                                modifier = Modifier.width(150.dp)
+                            )
+                        } else {
+                            Text(
+                                text = when (currentScreen) {
+                                    REPORT_REVIEW_SCREEN -> "Review Report"
+                                    else -> "New Report"
+                                },
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent,
