@@ -1,5 +1,6 @@
 package com.hackathon_ieee.myapplication.feature.report.presentation.components
 
+import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -62,6 +63,9 @@ fun LocationMap(
         MapLibre.getInstance(context)
 
         MapView(context).apply {
+            isFocusable = false
+            isFocusableInTouchMode = false
+            descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
             onCreate(null)
             getMapAsync { readyMap ->
                 mapLibreMap = readyMap

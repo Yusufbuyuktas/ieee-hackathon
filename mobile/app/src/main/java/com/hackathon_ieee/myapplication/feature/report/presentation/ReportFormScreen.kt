@@ -5,6 +5,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,13 +14,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -33,12 +35,22 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import com.hackathon_ieee.myapplication.core.location.LocationProvider
 import com.hackathon_ieee.myapplication.feature.report.domain.model.ReportCategory
 import com.hackathon_ieee.myapplication.feature.report.presentation.components.LocationMap
 import com.hackathon_ieee.myapplication.feature.report.presentation.components.PhotoInputCard
+import com.hackathon_ieee.myapplication.ui.components.GradientPanel
 import com.hackathon_ieee.myapplication.ui.theme.RiverGlassLow
 import com.hackathon_ieee.myapplication.ui.theme.RiverSuccess
 
@@ -51,6 +63,13 @@ private enum class LocationUiState {
 
 @Composable
 fun ReportFormScreen(
+    onContinue: (
+        photoUri: String,
+        category: ReportCategory,
+        latitude: Double,
+        longitude: Double,
+        note: String
+    ) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var selectedCategoryName by rememberSaveable {
@@ -80,6 +99,11 @@ fun ReportFormScreen(
     var locationMessage by rememberSaveable {
         mutableStateOf("Location has not been captured yet.")
     }
+
+    val noteFocusRequester = androidx.compose.runtime.remember {
+        FocusRequester()
+    }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val context = LocalContext.current
     val locationProvider = androidx.compose.runtime.remember(context) {
@@ -128,6 +152,7 @@ fun ReportFormScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .imePadding()
             .verticalScroll(rememberScrollState())
             .padding(20.dp)
     ) {
@@ -160,12 +185,7 @@ fun ReportFormScreen(
             modifier = Modifier.height(8.dp)
         )
 
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
-        ) {
+        GradientPanel {
             Column {
                 ReportCategory.entries.forEachIndexed { index, category ->
                     val isSelected = selectedCategory == category
@@ -221,12 +241,7 @@ fun ReportFormScreen(
             modifier = Modifier.height(8.dp)
         )
 
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
-        ) {
+        GradientPanel {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -330,7 +345,27 @@ fun ReportFormScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(140.dp),
+                .heightIn(min = 140.dp)
+                .focusRequester(noteFocusRequester)
+                .onFocusChanged { focusState ->
+                    if (focusState.isFocused) {
+                        keyboardController?.show()
+                    }
+                }
+                .pointerInput(Unit) {
+                    awaitEachGesture {
+                        awaitFirstDown(requireUnconsumed = false)
+                        noteFocusRequester.requestFocus()
+                        keyboardController?.show()
+                    }
+                },
+            enabled = true,
+            readOnly = false,
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Default
+            ),
             label = {
                 Text(
                     text = "Describe your observation"
@@ -341,7 +376,8 @@ fun ReportFormScreen(
                     text = "${note.length}/500"
                 )
             },
-            minLines = 4
+            minLines = 4,
+            maxLines = 7
         )
 
         Spacer(
@@ -350,7 +386,25 @@ fun ReportFormScreen(
 
         Button(
             onClick = {
-                // Review screen will be added later.
+                val photoUri = selectedPhotoUri
+                val category = selectedCategory
+                val currentLatitude = latitude
+                val currentLongitude = longitude
+
+                if (
+                    photoUri != null &&
+                    category != null &&
+                    currentLatitude != null &&
+                    currentLongitude != null
+                ) {
+                    onContinue(
+                        photoUri,
+                        category,
+                        currentLatitude,
+                        currentLongitude,
+                        note.trim()
+                    )
+                }
             },
             enabled = selectedPhotoUri != null &&
                 selectedCategory != null &&
