@@ -50,7 +50,7 @@ import com.hackathon_ieee.myapplication.core.location.LocationProvider
 import com.hackathon_ieee.myapplication.feature.report.domain.model.ReportCategory
 import com.hackathon_ieee.myapplication.feature.report.presentation.components.LocationMap
 import com.hackathon_ieee.myapplication.feature.report.presentation.components.PhotoInputCard
-import com.hackathon_ieee.myapplication.ui.components.GradientPanel
+import com.hackathon_ieee.myapplication.ui.components.SubtlePanel
 import com.hackathon_ieee.myapplication.ui.theme.RiverGlassLow
 import com.hackathon_ieee.myapplication.ui.theme.RiverSuccess
 
@@ -185,7 +185,7 @@ fun ReportFormScreen(
             modifier = Modifier.height(8.dp)
         )
 
-        GradientPanel {
+        SubtlePanel {
             Column {
                 ReportCategory.entries.forEachIndexed { index, category ->
                     val isSelected = selectedCategory == category
@@ -241,7 +241,7 @@ fun ReportFormScreen(
             modifier = Modifier.height(8.dp)
         )
 
-        GradientPanel {
+        SubtlePanel {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

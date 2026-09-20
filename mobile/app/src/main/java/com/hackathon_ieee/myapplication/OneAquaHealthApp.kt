@@ -107,17 +107,10 @@ fun OneAquaHealthApp() {
                         navigationIconContentColor = MaterialTheme.colorScheme.primary
                     ),
                     navigationIcon = {
-                        if (
-                            currentScreen == REPORT_FORM_SCREEN ||
-                            currentScreen == REPORT_REVIEW_SCREEN
-                        ) {
+                        if (currentScreen == REPORT_REVIEW_SCREEN) {
                             IconButton(
                                 onClick = {
-                                    currentScreen = if (currentScreen == REPORT_REVIEW_SCREEN) {
-                                        REPORT_FORM_SCREEN
-                                    } else {
-                                        HOME_SCREEN
-                                    }
+                                    currentScreen = REPORT_FORM_SCREEN
                                 }
                             ) {
                                 ThickBackIcon()

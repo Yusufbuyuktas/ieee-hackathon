@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import coil3.compose.AsyncImage
 import com.hackathon_ieee.myapplication.core.media.PhotoFileProvider
-import com.hackathon_ieee.myapplication.ui.components.GradientPanel
+import com.hackathon_ieee.myapplication.ui.components.SubtlePanel
 
 @Composable
 fun PhotoInputCard(
@@ -104,7 +104,7 @@ fun PhotoInputCard(
         }
     }
 
-    GradientPanel(
+    SubtlePanel(
         modifier = modifier
     ) {
         Column(

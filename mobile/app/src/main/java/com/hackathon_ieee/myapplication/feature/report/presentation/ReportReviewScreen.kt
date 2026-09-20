@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.hackathon_ieee.myapplication.feature.report.domain.model.ReportCategory
 import com.hackathon_ieee.myapplication.feature.report.presentation.components.LocationMap
-import com.hackathon_ieee.myapplication.ui.components.GradientPanel
+import com.hackathon_ieee.myapplication.ui.components.SubtlePanel
 
 @Composable
 fun ReportReviewScreen(
@@ -134,7 +134,7 @@ private fun ReviewCard(
             style = MaterialTheme.typography.titleMedium
         )
 
-        GradientPanel {
+        SubtlePanel {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
