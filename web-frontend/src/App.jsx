@@ -26,12 +26,19 @@ export default function App() {
   const [allMeasurements, setAllMeasurements] = useState([]); // FHIR Gezgini: 9 parametrenin tamamı
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [apiOnline, setApiOnline] = useState(null); // null: henüz bilinmiyor, true/false: gerçek bağlantı durumu
 
-  // 1. Bilinen Konumları Tek Seferde Çek (GET /api/locations)
+  // 1. Bilinen Konumları Tek Seferde Çek (GET /api/locations) — aynı zamanda bağlantı testi
   useEffect(() => {
     getLocations()
-      .then(locs => setLocations(locs))
-      .catch(err => console.error("Konumlar yüklenemedi:", err));
+      .then(locs => {
+        setLocations(locs);
+        setApiOnline(true);
+      })
+      .catch(err => {
+        console.error("Konumlar yüklenemedi:", err);
+        setApiOnline(false);
+      });
   }, []);
 
   // 2. Seçili Parametreye Göre Gözlemleri Çek (GET /api/observations)
@@ -41,10 +48,12 @@ export default function App() {
       .then(data => {
         setMeasurements(data);
         setError(null);
+        setApiOnline(true);
       })
       .catch(err => {
         console.error("Gözlem verileri çekilemedi:", err);
         setError("Backend servisinden veri alınamadı.");
+        setApiOnline(false);
       })
       .finally(() => setLoading(false));
   }, [selectedParameter]);
@@ -74,7 +83,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} apiOnline={apiOnline} />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         

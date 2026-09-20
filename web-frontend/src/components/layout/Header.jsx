@@ -1,7 +1,7 @@
 import React from 'react';
 import { Activity, Waves, Stethoscope, FileJson } from 'lucide-react';
 
-export default function Header({ activeTab, setActiveTab }) {
+export default function Header({ activeTab, setActiveTab, apiOnline }) {
   const isMockMode = import.meta.env.VITE_USE_MOCK !== 'false';
 
   return (
@@ -64,17 +64,27 @@ export default function Header({ activeTab, setActiveTab }) {
             </button>
           </nav>
 
-          {/* Dinamik Ortam Rozeti */}
+          {/* Dinamik Ortam Rozeti — gerçek modda apiOnline durumunu yansıtır, sabit metin değil */}
           <div className="flex items-center space-x-3 text-xs">
             {isMockMode ? (
               <div className="flex items-center space-x-1.5 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-2.5 py-1 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
                 <span>Mod: Literatür Veri Havuzu</span>
               </div>
-            ) : (
+            ) : apiOnline === true ? (
               <div className="flex items-center space-x-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
                 <span>Canlı API / FHIR Online</span>
+              </div>
+            ) : apiOnline === false ? (
+              <div className="flex items-center space-x-1.5 bg-rose-500/10 text-rose-400 border border-rose-500/30 px-2.5 py-1 rounded-full">
+                <span className="w-2 h-2 rounded-full bg-rose-400"></span>
+                <span>API Erişilemiyor</span>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-1.5 bg-slate-500/10 text-slate-400 border border-slate-500/30 px-2.5 py-1 rounded-full">
+                <span className="w-2 h-2 rounded-full bg-slate-400 animate-pulse"></span>
+                <span>Bağlantı Kontrol Ediliyor...</span>
               </div>
             )}
           </div>
