@@ -44,12 +44,15 @@ const createMarkerIcon = (type, isExceeded = false) => {
   });
 };
 
-export default function ErgeneMap({ measurements, locations = [], citizenReports, selectedParameter }) {
+export default function ErgeneMap({ measurements, locations = [], citizenReports, selectedParameter, sampleType = 'all' }) {
   const [filter, setFilter] = useState('all');
   const currentThreshold = THRESHOLDS[selectedParameter];
 
   const stations = measurements
     .filter(m => m.parameter === selectedParameter)
+    // Su (mg/L) ve sediment (mg/kg) kayıtları farklı fiziksel büyüklükler;
+    // TrendChart'taki seçimle tutarlı kalmak için aynı filtreyi burada da uyguluyoruz.
+    .filter(m => sampleType === 'all' ? true : m.sample_type === sampleType)
     .map(m => ({
       ...m,
       geo: resolveCoordinates(m, locations)

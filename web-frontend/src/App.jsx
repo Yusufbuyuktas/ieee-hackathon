@@ -22,7 +22,8 @@ export default function App() {
   const [sampleType, setSampleType] = useState('surface_water'); // 'surface_water' | 'groundwater' | 'sediment'
   
   const [locations, setLocations] = useState([]);
-  const [measurements, setMeasurements] = useState([]);
+  const [measurements, setMeasurements] = useState([]); // İzleme sekmesi: yalnızca seçili parametre
+  const [allMeasurements, setAllMeasurements] = useState([]); // FHIR Gezgini: 9 parametrenin tamamı
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -47,6 +48,16 @@ export default function App() {
       })
       .finally(() => setLoading(false));
   }, [selectedParameter]);
+
+  // 3. FHIR Gezgini için TÜM parametreleri tek seferde çek (parametresiz istek).
+  // Not: 'measurements' state'i selectedParameter'a göre filtreli geldiği için
+  // FhirExplorer'a onu vermiyoruz — aksi halde kullanıcı hiç parametre
+  // değiştirmeden o sekmeye giderse yalnızca tek bir metali görür.
+  useEffect(() => {
+    getAllMeasurements({})
+      .then(data => setAllMeasurements(data))
+      .catch(err => console.error("FHIR Gezgini için tüm gözlemler çekilemedi:", err));
+  }, []);
 
   // Metrikler ve Trend Verisi (Backend'in isExceeded alanına göre hesaplanır)
   const metrics = useMemo(() => 
@@ -92,6 +103,7 @@ export default function App() {
                   locations={locations}
                   citizenReports={citizenReports}
                   selectedParameter={selectedParameter}
+                  sampleType={sampleType}
                 />
 
                 <TrendChart
@@ -112,14 +124,14 @@ export default function App() {
           </div>
         )}
 
-        {/* SEKME 2: Klinik Karar Destek Paneli (PoC) */}
+        {/* SEKME 2: Klinik Karar Destek Paneli (PoC) — kendi API çağrılarını yapar, prop almaz */}
         {activeTab === 'clinical' && (
-          <ClinicalDecisionSupport measurements={measurements} />
+          <ClinicalDecisionSupport />
         )}
 
-        {/* SEKME 3: HL7 FHIR Standart Gezgini */}
+        {/* SEKME 3: HL7 FHIR Standart Gezgini — tüm parametreler (allMeasurements) */}
         {activeTab === 'fhir' && (
-          <FhirExplorer measurements={measurements} />
+          <FhirExplorer measurements={allMeasurements} />
         )}
 
       </main>

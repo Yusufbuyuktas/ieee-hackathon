@@ -34,7 +34,7 @@ export const THRESHOLDS = {
   copper: { who: 2.0, ts: 2.0, epa: 1.3, label: 'Bakır (Cu)' },
   iron: { who: 0.3, ts: 0.2, epa: 0.3, label: 'Demir (Fe)' },
   lead: { who: 0.01, ts: 0.01, epa: 0.015, label: 'Kurşun (Pb)' },
-  manganese: { who: 0.4, ts: 0.05, epa: 0.05, label: 'Mangan (Mn)' },
+  manganese: { who: 0.08, ts: 0.05, epa: 0.05, label: 'Mangan (Mn)' },
   nickel: { who: 0.07, ts: 0.02, epa: 0.1, label: 'Nikel (Ni)' },
   zinc: { who: 3.0, ts: null, epa: 5.0, label: 'Çinko (Zn)' },
 };

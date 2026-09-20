@@ -46,15 +46,12 @@ export default function ClinicalDecisionSupport() {
 
     setLoading(true);
 
-    // Kuyu suları dışındaki istasyonlarda doğrudan kimyasal su eşik aşımı (/risk-status) kaydı bulunmaz
-    const hasChemicalRiskEndpoint = selectedPatient.location_name.includes("Kuyu");
-
-    const riskStatusPromise = hasChemicalRiskEndpoint
-      ? getRiskStatus(selectedPatient.location_name).catch(() => null)
-      : Promise.resolve(null);
-
+    // /api/risk-status, o konumda eşik aşan kayıt yoksa zaten 404 (-> null) döner.
+    // Bu yüzden istasyon adına göre önceden filtreleme yapmaya gerek yok; her
+    // konum için doğrudan sorgulanır (2021 verisiyle "St" istasyonlarında da
+    // gerçek eşik aşımları çıkabiliyor, sadece "Kuyu" ile sınırlı değil).
     Promise.all([
-      riskStatusPromise,
+      getRiskStatus(selectedPatient.location_name).catch(() => null),
       getRiskAssessments(selectedPatient.location_name).catch(() => [])
     ])
       .then(([statusData, assessmentsData]) => {
