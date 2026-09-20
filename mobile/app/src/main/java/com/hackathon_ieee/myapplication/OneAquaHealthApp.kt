@@ -15,11 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.hackathon_ieee.myapplication.feature.home.HomeScreen
 import androidx.compose.material3.IconButton
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportFormScreen
+import com.hackathon_ieee.myapplication.ui.components.ThickBackIcon
 
 private const val HOME_SCREEN = "home"
 private const val REPORT_FORM_SCREEN = "report_form"
@@ -30,6 +32,7 @@ fun OneAquaHealthApp() {
     var currentScreen by rememberSaveable {
         mutableStateOf(HOME_SCREEN)
     }
+    val screenStateHolder = rememberSaveableStateHolder()
 
     BackHandler(
         enabled = currentScreen != HOME_SCREEN
@@ -62,10 +65,7 @@ fun OneAquaHealthApp() {
                                 currentScreen = HOME_SCREEN
                             }
                         ) {
-                            Text(
-                                text = "←",
-                                style = MaterialTheme.typography.headlineSmall
-                            )
+                            ThickBackIcon()
                         }
                     }
                 }
@@ -117,20 +117,22 @@ fun OneAquaHealthApp() {
             }
         }
     ) { innerPadding ->
-        when (currentScreen) {
-            HOME_SCREEN -> {
-                HomeScreen(
-                    onCreateReportClick = {
-                        currentScreen = REPORT_FORM_SCREEN
-                    },
-                    modifier = Modifier.padding(innerPadding)
-                )
-            }
+        screenStateHolder.SaveableStateProvider(currentScreen) {
+            when (currentScreen) {
+                HOME_SCREEN -> {
+                    HomeScreen(
+                        onCreateReportClick = {
+                            currentScreen = REPORT_FORM_SCREEN
+                        },
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
 
-            REPORT_FORM_SCREEN -> {
-                ReportFormScreen(
-                    modifier = Modifier.padding(innerPadding)
-                )
+                REPORT_FORM_SCREEN -> {
+                    ReportFormScreen(
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
             }
         }
     }

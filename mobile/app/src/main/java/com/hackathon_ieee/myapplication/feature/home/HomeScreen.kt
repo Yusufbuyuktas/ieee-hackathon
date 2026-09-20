@@ -28,16 +28,6 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "RiverGuard",
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary
-        )
-
-        Spacer(
-            modifier = Modifier.height(8.dp)
-        )
-
-        Text(
             text = "Ergene Basin Water Quality Monitoring System",
             style = MaterialTheme.typography.titleMedium
         )

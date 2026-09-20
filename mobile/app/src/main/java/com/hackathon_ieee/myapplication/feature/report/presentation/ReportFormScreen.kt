@@ -1,5 +1,9 @@
 package com.hackathon_ieee.myapplication.feature.report.presentation
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,15 +13,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,8 +33,21 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.hackathon_ieee.myapplication.core.location.LocationProvider
 import com.hackathon_ieee.myapplication.feature.report.domain.model.ReportCategory
+import com.hackathon_ieee.myapplication.feature.report.presentation.components.LocationMap
+import com.hackathon_ieee.myapplication.feature.report.presentation.components.PhotoInputCard
+import com.hackathon_ieee.myapplication.ui.theme.RiverGlassLow
+import com.hackathon_ieee.myapplication.ui.theme.RiverSuccess
+
+private enum class LocationUiState {
+    IDLE,
+    LOADING,
+    SUCCESS,
+    ERROR
+}
 
 @Composable
 fun ReportFormScreen(
@@ -41,6 +61,66 @@ fun ReportFormScreen(
         mutableStateOf("")
     }
 
+    var selectedPhotoUri by rememberSaveable {
+        mutableStateOf<String?>(null)
+    }
+
+    var latitude by rememberSaveable {
+        mutableStateOf<Double?>(null)
+    }
+
+    var longitude by rememberSaveable {
+        mutableStateOf<Double?>(null)
+    }
+
+    var locationStateName by rememberSaveable {
+        mutableStateOf(LocationUiState.IDLE.name)
+    }
+
+    var locationMessage by rememberSaveable {
+        mutableStateOf("Location has not been captured yet.")
+    }
+
+    val context = LocalContext.current
+    val locationProvider = androidx.compose.runtime.remember(context) {
+        LocationProvider(context)
+    }
+
+    fun requestCurrentLocation() {
+        locationStateName = LocationUiState.LOADING.name
+        locationMessage = "Retrieving your current location..."
+
+        locationProvider.getCurrentLocation(
+            onSuccess = { location ->
+                latitude = location.latitude
+                longitude = location.longitude
+                locationStateName = LocationUiState.SUCCESS.name
+                locationMessage = "Current location captured."
+            },
+            onError = { message ->
+                latitude = null
+                longitude = null
+                locationStateName = LocationUiState.ERROR.name
+                locationMessage = message
+            }
+        )
+    }
+
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val permissionGranted =
+            permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+
+        if (permissionGranted) {
+            requestCurrentLocation()
+        } else {
+            locationStateName = LocationUiState.ERROR.name
+            locationMessage = "Location permission was denied. Permission is required to submit a report."
+        }
+    }
+
     val selectedCategory = selectedCategoryName?.let { categoryName ->
         ReportCategory.valueOf(categoryName)
     }
@@ -52,7 +132,19 @@ fun ReportFormScreen(
             .padding(20.dp)
     ) {
         Text(
-            text = "Share information about the water pollution you observed."
+            text = "Photo",
+            style = MaterialTheme.typography.titleMedium
+        )
+
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
+
+        PhotoInputCard(
+            selectedPhotoUri = selectedPhotoUri,
+            onPhotoSelected = { photoUri ->
+                selectedPhotoUri = photoUri
+            }
         )
 
         Spacer(
@@ -60,7 +152,68 @@ fun ReportFormScreen(
         )
 
         Text(
-            text = "Photo",
+            text = "Category",
+            style = MaterialTheme.typography.titleMedium
+        )
+
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        ) {
+            Column {
+                ReportCategory.entries.forEachIndexed { index, category ->
+                    val isSelected = selectedCategory == category
+                    val categoryBackground = when {
+                        isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+                        index % 2 == 0 -> RiverGlassLow
+                        else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0f)
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(categoryBackground)
+                            .clickable {
+                                selectedCategoryName = category.name
+                            }
+                            .padding(
+                                horizontal = 12.dp,
+                                vertical = 8.dp
+                            ),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = isSelected,
+                            onClick = {
+                                selectedCategoryName = category.name
+                            },
+                            colors = RadioButtonDefaults.colors(
+                                selectedColor = MaterialTheme.colorScheme.primary,
+                                unselectedColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        )
+
+                        Text(
+                            text = category.displayName,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+        Spacer(
+            modifier = Modifier.height(24.dp)
+        )
+
+        Text(
+            text = "Location",
             style = MaterialTheme.typography.titleMedium
         )
 
@@ -77,65 +230,79 @@ fun ReportFormScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .padding(20.dp)
             ) {
-                Text(
-                    text = "No photo selected"
-                )
+                when (LocationUiState.valueOf(locationStateName)) {
+                    LocationUiState.LOADING -> {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                strokeWidth = 2.dp
+                            )
 
-                Spacer(
-                    modifier = Modifier.height(12.dp)
-                )
+                            Text(text = locationMessage)
+                        }
+                    }
+
+                    LocationUiState.SUCCESS -> {
+                        val currentLatitude = latitude
+                        val currentLongitude = longitude
+
+                        Text(
+                            text = locationMessage,
+                            color = RiverSuccess,
+                            style = MaterialTheme.typography.titleSmall
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        if (currentLatitude != null && currentLongitude != null) {
+                            LocationMap(
+                                latitude = currentLatitude,
+                                longitude = currentLongitude
+                            )
+                        }
+                    }
+
+                    LocationUiState.ERROR -> {
+                        Text(
+                            text = locationMessage,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+
+                    LocationUiState.IDLE -> {
+                        Text(text = locationMessage)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
 
                 OutlinedButton(
                     onClick = {
-                        // Camera and gallery support will be added later.
-                    }
+                        if (locationProvider.hasLocationPermission()) {
+                            requestCurrentLocation()
+                        } else {
+                            locationPermissionLauncher.launch(
+                                arrayOf(
+                                    Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                                )
+                            )
+                        }
+                    },
+                    enabled = locationStateName != LocationUiState.LOADING.name,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
                     Text(
-                        text = "Add Photo"
-                    )
-                }
-            }
-        }
-
-        Spacer(
-            modifier = Modifier.height(24.dp)
-        )
-
-        Text(
-            text = "Category",
-            style = MaterialTheme.typography.titleMedium
-        )
-
-        Spacer(
-            modifier = Modifier.height(8.dp)
-        )
-
-        Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            ReportCategory.entries.forEach { category ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            selectedCategoryName = category.name
+                        text = if (latitude == null || longitude == null) {
+                            "Use Current Location"
+                        } else {
+                            "Refresh Location"
                         }
-                        .padding(vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RadioButton(
-                        selected = selectedCategory == category,
-                        onClick = {
-                            selectedCategoryName = category.name
-                        }
-                    )
-
-                    Text(
-                        text = category.displayName,
-                        modifier = Modifier.padding(start = 8.dp)
                     )
                 }
             }
@@ -181,20 +348,14 @@ fun ReportFormScreen(
             modifier = Modifier.height(24.dp)
         )
 
-        Text(
-            text = "Your location will be added automatically using GPS.",
-            style = MaterialTheme.typography.bodyMedium
-        )
-
-        Spacer(
-            modifier = Modifier.height(24.dp)
-        )
-
         Button(
             onClick = {
                 // Review screen will be added later.
             },
-            enabled = selectedCategory != null,
+            enabled = selectedPhotoUri != null &&
+                selectedCategory != null &&
+                latitude != null &&
+                longitude != null,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
