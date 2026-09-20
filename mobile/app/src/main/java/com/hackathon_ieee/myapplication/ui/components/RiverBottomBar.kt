@@ -28,7 +28,7 @@ enum class BottomDestination {
     HOME,
     MAP,
     REPORT,
-    MY_REPORTS,
+    PROFILE,
     MORE
 }
 
@@ -69,9 +69,9 @@ fun RiverBottomBar(
                 onDestinationSelected = onDestinationSelected
             )
             BottomBarItem(
-                destination = BottomDestination.MY_REPORTS,
+                destination = BottomDestination.PROFILE,
                 selectedDestination = selectedDestination,
-                contentDescription = "My reports",
+                contentDescription = "Profile",
                 onDestinationSelected = onDestinationSelected
             )
             BottomBarItem(
@@ -218,27 +218,29 @@ private fun RiverNavigationIcon(
                 )
             }
 
-            BottomDestination.MY_REPORTS -> {
-                drawRoundRect(
+            BottomDestination.PROFILE -> {
+                drawCircle(
                     color = color,
-                    topLeft = Offset(size.width * 0.20f, size.height * 0.16f),
-                    size = androidx.compose.ui.geometry.Size(
-                        size.width * 0.60f,
-                        size.height * 0.70f
-                    ),
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(4.dp.toPx()),
+                    radius = size.minDimension * 0.17f,
+                    center = Offset(center.x, size.height * 0.31f),
                     style = Stroke(strokeWidth)
                 )
-                repeat(3) { index ->
-                    val y = size.height * (0.36f + index * 0.17f)
-                    drawLine(
-                        color = color,
-                        start = Offset(size.width * 0.34f, y),
-                        end = Offset(size.width * 0.68f, y),
-                        strokeWidth = strokeWidth,
-                        cap = StrokeCap.Round
+                val shoulders = Path().apply {
+                    moveTo(size.width * 0.20f, size.height * 0.84f)
+                    cubicTo(
+                        size.width * 0.24f,
+                        size.height * 0.57f,
+                        size.width * 0.76f,
+                        size.height * 0.57f,
+                        size.width * 0.80f,
+                        size.height * 0.84f
                     )
                 }
+                drawPath(
+                    path = shoulders,
+                    color = color,
+                    style = Stroke(strokeWidth, cap = StrokeCap.Round)
+                )
             }
 
             BottomDestination.MORE -> {

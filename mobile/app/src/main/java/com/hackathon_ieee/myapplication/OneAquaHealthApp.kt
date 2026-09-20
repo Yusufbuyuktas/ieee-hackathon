@@ -22,13 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.hackathon_ieee.myapplication.feature.auth.LoginScreen
+import com.hackathon_ieee.myapplication.feature.auth.SplashScreen
 import com.hackathon_ieee.myapplication.feature.home.HomeScreen
 import com.hackathon_ieee.myapplication.feature.map.RiskMapScreen
 import com.hackathon_ieee.myapplication.feature.more.MoreScreen
+import com.hackathon_ieee.myapplication.feature.profile.ProfileScreen
 import com.hackathon_ieee.myapplication.feature.report.domain.model.ReportCategory
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportFormScreen
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportReviewScreen
-import com.hackathon_ieee.myapplication.feature.reports.MyReportsScreen
 import com.hackathon_ieee.myapplication.ui.components.BottomDestination
 import com.hackathon_ieee.myapplication.ui.components.RiverBottomBar
 import com.hackathon_ieee.myapplication.ui.components.ThickBackIcon
@@ -37,12 +39,21 @@ private const val HOME_SCREEN = "home"
 private const val MAP_SCREEN = "map"
 private const val REPORT_FORM_SCREEN = "report_form"
 private const val REPORT_REVIEW_SCREEN = "report_review"
-private const val MY_REPORTS_SCREEN = "my_reports"
+private const val PROFILE_SCREEN = "profile"
 private const val MORE_SCREEN = "more"
+private const val SPLASH_STAGE = "splash"
+private const val LOGIN_STAGE = "login"
+private const val APP_STAGE = "app"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OneAquaHealthApp() {
+    var appStage by rememberSaveable {
+        mutableStateOf(SPLASH_STAGE)
+    }
+    var signedInEmail by rememberSaveable {
+        mutableStateOf("")
+    }
     var currentScreen by rememberSaveable {
         mutableStateOf(HOME_SCREEN)
     }
@@ -62,6 +73,26 @@ fun OneAquaHealthApp() {
     }
     var reviewNote by rememberSaveable {
         mutableStateOf("")
+    }
+
+    if (appStage == SPLASH_STAGE) {
+        SplashScreen(
+            onFinished = {
+                appStage = LOGIN_STAGE
+            }
+        )
+        return
+    }
+
+    if (appStage == LOGIN_STAGE) {
+        LoginScreen(
+            onSignIn = { email ->
+                signedInEmail = email
+                currentScreen = HOME_SCREEN
+                appStage = APP_STAGE
+            }
+        )
+        return
     }
 
     BackHandler(
@@ -94,7 +125,7 @@ fun OneAquaHealthApp() {
                             text = when (currentScreen) {
                                 HOME_SCREEN -> "RiverGuard"
                                 MAP_SCREEN -> "Risk Map"
-                                MY_REPORTS_SCREEN -> "My Reports"
+                                PROFILE_SCREEN -> "Profile"
                                 MORE_SCREEN -> "More"
                                 REPORT_REVIEW_SCREEN -> "Review Report"
                                 else -> "New Report"
@@ -185,8 +216,14 @@ fun OneAquaHealthApp() {
                     }
                 }
 
-                MY_REPORTS_SCREEN -> {
-                    MyReportsScreen(
+                PROFILE_SCREEN -> {
+                    ProfileScreen(
+                        email = signedInEmail,
+                        onLogout = {
+                            signedInEmail = ""
+                            currentScreen = HOME_SCREEN
+                            appStage = LOGIN_STAGE
+                        },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -204,7 +241,7 @@ fun OneAquaHealthApp() {
 private fun String.toBottomDestination(): BottomDestination = when (this) {
     MAP_SCREEN -> BottomDestination.MAP
     REPORT_FORM_SCREEN -> BottomDestination.REPORT
-    MY_REPORTS_SCREEN -> BottomDestination.MY_REPORTS
+    PROFILE_SCREEN -> BottomDestination.PROFILE
     MORE_SCREEN -> BottomDestination.MORE
     else -> BottomDestination.HOME
 }
@@ -213,6 +250,6 @@ private fun BottomDestination.toScreenName(): String = when (this) {
     BottomDestination.HOME -> HOME_SCREEN
     BottomDestination.MAP -> MAP_SCREEN
     BottomDestination.REPORT -> REPORT_FORM_SCREEN
-    BottomDestination.MY_REPORTS -> MY_REPORTS_SCREEN
+    BottomDestination.PROFILE -> PROFILE_SCREEN
     BottomDestination.MORE -> MORE_SCREEN
 }
