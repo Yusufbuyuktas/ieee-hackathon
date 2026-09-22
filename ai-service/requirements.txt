@@ -1,2 +1,6 @@
 fastapi
 uvicorn[standard]
+google-genai
+httpx
+Pillow
+pytest
