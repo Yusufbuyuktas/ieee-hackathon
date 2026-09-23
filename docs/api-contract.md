@@ -236,7 +236,7 @@ Response `200 OK`:
 
 ## 5. AI Foto Doğrulama (Backend → AI Servisi arası, iç API)
 **Durum:** Taslak
-**Endpoint:** `POST http://ai-service:8000/validate-photo`
+**Endpoint:** `POST http://ai-service:8000/moderate-photo`
 **Kim çağırır:** Backend (vatandaş bildirimi geldiğinde otomatik)
 
 Request:
@@ -251,9 +251,17 @@ Response `200 OK`:
 {
   "tutarli": true,
   "guven_skoru": 0.87,
-  "aciklama": "Fotoğrafta koyu renkli, bulanık su net görülüyor, seçilen kategoriyle tutarlı."
+  "aciklama": "Fotoğrafta koyu renkli, bulanık su net görülüyor, seçilen kategoriyle tutarlı.",
+  "moderation_status": "approved"
 }
 ```
+Moderation status:
+- approved: Görsel kategoriyle tutarlı ve güven göstergesi >= 0.80.
+- review: Düşük güven veya görselden doğrulanamayan kategori.
+- inconsistent: Görsel kategoriyle yüksek güven göstergesiyle uyumsuz.
+
+kotu_koku ve diger kategorileri her zaman review durumuna yönlendirilir.
+
 
 ---
 

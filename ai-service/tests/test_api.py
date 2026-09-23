@@ -88,7 +88,7 @@ def test_health_endpoint():
 def test_invalid_category():
 
     response = client.post(
-        "/validate-photo",
+        "/moderate-photo",
         json={
             "photo_url": PHOTO_URL,
             "category": "araba_kazasi"
@@ -105,7 +105,7 @@ def test_invalid_category():
 def test_invalid_url():
 
     response = client.post(
-        "/validate-photo",
+        "/moderate-photo",
         json={
             "photo_url": "not-a-url",
             "category": "balik_olumu"
@@ -122,7 +122,7 @@ def test_invalid_url():
 def test_forbidden_image_host():
 
     response = client.post(
-        "/validate-photo",
+        "/moderate-photo",
         json={
             "photo_url":
                 "https://example.com/photo.jpg",
@@ -263,7 +263,7 @@ def test_invalid_ai_response(
 
     response = client.post(
 
-        "/validate-photo",
+        "/moderate-photo",
 
         json={
             "photo_url": PHOTO_URL,
@@ -303,7 +303,7 @@ def test_gemini_unavailable(
 
     response = client.post(
 
-        "/validate-photo",
+        "/moderate-photo",
 
         json={
             "photo_url": PHOTO_URL,
