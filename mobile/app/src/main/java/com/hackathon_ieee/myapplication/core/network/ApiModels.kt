@@ -57,3 +57,9 @@ data class RiskAssessment(
     val citation: String?,
     val fhirRiskAssessmentId: String?
 )
+
+data class CitizenReportSubmission(
+    val id: String,
+    val aiValidationStatus: String,
+    val aiConfidence: Double?
+)

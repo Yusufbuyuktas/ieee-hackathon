@@ -33,6 +33,7 @@ import com.hackathon_ieee.myapplication.feature.profile.ProfileScreen
 import com.hackathon_ieee.myapplication.feature.report.domain.model.ReportCategory
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportFormScreen
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportReviewScreen
+import com.hackathon_ieee.myapplication.feature.report.presentation.ReportStatusScreen
 import com.hackathon_ieee.myapplication.ui.components.BottomDestination
 import com.hackathon_ieee.myapplication.ui.components.RiverBottomBar
 import com.hackathon_ieee.myapplication.ui.components.RiverGuardWordmark
@@ -42,6 +43,7 @@ private const val HOME_SCREEN = "home"
 private const val MAP_SCREEN = "map"
 private const val REPORT_FORM_SCREEN = "report_form"
 private const val REPORT_REVIEW_SCREEN = "report_review"
+private const val REPORT_STATUS_SCREEN = "report_status"
 private const val PROFILE_SCREEN = "profile"
 private const val MORE_SCREEN = "more"
 private const val SPLASH_STAGE = "splash"
@@ -77,6 +79,18 @@ fun OneAquaHealthApp() {
     var reviewNote by rememberSaveable {
         mutableStateOf("")
     }
+    var reportDraftVersion by rememberSaveable {
+        mutableStateOf(0)
+    }
+    var submittedReportId by rememberSaveable {
+        mutableStateOf<String?>(null)
+    }
+    var submittedReportStatus by rememberSaveable {
+        mutableStateOf<String?>(null)
+    }
+    var submittedReportConfidence by rememberSaveable {
+        mutableStateOf<Double?>(null)
+    }
 
     if (appStage == SPLASH_STAGE) {
         SplashScreen(
@@ -100,12 +114,12 @@ fun OneAquaHealthApp() {
 
     BackHandler(
         enabled = currentScreen == REPORT_FORM_SCREEN ||
-            currentScreen == REPORT_REVIEW_SCREEN
+            currentScreen == REPORT_REVIEW_SCREEN ||
+            currentScreen == REPORT_STATUS_SCREEN
     ) {
-        currentScreen = if (currentScreen == REPORT_REVIEW_SCREEN) {
-            REPORT_FORM_SCREEN
-        } else {
-            HOME_SCREEN
+        currentScreen = when (currentScreen) {
+            REPORT_REVIEW_SCREEN -> REPORT_FORM_SCREEN
+            else -> HOME_SCREEN
         }
     }
 
@@ -137,6 +151,7 @@ fun OneAquaHealthApp() {
                             Text(
                                 text = when (currentScreen) {
                                     REPORT_REVIEW_SCREEN -> "Review Report"
+                                    REPORT_STATUS_SCREEN -> "Report Status"
                                     else -> "New Report"
                                 },
                                 style = MaterialTheme.typography.headlineSmall,
@@ -165,7 +180,10 @@ fun OneAquaHealthApp() {
             }
         },
         bottomBar = {
-            if (currentScreen != REPORT_REVIEW_SCREEN) {
+            if (
+                currentScreen != REPORT_REVIEW_SCREEN &&
+                currentScreen != REPORT_STATUS_SCREEN
+            ) {
                 RiverBottomBar(
                     selectedDestination = currentScreen.toBottomDestination(),
                     onDestinationSelected = { destination ->
@@ -175,7 +193,12 @@ fun OneAquaHealthApp() {
             }
         }
     ) { innerPadding ->
-        screenStateHolder.SaveableStateProvider(currentScreen) {
+        val screenStateKey = if (currentScreen == REPORT_FORM_SCREEN) {
+            "$currentScreen-$reportDraftVersion"
+        } else {
+            currentScreen
+        }
+        screenStateHolder.SaveableStateProvider(screenStateKey) {
             when (currentScreen) {
                 HOME_SCREEN -> {
                     HomeScreen(
@@ -223,6 +246,35 @@ fun OneAquaHealthApp() {
                             note = reviewNote,
                             onEdit = {
                                 currentScreen = REPORT_FORM_SCREEN
+                            },
+                            onSubmitted = { submission ->
+                                submittedReportId = submission.id
+                                submittedReportStatus = submission.aiValidationStatus
+                                submittedReportConfidence = submission.aiConfidence
+
+                                reviewPhotoUri = null
+                                reviewCategoryName = null
+                                reviewLatitude = null
+                                reviewLongitude = null
+                                reviewNote = ""
+                                reportDraftVersion++
+                                currentScreen = REPORT_STATUS_SCREEN
+                            },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
+                }
+
+                REPORT_STATUS_SCREEN -> {
+                    val reportId = submittedReportId
+                    val reportStatus = submittedReportStatus
+                    if (reportId != null && reportStatus != null) {
+                        ReportStatusScreen(
+                            reportId = reportId,
+                            aiValidationStatus = reportStatus,
+                            aiConfidence = submittedReportConfidence,
+                            onBackHome = {
+                                currentScreen = HOME_SCREEN
                             },
                             modifier = Modifier.padding(innerPadding)
                         )

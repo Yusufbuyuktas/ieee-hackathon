@@ -1,18 +1,21 @@
 package com.hackathon_ieee.myapplication.core.network
 
+import android.content.ContentResolver
+import android.net.Uri
+import android.provider.OpenableColumns
+import com.hackathon_ieee.myapplication.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.DataOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-private const val DEFAULT_API_BASE_URL = "http://10.0.2.2:8080"
-
 class RiverGuardApi(
-    private val baseUrl: String = DEFAULT_API_BASE_URL
+    private val baseUrl: String = BuildConfig.API_BASE_URL
 ) {
     suspend fun getLocations(): Result<List<MonitoringLocation>> = runCatching {
         val response = getJsonObject("/api/locations")
@@ -84,6 +87,101 @@ class RiverGuardApi(
         }
     }
 
+    suspend fun submitCitizenReport(
+        contentResolver: ContentResolver,
+        photoUri: Uri,
+        category: String,
+        note: String,
+        latitude: Double,
+        longitude: Double,
+        timestamp: String
+    ): Result<CitizenReportSubmission> = runCatching {
+        postCitizenReport(
+            contentResolver = contentResolver,
+            photoUri = photoUri,
+            category = category,
+            note = note,
+            latitude = latitude,
+            longitude = longitude,
+            timestamp = timestamp
+        )
+    }
+
+    private suspend fun postCitizenReport(
+        contentResolver: ContentResolver,
+        photoUri: Uri,
+        category: String,
+        note: String,
+        latitude: Double,
+        longitude: Double,
+        timestamp: String
+    ): CitizenReportSubmission = withContext(Dispatchers.IO) {
+        val boundary = "RiverGuardBoundary${System.currentTimeMillis()}"
+        val connection = URL(
+            baseUrl.trimEnd('/') + "/api/citizen-reports"
+        ).openConnection() as HttpURLConnection
+
+        try {
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.connectTimeout = 15_000
+            connection.readTimeout = 120_000
+            connection.setChunkedStreamingMode(0)
+            connection.setRequestProperty("Accept", "application/json")
+            connection.setRequestProperty(
+                "Content-Type",
+                "multipart/form-data; boundary=$boundary"
+            )
+
+            DataOutputStream(connection.outputStream).use { output ->
+                output.writeTextPart(boundary, "category", category)
+                output.writeTextPart(boundary, "note", note)
+                output.writeTextPart(boundary, "latitude", latitude.toString())
+                output.writeTextPart(boundary, "longitude", longitude.toString())
+                output.writeTextPart(boundary, "timestamp", timestamp)
+
+                val fileName = contentResolver.displayName(photoUri)
+                    .sanitizeFileName()
+                val contentType = contentResolver.getType(photoUri) ?: "image/jpeg"
+
+                output.writeUtf8("--$boundary\r\n")
+                output.writeUtf8(
+                    "Content-Disposition: form-data; name=\"photo\"; " +
+                        "filename=\"$fileName\"\r\n"
+                )
+                output.writeUtf8("Content-Type: $contentType\r\n\r\n")
+                val input = contentResolver.openInputStream(photoUri)
+                    ?: throw IllegalArgumentException("Selected photo cannot be opened.")
+                input.use { it.copyTo(output) }
+                output.writeUtf8("\r\n--$boundary--\r\n")
+                output.flush()
+            }
+
+            val responseCode = connection.responseCode
+            val responseBody = (
+                if (responseCode in 200..299) connection.inputStream else connection.errorStream
+            )?.bufferedReader()?.use { it.readText() }.orEmpty()
+
+            if (responseCode !in 200..299) {
+                throw ApiException(
+                    statusCode = responseCode,
+                    message = responseBody.ifBlank {
+                        "Submission failed with HTTP $responseCode."
+                    }
+                )
+            }
+
+            val response = JSONObject(responseBody)
+            CitizenReportSubmission(
+                id = response.getString("id"),
+                aiValidationStatus = response.getString("ai_validation_status"),
+                aiConfidence = response.nullableDouble("ai_confidence")
+            )
+        } finally {
+            connection.disconnect()
+        }
+    }
+
     private suspend fun getJsonObject(path: String): JSONObject = withContext(Dispatchers.IO) {
         val connection = URL(baseUrl.trimEnd('/') + path).openConnection() as HttpURLConnection
 
@@ -115,6 +213,33 @@ class RiverGuardApi(
         }
     }
 }
+
+private fun DataOutputStream.writeTextPart(
+    boundary: String,
+    name: String,
+    value: String
+) {
+    writeUtf8("--$boundary\r\n")
+    writeUtf8("Content-Disposition: form-data; name=\"$name\"\r\n\r\n")
+    writeUtf8("$value\r\n")
+}
+
+private fun DataOutputStream.writeUtf8(value: String) {
+    write(value.toByteArray(StandardCharsets.UTF_8))
+}
+
+private fun ContentResolver.displayName(uri: Uri): String {
+    query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
+        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        if (nameIndex >= 0 && cursor.moveToFirst()) {
+            return cursor.getString(nameIndex)
+        }
+    }
+    return "riverguard-report.jpg"
+}
+
+private fun String.sanitizeFileName(): String =
+    replace("\r", "_").replace("\n", "_").replace("\"", "_")
 
 class ApiException(
     val statusCode: Int,
