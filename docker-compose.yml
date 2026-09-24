@@ -38,7 +38,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ergene_pass
       FHIR_SERVER_URL: http://hapi-fhir:8080/fhir
       AI_SERVICE_URL: http://ai-service:8000
-      STORAGE_PUBLIC_BASE_URL: https://134.112.41.108:8080
+      STORAGE_PUBLIC_BASE_URL: http://backend:8080
     volumes:
       - ./data:/app/data:ro
       - uploads_data:/app/uploads

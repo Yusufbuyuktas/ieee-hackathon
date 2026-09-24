@@ -16,7 +16,7 @@ from fastapi.concurrency import run_in_threadpool
 from pydantic import (
     BaseModel,
     Field,
-    HttpUrl,
+    AnyHttpUrl,
     ValidationError
 )
 
@@ -60,8 +60,7 @@ ALLOWED_IMAGE_HOSTS = {
     host.strip().lower()
     for host in os.getenv(
         "PHOTO_ALLOWED_HOSTS",
-        "upload.wikimedia.org,images.unsplash.com",
-        "134.112.41.108"
+        "upload.wikimedia.org,images.unsplash.com,134.112.41.108"
     ).split(",")
     if host.strip()
 }
@@ -98,7 +97,7 @@ class ModerationStatus(str, Enum):
 
 class PhotoValidationRequest(BaseModel):
 
-    photo_url: HttpUrl
+    photo_url: AnyHttpUrl
 
     category: ReportCategory
 
@@ -137,11 +136,18 @@ async def download_image(
 
     parsed_url = urlparse(photo_url)
 
-    if (
-        parsed_url.scheme != "https"
-        or parsed_url.hostname not in ALLOWED_IMAGE_HOSTS
-        or parsed_url.port not in (None, 443)
-    ):
+    is_allowed_external_url = (
+        parsed_url.scheme == "https"
+        and parsed_url.hostname in ALLOWED_IMAGE_HOSTS
+        and parsed_url.port in (None, 443)
+    )
+    is_allowed_internal_url = (
+        parsed_url.scheme == "http"
+        and parsed_url.hostname == "backend"
+        and parsed_url.port == 8080
+    )
+
+    if not (is_allowed_external_url or is_allowed_internal_url):
 
         raise HTTPException(
             status_code=400,
