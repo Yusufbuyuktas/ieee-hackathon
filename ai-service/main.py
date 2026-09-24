@@ -61,7 +61,7 @@ ALLOWED_IMAGE_HOSTS = {
     for host in os.getenv(
         "PHOTO_ALLOWED_HOSTS",
         "upload.wikimedia.org,images.unsplash.com",
-        "134.112.41.108:8080"
+        "134.112.41.108"
     ).split(",")
     if host.strip()
 }
