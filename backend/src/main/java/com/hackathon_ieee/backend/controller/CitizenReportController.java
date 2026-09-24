@@ -22,11 +22,11 @@ public class CitizenReportController {
     @ResponseStatus(HttpStatus.CREATED)
     public CitizenReportResponse create(
             @RequestPart("photo") MultipartFile photo,
-            @RequestPart("category") String category,
-            @RequestPart(value = "note", required = false) String note,
-            @RequestPart(value = "latitude", required = false) Double latitude,
-            @RequestPart(value = "longitude", required = false) Double longitude,
-            @RequestPart("timestamp") String timestamp) {
+            @RequestParam("category") String category,
+            @RequestParam(value = "note", required = false) String note,
+            @RequestParam(value = "latitude", required = false) Double latitude,
+            @RequestParam(value = "longitude", required = false) Double longitude,
+            @RequestParam("timestamp") String timestamp) {
         return service.create(photo, category, note, latitude, longitude, timestamp);
     }
 }
