@@ -172,10 +172,22 @@ class RiverGuardApi(
             }
 
             val response = JSONObject(responseBody)
+            val validationStatus = response.getString("ai_validation_status")
+            val rawConfidence = response.nullableDouble("ai_confidence")
+            val matchScore = response.nullableDouble("ai_match_score")
+                ?: response.nullableDouble("aiMatchScore")
+                ?: rawConfidence?.let { confidence ->
+                    if (validationStatus == "INCELEMEDE" && confidence >= 0.80) {
+                        1.0 - confidence
+                    } else {
+                        confidence
+                    }
+                }
+
             CitizenReportSubmission(
                 id = response.getString("id"),
-                aiValidationStatus = response.getString("ai_validation_status"),
-                aiConfidence = response.nullableDouble("ai_confidence")
+                aiValidationStatus = validationStatus,
+                aiMatchScore = matchScore
             )
         } finally {
             connection.disconnect()

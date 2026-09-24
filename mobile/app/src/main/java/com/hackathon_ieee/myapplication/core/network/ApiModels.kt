@@ -61,5 +61,5 @@ data class RiskAssessment(
 data class CitizenReportSubmission(
     val id: String,
     val aiValidationStatus: String,
-    val aiConfidence: Double?
+    val aiMatchScore: Double?
 )

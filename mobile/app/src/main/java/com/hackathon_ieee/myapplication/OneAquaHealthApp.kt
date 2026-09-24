@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -34,6 +36,8 @@ import com.hackathon_ieee.myapplication.feature.report.domain.model.ReportCatego
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportFormScreen
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportReviewScreen
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportStatusScreen
+import com.hackathon_ieee.myapplication.core.storage.LocalReportRepository
+import com.hackathon_ieee.myapplication.core.storage.SavedCitizenReport
 import com.hackathon_ieee.myapplication.ui.components.BottomDestination
 import com.hackathon_ieee.myapplication.ui.components.RiverBottomBar
 import com.hackathon_ieee.myapplication.ui.components.RiverGuardWordmark
@@ -53,6 +57,10 @@ private const val APP_STAGE = "app"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OneAquaHealthApp() {
+    val context = LocalContext.current
+    val localReportRepository = androidx.compose.runtime.remember {
+        LocalReportRepository(context)
+    }
     var appStage by rememberSaveable {
         mutableStateOf(SPLASH_STAGE)
     }
@@ -88,8 +96,19 @@ fun OneAquaHealthApp() {
     var submittedReportStatus by rememberSaveable {
         mutableStateOf<String?>(null)
     }
-    var submittedReportConfidence by rememberSaveable {
+    var submittedReportMatchScore by rememberSaveable {
         mutableStateOf<Double?>(null)
+    }
+    var savedReports by androidx.compose.runtime.remember {
+        mutableStateOf(emptyList<SavedCitizenReport>())
+    }
+
+    LaunchedEffect(signedInEmail, appStage) {
+        savedReports = if (signedInEmail.isBlank()) {
+            emptyList()
+        } else {
+            localReportRepository.getReports(signedInEmail)
+        }
     }
 
     if (appStage == SPLASH_STAGE) {
@@ -105,6 +124,7 @@ fun OneAquaHealthApp() {
         LoginScreen(
             onSignIn = { email ->
                 signedInEmail = email
+                savedReports = localReportRepository.getReports(email)
                 currentScreen = HOME_SCREEN
                 appStage = APP_STAGE
             }
@@ -248,9 +268,25 @@ fun OneAquaHealthApp() {
                                 currentScreen = REPORT_FORM_SCREEN
                             },
                             onSubmitted = { submission ->
+                                val submittedCategory = ReportCategory.valueOf(categoryName)
+                                localReportRepository.save(
+                                    SavedCitizenReport(
+                                        id = submission.id,
+                                        ownerEmail = signedInEmail,
+                                        category = submittedCategory.displayName,
+                                        note = reviewNote,
+                                        latitude = latitude,
+                                        longitude = longitude,
+                                        submittedAtMillis = System.currentTimeMillis(),
+                                        aiValidationStatus = submission.aiValidationStatus,
+                                        aiMatchScore = submission.aiMatchScore
+                                    )
+                                )
+                                savedReports = localReportRepository.getReports(signedInEmail)
+
                                 submittedReportId = submission.id
                                 submittedReportStatus = submission.aiValidationStatus
-                                submittedReportConfidence = submission.aiConfidence
+                                submittedReportMatchScore = submission.aiMatchScore
 
                                 reviewPhotoUri = null
                                 reviewCategoryName = null
@@ -272,7 +308,7 @@ fun OneAquaHealthApp() {
                         ReportStatusScreen(
                             reportId = reportId,
                             aiValidationStatus = reportStatus,
-                            aiConfidence = submittedReportConfidence,
+                            aiMatchScore = submittedReportMatchScore,
                             onBackHome = {
                                 currentScreen = HOME_SCREEN
                             },
@@ -284,8 +320,10 @@ fun OneAquaHealthApp() {
                 PROFILE_SCREEN -> {
                     ProfileScreen(
                         email = signedInEmail,
+                        reports = savedReports,
                         onLogout = {
                             signedInEmail = ""
+                            savedReports = emptyList()
                             currentScreen = HOME_SCREEN
                             appStage = LOGIN_STAGE
                         },

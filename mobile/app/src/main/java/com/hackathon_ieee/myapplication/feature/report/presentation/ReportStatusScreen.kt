@@ -31,7 +31,7 @@ import java.util.Locale
 fun ReportStatusScreen(
     reportId: String,
     aiValidationStatus: String,
-    aiConfidence: Double?,
+    aiMatchScore: Double?,
     onBackHome: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -75,13 +75,13 @@ fun ReportStatusScreen(
                     singleLine = true
                 )
                 ResultRow(label = "Status", value = presentation.statusLabel)
-                aiConfidence?.let { confidence ->
+                aiMatchScore?.let { matchScore ->
                     ResultRow(
-                        label = "AI confidence",
+                        label = "AI match",
                         value = String.format(
                             Locale.US,
                             "%.0f%%",
-                            confidence.coerceIn(0.0, 1.0) * 100
+                            matchScore.coerceIn(0.0, 1.0) * 100
                         )
                     )
                 }
@@ -134,7 +134,7 @@ private fun String.toStatusPresentation(): StatusPresentation = when (this) {
     "ONAYLANDI" -> StatusPresentation(
         title = "Report Submitted",
         statusLabel = "Approved",
-        description = "Your observation was received and its photo matched the selected category.",
+        description = "Your observation was received and its AI matched the selected category.",
         color = RiverSuccess
     )
     "INCELEMEDE" -> StatusPresentation(
@@ -171,7 +171,7 @@ private fun ReportStatusScreenPreview() {
             ReportStatusScreen(
                 reportId = "cit-8f73b11d",
                 aiValidationStatus = "ONAYLANDI",
-                aiConfidence = 0.87,
+                aiMatchScore = 0.87,
                 onBackHome = {}
             )
         }
@@ -192,7 +192,7 @@ private fun ReportStatusUnderReviewPreview() {
             ReportStatusScreen(
                 reportId = "cit-42c90ab1",
                 aiValidationStatus = "INCELEMEDE",
-                aiConfidence = 0.64,
+                aiMatchScore = 0.64,
                 onBackHome = {}
             )
         }
@@ -213,7 +213,7 @@ private fun ReportStatusAiUnavailablePreview() {
             ReportStatusScreen(
                 reportId = "cit-71de903f",
                 aiValidationStatus = "AI_SERVISI_ERISILEMEDI",
-                aiConfidence = null,
+                aiMatchScore = null,
                 onBackHome = {}
             )
         }
