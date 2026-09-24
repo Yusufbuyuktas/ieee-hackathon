@@ -13,3 +13,10 @@ spring:
 
 fhir:
   server-url: ${FHIR_SERVER_URL:http://localhost:8081/fhir}
+
+ai:
+  service-url: ${AI_SERVICE_URL:http://localhost:8000}
+
+storage:
+  upload-dir: ${UPLOAD_DIR:/app/uploads}
+  public-base-url: ${STORAGE_PUBLIC_BASE_URL:http://localhost:8080}

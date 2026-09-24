@@ -60,7 +60,8 @@ ALLOWED_IMAGE_HOSTS = {
     host.strip().lower()
     for host in os.getenv(
         "PHOTO_ALLOWED_HOSTS",
-        "upload.wikimedia.org,images.unsplash.com"
+        "upload.wikimedia.org,images.unsplash.com",
+        "134.112.41.108:8080"
     ).split(",")
     if host.strip()
 }
@@ -438,28 +439,25 @@ def health_check():
 
 
 @app.post(
-    "/validate-photo",
-    response_model=PhotoValidationResponse
+    "/moderate-photo",
+    response_model=ModerationResponse
 )
-async def validate_photo(
+async def moderate_photo(
     request: PhotoValidationRequest
 ):
 
-    # 1. Fotoğrafı indir
-
+    # Fotoğrafı indir
     image_data = await download_image(
         str(request.photo_url)
     )
 
-    # 2. Görseli doğrula ve hazırla
-
+    # Görseli hazırla
     prepared_image = await run_in_threadpool(
         prepare_image,
         image_data
     )
 
-    # 3. Gemini ile analiz et
-
+    # Gemini değerlendirmesi
     try:
 
         result = await run_in_threadpool(
@@ -468,12 +466,7 @@ async def validate_photo(
             request.category
         )
 
-        return result
-
-    except (
-        ValidationError,
-        ValueError
-    ):
+    except (ValidationError, ValueError):
 
         raise HTTPException(
             status_code=502,
@@ -487,42 +480,16 @@ async def validate_photo(
             detail="AI servisine şu anda erişilemiyor."
         )
 
-# ==========================================
-# MODERASYON ENDPOINT
-# ==========================================
-
-@app.post(
-    "/moderate-photo",
-    response_model=ModerationResponse
-)
-async def moderate_photo(
-    request: PhotoValidationRequest
-):
-
-    # Mevcut fotoğraf değerlendirme
-    # endpoint'imizin mantığını kullan
-
-    result = await validate_photo(
-        request
-    )
-
     # Moderasyon durumunu belirle
-
     status = determine_moderation_status(
         result=result,
         category=request.category
     )
 
-    # Backend'e gönderilecek cevap
-
+    # Backend'e sonucu döndür
     return ModerationResponse(
-
         tutarli=result.tutarli,
-
         guven_skoru=result.guven_skoru,
-
         aciklama=result.aciklama,
-
         moderation_status=status
-
     )
