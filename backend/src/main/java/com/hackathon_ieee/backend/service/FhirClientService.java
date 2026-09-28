@@ -6,7 +6,6 @@ import com.hackathon_ieee.backend.model.ObservationEntity;
 import com.hackathon_ieee.backend.model.RiskAssessmentEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -44,6 +43,22 @@ public class FhirClientService {
                 "outcome", Map.of("text", entity.getRiskLevel().name().toLowerCase()),
                 "probabilityDecimal", entity.getCarcinogenicRiskAdult()));
         return post("RiskAssessment", resource);
+    }
+
+    public String createCitizenReportObservation(com.hackathon_ieee.backend.model.CitizenReportEntity entity) {
+        Map<String, Object> resource = new LinkedHashMap<>();
+        resource.put("resourceType", "Observation");
+        resource.put("status", "final");
+        resource.put("code", Map.of("text", entity.getCategory().name().toLowerCase()));
+        if (entity.getNote() != null && !entity.getNote().isBlank()) {
+            resource.put("note", java.util.List.of(Map.of("text", entity.getNote())));
+        }
+        resource.put("effectiveDateTime", entity.getTimestamp());
+        resource.put("extension", java.util.List.of(
+                Map.of("url", "https://ergene.example/fhir/ai-validation-status",
+                        "valueCode", entity.getAiValidationStatus().name())
+        ));
+        return post("Observation", resource);
     }
 
     private String post(String resourceType, Map<String, Object> resource) {

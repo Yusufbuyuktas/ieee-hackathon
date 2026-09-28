@@ -1,0 +1,28 @@
+package com.hackathon_ieee.backend.controller;
+
+import com.hackathon_ieee.backend.dto.CitizenReportResponse;
+import com.hackathon_ieee.backend.service.CitizenReportService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+@RestController
+@RequestMapping("/api/citizen-reports")
+@RequiredArgsConstructor
+public class CitizenReportController {
+    private final CitizenReportService service;
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public CitizenReportResponse create(
+            @RequestPart("photo") MultipartFile photo,
+            @RequestParam("category") String category,
+            @RequestParam(value = "note", required = false) String note,
+            @RequestParam(value = "latitude", required = false) Double latitude,
+            @RequestParam(value = "longitude", required = false) Double longitude,
+            @RequestParam("timestamp") String timestamp) {
+        return service.create(photo, category, note, latitude, longitude, timestamp);
+    }
+}

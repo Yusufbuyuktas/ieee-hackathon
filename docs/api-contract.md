@@ -86,8 +86,7 @@ Backend bu kayıtları eşik karşılaştırmasına ve ortalama hesabına DAHİL
   `assessment_id` degeriyle ayni olmak zorunda degildir.
 - FHIR entegrasyonu basarisiz olsa bile MVP'de lokal DB kaydi korunur ve FHIR ID null
   kalabilir; frontend bu alanin nullable olabilecegini kabul etmelidir.
-- `POST /api/citizen-reports` ve AI `POST /validate-photo` bu MVP backend'inde henuz
-  uygulanmamistir; contract'ta taslak olarak tutulmaktadir.
+- Vatandaş bildirimi AI değerlendirmesi için `POST /moderate-photo` endpoint'ini kullanır.
 
 
 
@@ -153,25 +152,32 @@ Response `201 Created`:
 --- 
 
 ## 2. Vatandaş Bildirimi Gönderme
-**Durum:** Taslak
+**Durum:** Güncellendi
 **Endpoint:** `POST /api/citizen-reports`
 **Kim çağırır:** Mobil uygulama
 
-Request (multipart/form-data ya da JSON + ayrı foto upload — takım karar verecek):
-```json
-{
-  "coordinates": { "lat": 41.1605, "lon": 27.8021 },
-  "timestamp": "2026-08-18T14:22:00+03:00",
-  "category": "kirli_renk_degisimi",
-  "note": "Suyun rengi koyu kahverengiye dönmüş, koku var.",
-  "photo_url": "https://.../uploads/citreport-1183.jpg"
-}
+Request (`multipart/form-data`):
+- `photo` (MultipartFile)
+- `category` (String)
+- `note` (String)
+- `latitude` (Double)
+- `longitude` (Double)
+- `timestamp` (String)
+
+Örnek form alanları:
+```text
+photo=<binary file>
+category=kirli_renk_degisimi
+note=Suyun rengi koyu kahverengiye dönmüş, koku var.
+latitude=41.1605
+longitude=27.8021
+timestamp=2026-08-18T14:22:00+03:00
 ```
 Response `201 Created`:
 ```json
 {
-  "id": "cit-2026-1183",
-  "ai_validation_status": "onaylandi",
+  "id": "cit-uuid",
+  "ai_validation_status": "ONAYLANDI",
   "ai_confidence": 0.87
 }
 ```
@@ -235,8 +241,8 @@ Response `200 OK`:
 ---
 
 ## 5. AI Foto Doğrulama (Backend → AI Servisi arası, iç API)
-**Durum:** Taslak
-**Endpoint:** `POST http://ai-service:8000/validate-photo`
+**Durum:** Güncellendi
+**Endpoint:** `POST http://ai-service:8000/moderate-photo`
 **Kim çağırır:** Backend (vatandaş bildirimi geldiğinde otomatik)
 
 Request:
@@ -251,9 +257,17 @@ Response `200 OK`:
 {
   "tutarli": true,
   "guven_skoru": 0.87,
-  "aciklama": "Fotoğrafta koyu renkli, bulanık su net görülüyor, seçilen kategoriyle tutarlı."
+  "aciklama": "Fotoğrafta koyu renkli, bulanık su net görülüyor, seçilen kategoriyle tutarlı.",
+  "moderation_status": "approved"
 }
 ```
+Moderation status:
+- approved: Görsel kategoriyle tutarlı ve güven göstergesi >= 0.80.
+- review: Düşük güven veya görselden doğrulanamayan kategori.
+- inconsistent: Görsel kategoriyle yüksek güven göstergesiyle uyumsuz.
+
+kotu_koku ve diger kategorileri her zaman review durumuna yönlendirilir.
+
 
 ---
 
