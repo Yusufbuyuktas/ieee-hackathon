@@ -18,17 +18,17 @@ import { Loader2 } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('monitoring');
-  const [selectedParameter, setSelectedParameter] = useState('chromium'); // Veri setinde zengin olan krom ile başlayalım
+  const [selectedParameter, setSelectedParameter] = useState('chromium'); // Default rich telemetry
   const [sampleType, setSampleType] = useState('surface_water'); // 'surface_water' | 'groundwater' | 'sediment'
   
   const [locations, setLocations] = useState([]);
-  const [measurements, setMeasurements] = useState([]); // İzleme sekmesi: yalnızca seçili parametre
-  const [allMeasurements, setAllMeasurements] = useState([]); // FHIR Gezgini: 9 parametrenin tamamı
+  const [measurements, setMeasurements] = useState([]); // Surveillance tab: filtered by selected parameter
+  const [allMeasurements, setAllMeasurements] = useState([]); // FHIR Explorer: complete dataset across all 9 heavy metals
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [apiOnline, setApiOnline] = useState(null); // null: henüz bilinmiyor, true/false: gerçek bağlantı durumu
+  const [apiOnline, setApiOnline] = useState(null); // null: checking, true: connected, false: unreachable
 
-  // 1. Bilinen Konumları Tek Seferde Çek (GET /api/locations) — aynı zamanda bağlantı testi
+  // 1. Fetch monitoring stations (GET /api/locations) — acts as API health check
   useEffect(() => {
     getLocations()
       .then(locs => {
@@ -36,12 +36,12 @@ export default function App() {
         setApiOnline(true);
       })
       .catch(err => {
-        console.error("Konumlar yüklenemedi:", err);
+        console.error("Failed to load monitoring stations:", err);
         setApiOnline(false);
       });
   }, []);
 
-  // 2. Seçili Parametreye Göre Gözlemleri Çek (GET /api/observations)
+  // 2. Fetch observations filtered by active parameter (GET /api/observations)
   useEffect(() => {
     setLoading(true);
     getAllMeasurements({ parameter: selectedParameter })
@@ -51,24 +51,21 @@ export default function App() {
         setApiOnline(true);
       })
       .catch(err => {
-        console.error("Gözlem verileri çekilemedi:", err);
-        setError("Backend servisinden veri alınamadı.");
+        console.error("Failed to fetch observation telemetry:", err);
+        setError("Unable to retrieve live telemetry from backend server.");
         setApiOnline(false);
       })
       .finally(() => setLoading(false));
   }, [selectedParameter]);
 
-  // 3. FHIR Gezgini için TÜM parametreleri tek seferde çek (parametresiz istek).
-  // Not: 'measurements' state'i selectedParameter'a göre filtreli geldiği için
-  // FhirExplorer'a onu vermiyoruz — aksi halde kullanıcı hiç parametre
-  // değiştirmeden o sekmeye giderse yalnızca tek bir metali görür.
+  // 3. Fetch comprehensive multi-metal dataset for HL7 FHIR Explorer
   useEffect(() => {
     getAllMeasurements({})
       .then(data => setAllMeasurements(data))
-      .catch(err => console.error("FHIR Gezgini için tüm gözlemler çekilemedi:", err));
+      .catch(err => console.error("Failed to load comprehensive FHIR observations:", err));
   }, []);
 
-  // Metrikler ve Trend Verisi (Backend'in isExceeded alanına göre hesaplanır)
+  // Metrics and longitudinal trends calculated against regulatory benchmarks
   const metrics = useMemo(() => 
     getDashboardMetrics(measurements, selectedParameter, sampleType),
     [measurements, selectedParameter, sampleType]
@@ -87,14 +84,14 @@ export default function App() {
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         
-        {/* Hata Durumu */}
+        {/* Error Notification */}
         {error && (
           <div className="mb-6 p-4 rounded-xl bg-rose-950/60 border border-rose-500/50 text-rose-200 text-xs">
-            <strong>Hata:</strong> {error} — Docker servislerinin ayakta olduğundan emin olun.
+            <strong>System Notice:</strong> {error} — Please verify backend services and network proxy connectivity.
           </div>
         )}
 
-        {/* SEKME 1: Çevresel İzleme & Harita */}
+        {/* TAB 1: Environmental Surveillance & GIS */}
         {activeTab === 'monitoring' && (
           <div className="space-y-6">
             <AlertBanner metrics={metrics} selectedParameter={selectedParameter} />
@@ -103,7 +100,7 @@ export default function App() {
             {loading ? (
               <div className="h-64 rounded-xl bg-slate-900/50 border border-slate-800 flex flex-col items-center justify-center space-y-3">
                 <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
-                <span className="text-xs text-slate-400 font-mono">Backend'den gözlem verileri çekiliyor...</span>
+                <span className="text-xs text-slate-400 font-mono">Loading telemetry stream from backend...</span>
               </div>
             ) : (
               <>
@@ -133,12 +130,12 @@ export default function App() {
           </div>
         )}
 
-        {/* SEKME 2: Klinik Karar Destek Paneli (PoC) — kendi API çağrılarını yapar, prop almaz */}
+        {/* TAB 2: Clinical Decision Support (CDS) */}
         {activeTab === 'clinical' && (
           <ClinicalDecisionSupport />
         )}
 
-        {/* SEKME 3: HL7 FHIR Standart Gezgini — tüm parametreler (allMeasurements) */}
+        {/* TAB 3: HL7 FHIR Standard Explorer */}
         {activeTab === 'fhir' && (
           <FhirExplorer measurements={allMeasurements} />
         )}

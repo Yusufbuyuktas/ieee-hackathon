@@ -18,26 +18,26 @@ const CustomTooltip = ({ active, payload }) => {
     return (
       <div className="bg-slate-900 border border-slate-700 p-3 rounded-lg shadow-xl text-xs">
         <div className="font-semibold text-white mb-1">{data.location}</div>
-        <div className="text-slate-400 mb-1">Tarih / Yıl: <span className="text-slate-200">{data.date || data.year}</span></div>
+        <div className="text-slate-400 mb-1">Timeline / Year: <span className="text-slate-200">{data.date || data.year}</span></div>
         
         {data.isBDL ? (
-          <div className="text-amber-400 font-medium">Tespit Limiti Altında (BDL)</div>
+          <div className="text-amber-400 font-medium">Below Detection Limit (BDL)</div>
         ) : (
           <div className="flex items-center space-x-2">
-            <span className="text-slate-400">Konsantrasyon:</span>
+            <span className="text-slate-400">Concentration:</span>
             <span className="font-mono font-bold text-cyan-400">{data.value} {data.unit}</span>
           </div>
         )}
 
         {data.threshold && (
           <div className="text-slate-400 mt-1 border-t border-slate-800 pt-1">
-            DSÖ Su Limiti: <span className="font-mono text-rose-400">{data.threshold} mg/L</span>
+            WHO Guideline: <span className="font-mono text-rose-400">{data.threshold} mg/L</span>
           </div>
         )}
 
         {data.exceededStandards?.length > 0 && (
           <div className="text-rose-400 text-[10px] mt-1 font-mono">
-            Aşılan Standartlar: {data.exceededStandards.join(', ')}
+            Non-Compliant: {data.exceededStandards.join(', ')}
           </div>
         )}
       </div>
@@ -73,26 +73,26 @@ export default function TrendChart({
 
   const getSeriesColor = () => {
     if (sampleType === 'surface_water') return '#06b6d4'; // Cyan
-    if (sampleType === 'groundwater') return '#3b82f6';   // Mavi
+    if (sampleType === 'groundwater') return '#3b82f6';   // Blue
     return '#f59e0b'; // Amber (Sediment)
   };
 
   return (
-    <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 sm:p-5">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div>
-          <h3 className="text-base font-semibold text-white">Konsantrasyon Trendi ve Eşik Karşılaştırması</h3>
-          <p className="text-xs text-slate-400">
-            {sampleType === 'surface_water' && "Nehir Yüzey Suyu Ölçümleri (mg/L)"}
-            {sampleType === 'groundwater' && "Yeraltı Kuyu Suyu Ölçümleri (mg/L)"}
-            {sampleType === 'sediment' && "Dip Çamuru / Sediment Ölçümleri (mg/kg)"}
+          <h3 className="text-sm sm:text-base font-semibold text-white">Longitudinal Concentration & Regulatory Baseline</h3>
+          <p className="text-xs text-slate-400 mt-0.5">
+            {sampleType === 'surface_water' && "Surface Water Telemetry Stream (mg/L)"}
+            {sampleType === 'groundwater' && "Groundwater Aquifer Wells (mg/L)"}
+            {sampleType === 'sediment' && "Sediment Core Bed Analysis (mg/kg dry weight)"}
           </p>
         </div>
 
-        {/* Kontroller */}
+        {/* Responsive Controls */}
         <div className="flex flex-wrap items-center gap-2">
           
-          {/* 3'lü Ortam Filtresi */}
+          {/* Matrix / Medium Selector */}
           <div className="flex bg-slate-800 p-0.5 rounded-lg border border-slate-700 text-xs">
             <button
               onClick={() => onSampleTypeChange('surface_water')}
@@ -100,7 +100,7 @@ export default function TrendChart({
                 sampleType === 'surface_water' ? 'bg-cyan-500/20 text-cyan-300 font-semibold border border-cyan-500/40' : 'text-slate-400 hover:text-white'
               }`}
             >
-              Yüzeysel Su
+              Surface Water
             </button>
             <button
               onClick={() => onSampleTypeChange('groundwater')}
@@ -108,7 +108,7 @@ export default function TrendChart({
                 sampleType === 'groundwater' ? 'bg-blue-500/20 text-blue-300 font-semibold border border-blue-500/40' : 'text-slate-400 hover:text-white'
               }`}
             >
-              Yeraltı Suyu
+              Groundwater
             </button>
             <button
               onClick={() => onSampleTypeChange('sediment')}
@@ -120,7 +120,7 @@ export default function TrendChart({
             </button>
           </div>
 
-          {/* Eşik Ölçeği Aç/Kapa Butonu */}
+          {/* Threshold Scale Toggle */}
           {isWater && (
             <button
               onClick={() => setFitToThreshold(!fitToThreshold)}
@@ -129,18 +129,18 @@ export default function TrendChart({
                   ? 'bg-rose-500/10 text-rose-300 border-rose-500/40'
                   : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200'
               }`}
-              title="DSÖ Eşik çizgisini kadraja dahil et veya veriye yakınlaş"
+              title="Toggle WHO threshold scale or zoom to measured variance"
             >
               <SlidersHorizontal className="w-3.5 h-3.5" />
-              <span>{fitToThreshold ? 'DSÖ Çizgisi: Açık' : 'Yakınlaştırılmış'}</span>
+              <span>{fitToThreshold ? 'WHO Scale: On' : 'Zoomed Scale'}</span>
             </button>
           )}
 
-          {/* 9 Metal Parametresi */}
+          {/* Heavy Metal Parameter Dropdown */}
           <select
             value={selectedParameter}
             onChange={(e) => onParameterChange(e.target.value)}
-            className="bg-slate-800 border border-slate-700 text-white text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:border-cyan-500 font-medium"
+            className="bg-slate-800 border border-slate-700 text-white text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 font-medium"
           >
             {Object.entries(THRESHOLDS).map(([key, item]) => (
               <option key={key} value={key}>
@@ -171,7 +171,7 @@ export default function TrendChart({
             />
             <Tooltip content={<CustomTooltip />} />
             
-            {/* Su ölçümlerinde DSÖ Referans Çizgisi */}
+            {/* WHO Guideline Benchmark Reference Line */}
             {isWater && currentThreshold?.who && (
               <ReferenceLine
                 y={currentThreshold.who}
@@ -179,7 +179,7 @@ export default function TrendChart({
                 strokeDasharray="4 4"
                 strokeWidth={2}
                 label={{
-                  value: `DSÖ: ${currentThreshold.who} mg/L`,
+                  value: `WHO: ${currentThreshold.who} mg/L`,
                   fill: '#f43f5e',
                   fontSize: 11,
                   position: 'top',

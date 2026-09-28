@@ -2,20 +2,20 @@ import { apiGet } from './apiClient';
 import { THRESHOLDS, evaluateRisk } from '../constants/apiContract';
 import { mockCitizenReports } from '../mock/citizenReports';
 
-// --- MOCK FALLBACK HAZIRLIĞI ---
+// --- MOCK BENCHMARK DATASET INITIALIZATION ---
 let raw2013 = [];
 let raw2025 = [];
 
 try {
   raw2013 = (await import('../mock/ergene-2013-measurements.json')).default;
 } catch (e) {
-  // Mock dosya yoksa sessiz geç
+  // Silent fallback if mock json is unavailable
 }
 
 try {
   raw2025 = (await import('../mock/ergene-2025-measurements.json')).default;
 } catch (e) {
-  // Mock dosya yoksa sessiz geç
+  // Silent fallback if mock json is unavailable
 }
 
 function getMockMeasurements() {
@@ -33,7 +33,7 @@ function getMockMeasurements() {
       id: item.measurement_id || `MEAS-${index + 1}`,
       year: item.year || (item.timestamp ? new Date(item.timestamp).getFullYear() : 2025),
       timestamp: item.timestamp || `${item.year || 2025}-01-01T00:00:00Z`,
-      location_name: item.location_name || "Ergene Havzası Ölçüm Noktası",
+      location_name: item.location_name || "Ergene Basin Telemetry Station",
       coordinates: item.coordinates || null,
       parameter: item.parameter || 'arsenic',
       sample_type: sampleType,
@@ -47,7 +47,7 @@ function getMockMeasurements() {
   });
 }
 
-// --- 3a. BİLİNEN KONUMLARI LİSTELEME ---
+// --- 1. MONITORING STATIONS ENDPOINT ---
 export async function getLocations() {
   if (import.meta.env.VITE_USE_MOCK_OBSERVATIONS === 'true') {
     return [];
@@ -56,7 +56,7 @@ export async function getLocations() {
   return data.locations || [];
 }
 
-// --- 3b. GÖZLEMLERİ LİSTELEME (GERÇEK API / OBSERVATIONS) ---
+// --- 2. TELEMETRY OBSERVATIONS ENDPOINT (LIVE API) ---
 export async function getAllMeasurements({ parameter, from, to } = {}) {
   if (import.meta.env.VITE_USE_MOCK_OBSERVATIONS === 'true') {
     return getMockMeasurements();
@@ -76,37 +76,35 @@ export async function getAllMeasurements({ parameter, from, to } = {}) {
     below_detection_limit: item.below_detection_limit,
     sample_type: item.sample_type,
     source_type: item.source_type,
-    // Risk değerlendirmesi backend'in risk_flagged alanından doğrudan alınır
+    // Risk assessment flag directly inherited from backend regulatory validator
     isExceeded: Boolean(item.risk_flagged),
     exceededStandards: item.exceeded_standards || [],
     method: item.method || 'ICP-MS'
   }));
 }
 
-// --- 3c. RİSK DURUMU SORGULAMA ---
+// --- 3. TOXICOLOGICAL RISK STATUS QUERY ---
 export async function getRiskStatus(locationName) {
   if (!locationName) return null;
   return apiGet('/risk-status', { location: locationName });
 }
 
-// --- 3d. SAĞLIK RİSKİ DEĞERLENDİRMELERİ (LİTERATÜR CR / THI) ---
+// --- 4. USEPA HEALTH RISK ASSESSMENTS (LITERATURE CR / THI INDICES) ---
 export async function getRiskAssessments(locationName) {
   const params = locationName ? { location: locationName } : {};
   const data = await apiGet('/risk-assessments', params);
   return data.results || [];
 }
 
-// --- 3e. YURTTAŞ BİLDİRİMLERİ (MOCK) ---
+// --- 5. CROWDSOURCED CITIZEN REPORTS ---
 export const getCitizenReports = () => mockCitizenReports;
 
-// --- YARDIMCI HESAPLAMA FONKSİYONLARI ---
+// --- ANALYTICAL COMPUTATION UTILITIES ---
 
 /**
- * Dashboard KPI Metrikleri
- * Ölçüm listesi üzerinden eşik aşımlarını backend'in 'isExceeded' alanına göre sayar.
+ * Computes Executive KPI Metrics across telemetry arrays
  */
 export const getDashboardMetrics = (measurements = [], parameter = 'arsenic', sampleType = 'surface_water') => {
-  // Geriye dönük uyumluluk: Eğer ilk parametre dizi değilse
   let targetMeasurements = Array.isArray(measurements) ? measurements : [];
   let targetParam = typeof measurements === 'string' ? measurements : parameter;
   let targetSample = typeof parameter === 'string' && typeof measurements === 'string' ? parameter : sampleType;
@@ -142,7 +140,7 @@ export const getDashboardMetrics = (measurements = [], parameter = 'arsenic', sa
 };
 
 /**
- * Trend Grafiği Veri Formatlayıcı
+ * Formats time-series telemetry for AreaChart longitudinal views
  */
 export const getTrendData = (measurements = [], parameter = 'arsenic', sampleType = 'surface_water') => {
   let targetMeasurements = Array.isArray(measurements) ? measurements : [];

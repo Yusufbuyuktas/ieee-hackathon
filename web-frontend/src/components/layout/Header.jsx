@@ -5,86 +5,110 @@ export default function Header({ activeTab, setActiveTab, apiOnline }) {
   const isMockMode = import.meta.env.VITE_USE_MOCK !== 'false';
 
   return (
-    <header className="bg-slate-900/90 border-b border-slate-800 sticky top-0 z-50 backdrop-blur">
+    <header className="bg-slate-900/95 border-b border-slate-800 sticky top-0 z-50 backdrop-blur">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex flex-col sm:flex-row items-center justify-between py-2.5 sm:py-0 sm:h-16 gap-2.5 sm:gap-0">
           
-          {/* Logo & Başlık */}
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-              <Waves className="w-6 h-6 animate-pulse" />
-            </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="font-bold text-lg text-white tracking-tight">OneAquaHealth</span>
-                <span className="bg-cyan-500/20 text-cyan-400 text-xs px-2 py-0.5 rounded-full border border-cyan-500/30 font-mono">
-                  Ergene Havzası
-                </span>
+          {/* Brand & Subtitle */}
+          <div className="flex items-center justify-between w-full sm:w-auto">
+            <div className="flex items-center space-x-3">
+              <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+                <Waves className="w-5 h-5" />
               </div>
-              <p className="text-xs text-slate-400">Çevre & Sağlık Entegre Erken Uyarı Sistemi</p>
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="font-bold text-lg text-white tracking-tight">RiverGuard</span>
+                  <span className="bg-cyan-500/20 text-cyan-400 text-xs px-2 py-0.5 rounded-full border border-cyan-500/30 font-mono">
+                    Ergene Basin
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400 hidden xs:block">
+                  Integrated Environmental & Public Health Surveillance
+                </p>
+              </div>
+            </div>
+
+            {/* Mobile Status Badge (Only on very small screens) */}
+            <div className="sm:hidden">
+              {apiOnline === true ? (
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Live
+                </span>
+              ) : isMockMode ? (
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> Demo
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-rose-500/10 text-rose-400 border border-rose-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Offline
+                </span>
+              )}
             </div>
           </div>
 
-          {/* Sekmeler */}
-          <nav className="flex space-x-2">
+          {/* Navigation Tabs - Responsive with smooth mobile scrolling */}
+          <nav className="flex space-x-1.5 sm:space-x-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
             <button
               onClick={() => setActiveTab('monitoring')}
-              className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center space-x-1.5 sm:space-x-2 px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors shrink-0 ${
                 activeTab === 'monitoring'
                   ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
               }`}
             >
-              <Activity className="w-4 h-4" />
-              <span>Çevresel İzleme & Harita</span>
+              <Activity className="w-4 h-4 shrink-0" />
+              <span className="hidden md:inline">Environmental Surveillance</span>
+              <span className="md:hidden">Surveillance</span>
             </button>
 
             <button
               onClick={() => setActiveTab('clinical')}
-              className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center space-x-1.5 sm:space-x-2 px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors shrink-0 ${
                 activeTab === 'clinical'
                   ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
               }`}
             >
-              <Stethoscope className="w-4 h-4" />
-              <span>Klinik Karar Destek (PoC)</span>
+              <Stethoscope className="w-4 h-4 shrink-0" />
+              <span className="hidden md:inline">Clinical Decision Support</span>
+              <span className="md:hidden">Clinical (CDS)</span>
             </button>
 
             <button
               onClick={() => setActiveTab('fhir')}
-              className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center space-x-1.5 sm:space-x-2 px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors shrink-0 ${
                 activeTab === 'fhir'
                   ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
               }`}
             >
-              <FileJson className="w-4 h-4" />
-              <span>HL7 FHIR Gezgini</span>
+              <FileJson className="w-4 h-4 shrink-0" />
+              <span className="hidden md:inline">HL7 FHIR Explorer</span>
+              <span className="md:hidden">FHIR R4</span>
             </button>
           </nav>
 
-          {/* Dinamik Ortam Rozeti — gerçek modda apiOnline durumunu yansıtır, sabit metin değil */}
-          <div className="flex items-center space-x-3 text-xs">
+          {/* Desktop Status Badge */}
+          <div className="hidden sm:flex items-center space-x-3 text-xs">
             {isMockMode ? (
               <div className="flex items-center space-x-1.5 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-2.5 py-1 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
-                <span>Mod: Literatür Veri Havuzu</span>
+                <span>Mode: Research Benchmark</span>
               </div>
             ) : apiOnline === true ? (
               <div className="flex items-center space-x-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>Canlı API / FHIR Online</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>Live API / FHIR Connected</span>
               </div>
             ) : apiOnline === false ? (
               <div className="flex items-center space-x-1.5 bg-rose-500/10 text-rose-400 border border-rose-500/30 px-2.5 py-1 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-rose-400"></span>
-                <span>API Erişilemiyor</span>
+                <span>API Unreachable</span>
               </div>
             ) : (
               <div className="flex items-center space-x-1.5 bg-slate-500/10 text-slate-400 border border-slate-500/30 px-2.5 py-1 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-slate-400 animate-pulse"></span>
-                <span>Bağlantı Kontrol Ediliyor...</span>
+                <span>Checking Connectivity...</span>
               </div>
             )}
           </div>
