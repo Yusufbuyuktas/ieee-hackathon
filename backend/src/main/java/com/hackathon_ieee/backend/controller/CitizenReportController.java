@@ -1,6 +1,7 @@
 package com.hackathon_ieee.backend.controller;
 
 import com.hackathon_ieee.backend.dto.CitizenReportResponse;
+import com.hackathon_ieee.backend.dto.CitizenReportListResponse;
 import com.hackathon_ieee.backend.service.CitizenReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class CitizenReportController {
     private final CitizenReportService service;
+
+    @GetMapping
+    public CitizenReportListResponse findAll() {
+        return new CitizenReportListResponse(service.findAll());
+    }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
