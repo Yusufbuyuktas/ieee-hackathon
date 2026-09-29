@@ -1,122 +1,152 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import React, { useState, useEffect, useMemo } from 'react';
+import Header from './components/layout/Header';
+import AlertBanner from './components/dashboard/AlertBanner';
+import KpiCards from './components/dashboard/KpiCards';
+import ErgeneMap from './components/map/ErgeneMap';
+import TrendChart from './components/dashboard/TrendChart';
+import RecentObservations from './components/dashboard/RecentObservations';
+import ClinicalDecisionSupport from './components/clinical/ClinicalDecisionSupport';
+import FhirExplorer from './components/clinical/FhirExplorer';
+import {
+  getLocations,
+  getAllMeasurements,
+  getDashboardMetrics,
+  getTrendData,
+  getCitizenReports
+} from './services/apiService';
+import { Loader2 } from 'lucide-react';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [activeTab, setActiveTab] = useState('monitoring');
+  const [selectedParameter, setSelectedParameter] = useState('chromium'); // Default rich telemetry
+  const [sampleType, setSampleType] = useState('surface_water'); // 'surface_water' | 'groundwater' | 'sediment'
+  
+  const [locations, setLocations] = useState([]);
+  const [measurements, setMeasurements] = useState([]); // Surveillance tab: filtered by selected parameter
+  const [allMeasurements, setAllMeasurements] = useState([]); // FHIR Explorer: complete dataset across all 9 heavy metals
+  const [citizenReports, setCitizenReports] = useState([]); // Live crowdsourced citizen reports
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [apiOnline, setApiOnline] = useState(null); // null: checking, true: connected, false: unreachable
+
+  // 1. Fetch monitoring stations (GET /api/locations) — acts as API health check
+  useEffect(() => {
+    getLocations()
+      .then(locs => {
+        setLocations(locs);
+        setApiOnline(true);
+      })
+      .catch(err => {
+        console.error("Failed to load monitoring stations:", err);
+        setApiOnline(false);
+      });
+  }, []);
+
+  // 2. Fetch observations filtered by active parameter (GET /api/observations)
+  useEffect(() => {
+    setLoading(true);
+    getAllMeasurements({ parameter: selectedParameter })
+      .then(data => {
+        setMeasurements(data);
+        setError(null);
+        setApiOnline(true);
+      })
+      .catch(err => {
+        console.error("Failed to fetch observation telemetry:", err);
+        setError("Unable to retrieve live telemetry from backend server.");
+        setApiOnline(false);
+      })
+      .finally(() => setLoading(false));
+  }, [selectedParameter]);
+
+  // 3. Fetch comprehensive multi-metal dataset for HL7 FHIR Explorer
+  useEffect(() => {
+    getAllMeasurements({})
+      .then(data => setAllMeasurements(data))
+      .catch(err => console.error("Failed to load comprehensive FHIR observations:", err));
+  }, []);
+
+  // 4. Fetch live citizen science reports (GET /api/citizen-reports)
+  useEffect(() => {
+    getCitizenReports()
+      .then(reports => setCitizenReports(reports))
+      .catch(err => console.error("Failed to load live citizen reports:", err));
+  }, []);
+
+  // Metrics and longitudinal trends calculated against regulatory benchmarks
+  const metrics = useMemo(() => 
+    getDashboardMetrics(measurements, selectedParameter, sampleType, citizenReports.length),
+    [measurements, selectedParameter, sampleType, citizenReports.length]
+  );
+
+  const trendData = useMemo(() => 
+    getTrendData(measurements, selectedParameter, sampleType),
+    [measurements, selectedParameter, sampleType]
+  );
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} apiOnline={apiOnline} />
 
-      <div className="ticks"></div>
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        {/* Error Notification */}
+        {error && (
+          <div className="mb-6 p-4 rounded-xl bg-rose-950/60 border border-rose-500/50 text-rose-200 text-xs">
+            <strong>System Notice:</strong> {error} — Please verify backend services and network proxy connectivity.
+          </div>
+        )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* TAB 1: Environmental Surveillance & GIS */}
+        {activeTab === 'monitoring' && (
+          <div className="space-y-6">
+            <AlertBanner metrics={metrics} selectedParameter={selectedParameter} />
+            <KpiCards metrics={metrics} selectedParameter={selectedParameter} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+            {loading ? (
+              <div className="h-64 rounded-xl bg-slate-900/50 border border-slate-800 flex flex-col items-center justify-center space-y-3">
+                <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+                <span className="text-xs text-slate-400 font-mono">Loading telemetry stream from backend...</span>
+              </div>
+            ) : (
+              <>
+                <ErgeneMap
+                  measurements={measurements}
+                  locations={locations}
+                  citizenReports={citizenReports}
+                  selectedParameter={selectedParameter}
+                  sampleType={sampleType}
+                />
+
+                <TrendChart
+                  trendData={trendData}
+                  selectedParameter={selectedParameter}
+                  onParameterChange={setSelectedParameter}
+                  sampleType={sampleType}
+                  onSampleTypeChange={setSampleType}
+                />
+
+                <RecentObservations
+                  measurements={measurements}
+                  citizenReports={citizenReports}
+                  selectedParameter={selectedParameter}
+                />
+              </>
+            )}
+          </div>
+        )}
+
+        {/* TAB 2: Clinical Decision Support (CDS) */}
+        {activeTab === 'clinical' && (
+          <ClinicalDecisionSupport />
+        )}
+
+        {/* TAB 3: HL7 FHIR Standard Explorer */}
+        {activeTab === 'fhir' && (
+          <FhirExplorer measurements={allMeasurements} />
+        )}
+
+      </main>
+    </div>
+  );
 }
-
-export default App
