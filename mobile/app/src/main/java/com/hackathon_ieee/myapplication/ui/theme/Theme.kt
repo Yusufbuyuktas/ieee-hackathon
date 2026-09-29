@@ -6,24 +6,24 @@ import androidx.compose.runtime.Composable
 
 private val RiverGuardDarkColorScheme = darkColorScheme(
     primary = RiverPrimary,
-    onPrimary = RiverText,
-    primaryContainer = RiverGlassHigh,
+    onPrimary = RiverBackground,
+    primaryContainer = RiverCyanContainer,
     onPrimaryContainer = RiverText,
-    secondary = RiverPrimary,
-    onSecondary = RiverText,
-    secondaryContainer = RiverGlassHigh,
+    secondary = RiverCyan,
+    onSecondary = RiverBackground,
+    secondaryContainer = RiverInput,
     onSecondaryContainer = RiverText,
     tertiary = RiverWarning,
     onTertiary = RiverBackground,
     background = RiverBackground,
     onBackground = RiverText,
-    surface = RiverBarBackground,
+    surface = RiverSurface,
     onSurface = RiverText,
-    surfaceVariant = RiverGlassHigh,
-    onSurfaceVariant = RiverText,
+    surfaceVariant = RiverInput,
+    onSurfaceVariant = RiverTextSecondary,
     error = RiverDanger,
-    onError = RiverText,
-    outline = RiverText.copy(alpha = 0.35f)
+    onError = RiverBackground,
+    outline = RiverBorder
 )
 
 @Composable

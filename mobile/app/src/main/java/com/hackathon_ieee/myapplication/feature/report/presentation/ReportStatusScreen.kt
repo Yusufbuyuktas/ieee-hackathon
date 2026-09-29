@@ -160,7 +160,7 @@ private fun String.toStatusPresentation(): StatusPresentation = when (this) {
 @Preview(
     name = "Approved Report Status",
     showBackground = true,
-    backgroundColor = 0xFF0B132B,
+    backgroundColor = 0xFF020617,
     widthDp = 390,
     heightDp = 844
 )
@@ -181,7 +181,7 @@ private fun ReportStatusScreenPreview() {
 @Preview(
     name = "Report Status Under Review",
     showBackground = true,
-    backgroundColor = 0xFF0B132B,
+    backgroundColor = 0xFF020617,
     widthDp = 390,
     heightDp = 844
 )
@@ -202,7 +202,7 @@ private fun ReportStatusUnderReviewPreview() {
 @Preview(
     name = "Report Status AI Unavailable",
     showBackground = true,
-    backgroundColor = 0xFF0B132B,
+    backgroundColor = 0xFF020617,
     widthDp = 390,
     heightDp = 844
 )

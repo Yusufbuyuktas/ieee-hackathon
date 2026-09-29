@@ -24,6 +24,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.findViewTreeLifecycleOwner
+import com.hackathon_ieee.myapplication.core.map.OpenFreeMapStyleUrl
 import org.maplibre.geojson.Point
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraPosition
@@ -37,8 +38,6 @@ import org.maplibre.android.style.layers.PropertyFactory.circleStrokeColor
 import org.maplibre.android.style.layers.PropertyFactory.circleStrokeWidth
 import org.maplibre.android.style.sources.GeoJsonSource
 
-private const val OPEN_FREE_MAP_STYLE_URL =
-    "https://tiles.openfreemap.org/styles/liberty"
 private const val CURRENT_LOCATION_SOURCE_ID = "current-location-source"
 private const val CURRENT_LOCATION_LAYER_ID = "current-location-layer"
 
@@ -69,7 +68,8 @@ fun LocationMap(
             onCreate(null)
             getMapAsync { readyMap ->
                 mapLibreMap = readyMap
-                readyMap.setStyle(OPEN_FREE_MAP_STYLE_URL) { style ->
+                readyMap.setMaxZoomPreference(18.0)
+                readyMap.setStyle(OpenFreeMapStyleUrl) { style ->
                     style.addSource(
                         GeoJsonSource(
                             CURRENT_LOCATION_SOURCE_ID,
@@ -82,9 +82,9 @@ fun LocationMap(
                             CURRENT_LOCATION_SOURCE_ID
                         ).withProperties(
                             circleRadius(8f),
-                            circleColor("#1C77C3"),
+                            circleColor("#22D3EE"),
                             circleStrokeWidth(3f),
-                            circleStrokeColor("#E2E8F0")
+                            circleStrokeColor("#F8FAFC")
                         )
                     )
                     styleLoaded = true
@@ -155,7 +155,7 @@ fun LocationMap(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Map data © OpenStreetMap contributors",
+            text = "Map data © OpenStreetMap contributors · OpenFreeMap",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

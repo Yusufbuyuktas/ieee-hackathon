@@ -30,7 +30,9 @@ fun SplashScreen(
         contentAlignment = Alignment.Center
     ) {
         RiverGuardWordmark(
-            modifier = Modifier.width(240.dp)
+            modifier = Modifier.width(280.dp),
+            iconSize = 76.dp,
+            textStyle = MaterialTheme.typography.headlineMedium
         )
     }
 }
