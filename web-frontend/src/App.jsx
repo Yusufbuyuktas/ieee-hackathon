@@ -24,6 +24,7 @@ export default function App() {
   const [locations, setLocations] = useState([]);
   const [measurements, setMeasurements] = useState([]); // Surveillance tab: filtered by selected parameter
   const [allMeasurements, setAllMeasurements] = useState([]); // FHIR Explorer: complete dataset across all 9 heavy metals
+  const [citizenReports, setCitizenReports] = useState([]); // Live crowdsourced citizen reports
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [apiOnline, setApiOnline] = useState(null); // null: checking, true: connected, false: unreachable
@@ -65,18 +66,23 @@ export default function App() {
       .catch(err => console.error("Failed to load comprehensive FHIR observations:", err));
   }, []);
 
+  // 4. Fetch live citizen science reports (GET /api/citizen-reports)
+  useEffect(() => {
+    getCitizenReports()
+      .then(reports => setCitizenReports(reports))
+      .catch(err => console.error("Failed to load live citizen reports:", err));
+  }, []);
+
   // Metrics and longitudinal trends calculated against regulatory benchmarks
   const metrics = useMemo(() => 
-    getDashboardMetrics(measurements, selectedParameter, sampleType),
-    [measurements, selectedParameter, sampleType]
+    getDashboardMetrics(measurements, selectedParameter, sampleType, citizenReports.length),
+    [measurements, selectedParameter, sampleType, citizenReports.length]
   );
 
   const trendData = useMemo(() => 
     getTrendData(measurements, selectedParameter, sampleType),
     [measurements, selectedParameter, sampleType]
   );
-
-  const citizenReports = useMemo(() => getCitizenReports(), []);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">

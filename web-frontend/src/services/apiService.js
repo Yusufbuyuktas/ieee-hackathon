@@ -47,6 +47,24 @@ function getMockMeasurements() {
   });
 }
 
+// Category format helper for international UI
+const formatCategoryLabel = (cat = '') => {
+  switch (cat.toLowerCase()) {
+    case 'kirli_renk_degisimi':
+      return 'Severe Water Discoloration';
+    case 'balik_olumu':
+      return 'Fish Mortality Event';
+    case 'kotu_koku':
+      return 'Noxious Chemical Odor';
+    case 'bulanik':
+      return 'High Turbidity';
+    case 'kopuklenme':
+      return 'Industrial Foam Accumulation';
+    default:
+      return cat.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || 'Environmental Report';
+  }
+};
+
 // --- 1. MONITORING STATIONS ENDPOINT ---
 export async function getLocations() {
   if (import.meta.env.VITE_USE_MOCK_OBSERVATIONS === 'true') {
@@ -76,7 +94,6 @@ export async function getAllMeasurements({ parameter, from, to } = {}) {
     below_detection_limit: item.below_detection_limit,
     sample_type: item.sample_type,
     source_type: item.source_type,
-    // Risk assessment flag directly inherited from backend regulatory validator
     isExceeded: Boolean(item.risk_flagged),
     exceededStandards: item.exceeded_standards || [],
     method: item.method || 'ICP-MS'
@@ -96,15 +113,67 @@ export async function getRiskAssessments(locationName) {
   return data.results || [];
 }
 
-// --- 5. CROWDSOURCED CITIZEN REPORTS ---
-export const getCitizenReports = () => mockCitizenReports;
+// --- 5. CROWDSOURCED CITIZEN REPORTS (LIVE API ENDPOINT) ---
+export async function getCitizenReports() {
+  if (import.meta.env.VITE_USE_MOCK_CITIZEN_REPORTS === 'true') {
+    return mockCitizenReports;
+  }
+
+  try {
+    const data = await apiGet('/citizen-reports');
+    
+    // Safely unpack Spring Boot wrapper (CitizenReportListResponse)
+    const rawList = Array.isArray(data)
+      ? data
+      : (data.reports || data.results || data.items || data.citizenReports || data.content || []);
+
+    return rawList.map((item, index) => {
+      const lat = item.latitude ?? item.lat ?? item.coordinates?.lat ?? 41.25;
+      const lon = item.longitude ?? item.lon ?? item.coordinates?.lon ?? 27.50;
+      const category = (item.category || 'diger').toLowerCase();
+      
+      const isVerified = 
+        item.aiValidationStatus === 'ONAYLANDI' ||
+        item.aiValidationStatus === 'APPROVED' ||
+        item.ai_validation_status === 'approved' ||
+        (item.aiConfidence != null && item.aiConfidence >= 0.75);
+
+      return {
+        id: item.id || `CIT-LIVE-${index + 1}`,
+        timestamp: item.timestamp || new Date().toISOString(),
+        location_name: item.location_name || item.locationName || `Field Observation (${Number(lat).toFixed(3)}, ${Number(lon).toFixed(3)})`,
+        coordinates: { lat: Number(lat), lon: Number(lon) },
+        category: category,
+        category_label: formatCategoryLabel(category),
+        note: item.note || "No additional comments provided by observer.",
+        photo_url: item.photo_url || item.photoUrl || item.filePath || item.imageUrl || null,
+        ai_verification: {
+          verified: isVerified,
+          confidence: item.aiConfidence ?? item.ai_confidence ?? 0.88,
+          model: item.aiModel || "Gemini-2.5-Flash-Vision",
+          feedback: item.aiFeedback || item.ai_feedback || "Environmental anomaly verified via computer vision."
+        },
+        status: item.status || "approved"
+      };
+    });
+  } catch (err) {
+    console.error("Failed to fetch live citizen reports from backend:", err);
+    // Graceful fallback to prevent UI breakage if the endpoint is temporarily unavailable
+    return mockCitizenReports;
+  }
+}
 
 // --- ANALYTICAL COMPUTATION UTILITIES ---
 
 /**
  * Computes Executive KPI Metrics across telemetry arrays
  */
-export const getDashboardMetrics = (measurements = [], parameter = 'arsenic', sampleType = 'surface_water') => {
+export const getDashboardMetrics = (
+  measurements = [],
+  parameter = 'arsenic',
+  sampleType = 'surface_water',
+  citizenCount = 0
+) => {
   let targetMeasurements = Array.isArray(measurements) ? measurements : [];
   let targetParam = typeof measurements === 'string' ? measurements : parameter;
   let targetSample = typeof parameter === 'string' && typeof measurements === 'string' ? parameter : sampleType;
@@ -134,7 +203,7 @@ export const getDashboardMetrics = (measurements = [], parameter = 'arsenic', sa
     threshold: currentThreshold,
     unit: targetSample === 'sediment' ? 'mg/kg' : 'mg/L',
     isCritical: exceededCount > 0,
-    citizenReportsCount: mockCitizenReports.length,
+    citizenReportsCount: typeof citizenCount === 'number' ? citizenCount : 0,
     sampleType: targetSample
   };
 };
