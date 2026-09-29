@@ -13,7 +13,8 @@ data class SavedCitizenReport(
     val longitude: Double,
     val submittedAtMillis: Long,
     val aiValidationStatus: String,
-    val aiMatchScore: Double?
+    val aiMatchScore: Double?,
+    val photoUrl: String? = null
 )
 
 class LocalReportRepository(context: Context) {
@@ -32,6 +33,17 @@ class LocalReportRepository(context: Context) {
         reports.removeAll { it.id == report.id }
         reports.add(report)
 
+        writeAll(reports)
+    }
+
+    fun replaceForOwner(ownerEmail: String, reports: List<SavedCitizenReport>) {
+        val retainedReports = readAll().filterNot {
+            it.ownerEmail.equals(ownerEmail, ignoreCase = true)
+        }
+        writeAll(retainedReports + reports)
+    }
+
+    private fun writeAll(reports: List<SavedCitizenReport>) {
         val json = JSONArray()
         reports.forEach { item ->
             json.put(
@@ -45,6 +57,7 @@ class LocalReportRepository(context: Context) {
                     .put("submitted_at_millis", item.submittedAtMillis)
                     .put("ai_validation_status", item.aiValidationStatus)
                     .put("ai_match_score", item.aiMatchScore ?: JSONObject.NULL)
+                    .put("photo_url", item.photoUrl ?: JSONObject.NULL)
             )
         }
 
@@ -75,6 +88,13 @@ class LocalReportRepository(context: Context) {
                                 item.has("ai_confidence") && !item.isNull("ai_confidence") ->
                                 item.getDouble("ai_confidence")
                             else -> null
+                        },
+                        photoUrl = if (
+                            item.has("photo_url") && !item.isNull("photo_url")
+                        ) {
+                            item.getString("photo_url")
+                        } else {
+                            null
                         }
                     )
                 )

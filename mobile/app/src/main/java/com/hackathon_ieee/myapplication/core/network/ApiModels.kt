@@ -63,3 +63,15 @@ data class CitizenReportSubmission(
     val aiValidationStatus: String,
     val aiMatchScore: Double?
 )
+
+data class CitizenReport(
+    val id: String,
+    val photoUrl: String?,
+    val category: String,
+    val note: String,
+    val latitude: Double,
+    val longitude: Double,
+    val timestamp: String,
+    val aiValidationStatus: String,
+    val aiMatchScore: Double?
+)

@@ -17,6 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
@@ -36,12 +38,15 @@ import com.hackathon_ieee.myapplication.feature.report.domain.model.ReportCatego
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportFormScreen
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportReviewScreen
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportStatusScreen
+import com.hackathon_ieee.myapplication.core.network.CitizenReport
+import com.hackathon_ieee.myapplication.core.network.RiverGuardApi
 import com.hackathon_ieee.myapplication.core.storage.LocalReportRepository
 import com.hackathon_ieee.myapplication.core.storage.SavedCitizenReport
 import com.hackathon_ieee.myapplication.ui.components.BottomDestination
 import com.hackathon_ieee.myapplication.ui.components.RiverBottomBar
 import com.hackathon_ieee.myapplication.ui.components.RiverGuardWordmark
 import com.hackathon_ieee.myapplication.ui.components.ThickBackIcon
+import kotlinx.coroutines.launch
 
 private const val HOME_SCREEN = "home"
 private const val MAP_SCREEN = "map"
@@ -58,9 +63,11 @@ private const val APP_STAGE = "app"
 @Composable
 fun OneAquaHealthApp() {
     val context = LocalContext.current
-    val localReportRepository = androidx.compose.runtime.remember {
+    val localReportRepository = remember {
         LocalReportRepository(context)
     }
+    val api = remember { RiverGuardApi() }
+    val coroutineScope = rememberCoroutineScope()
     var appStage by rememberSaveable {
         mutableStateOf(SPLASH_STAGE)
     }
@@ -99,15 +106,53 @@ fun OneAquaHealthApp() {
     var submittedReportMatchScore by rememberSaveable {
         mutableStateOf<Double?>(null)
     }
-    var savedReports by androidx.compose.runtime.remember {
+    var savedReports by remember {
         mutableStateOf(emptyList<SavedCitizenReport>())
     }
+    var isReportsRefreshing by remember {
+        mutableStateOf(false)
+    }
+    var reportsRefreshMessage by remember {
+        mutableStateOf<String?>(null)
+    }
 
-    LaunchedEffect(signedInEmail, appStage) {
+    suspend fun refreshReports(email: String) {
+        if (email.isBlank()) return
+
+        val localReports = localReportRepository.getReports(email)
+        savedReports = localReports
+        isReportsRefreshing = true
+        reportsRefreshMessage = null
+
+        api.getCitizenReports().fold(
+            onSuccess = { remoteReports ->
+                val syncedReports = mergeReports(localReports, remoteReports)
+                localReportRepository.replaceForOwner(email, syncedReports)
+                savedReports = syncedReports
+            },
+            onFailure = {
+                reportsRefreshMessage = if (localReports.isEmpty()) {
+                    "Reports could not be loaded. Please try again."
+                } else {
+                    "Could not refresh. Showing reports saved on this device."
+                }
+            }
+        )
+        isReportsRefreshing = false
+    }
+
+    LaunchedEffect(signedInEmail, appStage, currentScreen) {
         savedReports = if (signedInEmail.isBlank()) {
             emptyList()
         } else {
             localReportRepository.getReports(signedInEmail)
+        }
+        if (
+            signedInEmail.isNotBlank() &&
+            appStage == APP_STAGE &&
+            currentScreen == PROFILE_SCREEN
+        ) {
+            refreshReports(signedInEmail)
         }
     }
 
@@ -321,9 +366,17 @@ fun OneAquaHealthApp() {
                     ProfileScreen(
                         email = signedInEmail,
                         reports = savedReports,
+                        isRefreshing = isReportsRefreshing,
+                        refreshMessage = reportsRefreshMessage,
+                        onRefresh = {
+                            coroutineScope.launch {
+                                refreshReports(signedInEmail)
+                            }
+                        },
                         onLogout = {
                             signedInEmail = ""
                             savedReports = emptyList()
+                            reportsRefreshMessage = null
                             currentScreen = HOME_SCREEN
                             appStage = LOGIN_STAGE
                         },
@@ -339,6 +392,34 @@ fun OneAquaHealthApp() {
             }
         }
     }
+}
+
+private fun mergeReports(
+    localReports: List<SavedCitizenReport>,
+    remoteReports: List<CitizenReport>
+): List<SavedCitizenReport> {
+    val remoteById = remoteReports.associateBy { it.id }
+    return localReports.map { localReport ->
+        val remoteReport = remoteById[localReport.id] ?: return@map localReport
+        localReport.copy(
+            category = remoteReport.category.toCategoryLabel(),
+            note = remoteReport.note,
+            latitude = remoteReport.latitude,
+            longitude = remoteReport.longitude,
+            aiValidationStatus = remoteReport.aiValidationStatus,
+            aiMatchScore = remoteReport.aiMatchScore,
+            photoUrl = remoteReport.photoUrl
+        )
+    }.sortedByDescending { it.submittedAtMillis }
+}
+
+private fun String.toCategoryLabel(): String = when (uppercase()) {
+    "BULANIK", "BULANIK_SU" -> "Turbid water"
+    "KIRLI_RENK_DEGISIMI" -> "Water discoloration"
+    "BALIK_OLUMU" -> "Fish mortality"
+    "KOTU_KOKU" -> "Bad odor"
+    "DIGER" -> "Other"
+    else -> replace('_', ' ').lowercase().replaceFirstChar { it.uppercase() }
 }
 
 private fun String.toBottomDestination(): BottomDestination = when (this) {

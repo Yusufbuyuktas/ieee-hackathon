@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hackathon_ieee.myapplication.ui.components.SubtlePanel
 import com.hackathon_ieee.myapplication.ui.theme.MobileTheme
+import com.hackathon_ieee.myapplication.ui.theme.RiverDanger
 import com.hackathon_ieee.myapplication.ui.theme.RiverSuccess
 import com.hackathon_ieee.myapplication.ui.theme.RiverWarning
 import java.util.Locale
@@ -142,6 +143,12 @@ private fun String.toStatusPresentation(): StatusPresentation = when (this) {
         statusLabel = "Under review",
         description = "Your observation was received and saved for further review.",
         color = RiverWarning
+    )
+    "TUTARSIZ" -> StatusPresentation(
+        title = "Report Not Verified",
+        statusLabel = "Not verified",
+        description = "The submitted photo could not be verified for the selected category.",
+        color = RiverDanger
     )
     "AI_SERVISI_ERISILEMEDI" -> StatusPresentation(
         title = "Report Submitted",

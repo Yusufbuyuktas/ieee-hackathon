@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -27,11 +28,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.hackathon_ieee.myapplication.core.storage.SavedCitizenReport
 import com.hackathon_ieee.myapplication.ui.components.SubtlePanel
+import com.hackathon_ieee.myapplication.ui.theme.RiverDanger
 import com.hackathon_ieee.myapplication.ui.theme.RiverSuccess
 import com.hackathon_ieee.myapplication.ui.theme.RiverWarning
 import java.text.SimpleDateFormat
@@ -43,6 +48,9 @@ import java.util.Locale
 fun ProfileScreen(
     email: String,
     reports: List<SavedCitizenReport>,
+    isRefreshing: Boolean,
+    refreshMessage: String?,
+    onRefresh: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -87,13 +95,33 @@ fun ProfileScreen(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Text(
-                text = "My Reports",
-                style = MaterialTheme.typography.titleMedium,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "My Reports",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                OutlinedButton(
+                    onClick = onRefresh,
+                    enabled = !isRefreshing
+                ) {
+                    Text(text = if (isRefreshing) "Refreshing…" else "Refresh")
+                }
+            }
+
+            refreshMessage?.let { message ->
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = RiverWarning
+                )
+            }
 
             if (reports.isEmpty()) {
                 SubtlePanel {
@@ -148,6 +176,17 @@ private fun ReportListItem(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(7.dp)
         ) {
+            report.photoUrl?.let { photoUrl ->
+                AsyncImage(
+                    model = photoUrl,
+                    contentDescription = "Submitted report photo",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(132.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = ContentScale.Crop
+                )
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -201,6 +240,17 @@ private fun ReportDetails(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
+        report.photoUrl?.let { photoUrl ->
+            AsyncImage(
+                model = photoUrl,
+                contentDescription = "Submitted report photo",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+                contentScale = ContentScale.Crop
+            )
+        }
         Text(
             text = report.category,
             style = MaterialTheme.typography.titleLarge,
@@ -220,7 +270,11 @@ private fun ReportDetails(
         DetailField("Note", report.note.ifBlank { "No additional note." })
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Stored locally on this device",
+            text = if (report.photoUrl == null) {
+                "Stored locally on this device"
+            } else {
+                "Latest details synced with RiverGuard"
+            },
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -256,6 +310,7 @@ private data class ReportStatusPresentation(
 private fun String.toReportStatus(): ReportStatusPresentation = when (this) {
     "ONAYLANDI" -> ReportStatusPresentation("Approved", RiverSuccess)
     "INCELEMEDE" -> ReportStatusPresentation("Under review", RiverWarning)
+    "TUTARSIZ" -> ReportStatusPresentation("Not verified", RiverDanger)
     "AI_SERVISI_ERISILEMEDI" -> ReportStatusPresentation("AI unavailable", RiverWarning)
     else -> ReportStatusPresentation(
         replace('_', ' ').lowercase().replaceFirstChar { it.uppercase() },

@@ -87,6 +87,24 @@ class RiverGuardApi(
         }
     }
 
+    suspend fun getCitizenReports(): Result<List<CitizenReport>> = runCatching {
+        val response = getJsonObject("/api/citizen-reports")
+        response.getJSONArray("results").mapObjects { item ->
+            val validationStatus = item.optString("ai_validation_status")
+            CitizenReport(
+                id = item.getString("id"),
+                photoUrl = item.nullableString("photo_url")?.toAbsoluteUrl(),
+                category = item.optString("category"),
+                note = item.optString("note"),
+                latitude = item.optDouble("latitude"),
+                longitude = item.optDouble("longitude"),
+                timestamp = item.optString("timestamp"),
+                aiValidationStatus = validationStatus,
+                aiMatchScore = item.toMatchScore(validationStatus)
+            )
+        }
+    }
+
     suspend fun submitCitizenReport(
         contentResolver: ContentResolver,
         photoUri: Uri,
@@ -173,21 +191,11 @@ class RiverGuardApi(
 
             val response = JSONObject(responseBody)
             val validationStatus = response.getString("ai_validation_status")
-            val rawConfidence = response.nullableDouble("ai_confidence")
-            val matchScore = response.nullableDouble("ai_match_score")
-                ?: response.nullableDouble("aiMatchScore")
-                ?: rawConfidence?.let { confidence ->
-                    if (validationStatus == "INCELEMEDE" && confidence >= 0.80) {
-                        1.0 - confidence
-                    } else {
-                        confidence
-                    }
-                }
 
             CitizenReportSubmission(
                 id = response.getString("id"),
                 aiValidationStatus = validationStatus,
-                aiMatchScore = matchScore
+                aiMatchScore = response.toMatchScore(validationStatus)
             )
         } finally {
             connection.disconnect()
@@ -223,6 +231,12 @@ class RiverGuardApi(
         } finally {
             connection.disconnect()
         }
+    }
+
+    private fun String.toAbsoluteUrl(): String = when {
+        startsWith("http://") || startsWith("https://") -> this
+        startsWith("/") -> baseUrl.trimEnd('/') + this
+        else -> baseUrl.trimEnd('/') + "/" + this
     }
 }
 
@@ -300,3 +314,17 @@ private fun JSONObject.nullableInt(name: String): Int? =
 
 private fun JSONObject.nullableString(name: String): String? =
     if (has(name) && !isNull(name)) getString(name) else null
+
+private fun JSONObject.toMatchScore(validationStatus: String): Double? {
+    nullableDouble("confidence_score")?.let { return it }
+    nullableDouble("ai_match_score")?.let { return it }
+    nullableDouble("aiMatchScore")?.let { return it }
+
+    return nullableDouble("ai_confidence")?.let { confidence ->
+        if (validationStatus == "INCELEMEDE" && confidence >= 0.80) {
+            1.0 - confidence
+        } else {
+            confidence
+        }
+    }
+}
