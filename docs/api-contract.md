@@ -182,6 +182,33 @@ Response `201 Created`:
 }
 ```
 
+### Vatandaş Bildirimlerini Listeleme
+**Durum:** Güncellendi
+**Endpoint:** `GET /api/citizen-reports`
+**Kim çağırır:** Web dashboard
+
+Response `200 OK` (en yeni bildirim en üstte):
+```json
+{
+  "results": [
+    {
+      "id": "cit-uuid",
+      "photo_url": "/uploads/cit-report-uuid.jpg",
+      "category": "BALIK_OLUMU",
+      "note": "Nehir kenarında ölü balıklar görüldü.",
+      "latitude": 41.445,
+      "longitude": 27.925,
+      "timestamp": "2026-09-24T10:48:03Z",
+      "ai_validation_status": "ONAYLANDI",
+      "ai_confidence": 0.87,
+      "ai_explanation": "Fotoğraftaki içerik seçilen kategoriyle tutarlı.",
+      "fhir_observation_id": "observation-id"
+    }
+  ]
+}
+```
+`photo_url` görsel yoldur; tam fotoğraf adresi, backend base URL'si ile birleştirilerek oluşturulur.
+
 ---
 
 ## 3. Gözlemleri Listeleme (Dashboard için)
