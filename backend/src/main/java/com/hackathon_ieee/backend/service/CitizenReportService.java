@@ -1,6 +1,7 @@
 package com.hackathon_ieee.backend.service;
 
 import com.hackathon_ieee.backend.dto.CitizenReportResponse;
+import com.hackathon_ieee.backend.dto.CitizenReportListItemDto;
 import com.hackathon_ieee.backend.enums.AiValidationStatus;
 import com.hackathon_ieee.backend.enums.CitizenReportCategory;
 import com.hackathon_ieee.backend.model.CitizenReportEntity;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Locale;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -49,6 +51,16 @@ public class CitizenReportService {
         entity.setFhirObservationId(fhirClientService.createCitizenReportObservation(entity));
         entity = repository.save(entity);
         return new CitizenReportResponse(entity.getId(), entity.getAiValidationStatus(), entity.getAiConfidence());
+    }
+
+    public List<CitizenReportListItemDto> findAll() {
+        return repository.findAllByOrderByTimestampDesc().stream()
+                .map(entity -> new CitizenReportListItemDto(
+                        entity.getId(), entity.getPhotoUrl(), entity.getCategory(), entity.getNote(),
+                        entity.getLatitude(), entity.getLongitude(), entity.getTimestamp(),
+                        entity.getAiValidationStatus(), entity.getAiConfidence(), entity.getAiExplanation(),
+                        entity.getFhirObservationId()))
+                .toList();
     }
 
     private CitizenReportCategory parseCategory(String value) {
