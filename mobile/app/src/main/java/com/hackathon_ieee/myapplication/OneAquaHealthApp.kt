@@ -210,7 +210,7 @@ fun OneAquaHealthApp() {
                             currentScreen == MORE_SCREEN
                         ) {
                             RiverGuardWordmark(
-                                modifier = Modifier.width(150.dp)
+                                modifier = Modifier.width(180.dp)
                             )
                         } else {
                             Text(

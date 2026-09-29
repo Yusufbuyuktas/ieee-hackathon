@@ -2,7 +2,6 @@ package com.hackathon_ieee.myapplication.core.network
 
 import android.content.ContentResolver
 import android.net.Uri
-import android.provider.OpenableColumns
 import com.hackathon_ieee.myapplication.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -158,19 +157,15 @@ class RiverGuardApi(
                 output.writeTextPart(boundary, "longitude", longitude.toString())
                 output.writeTextPart(boundary, "timestamp", timestamp)
 
-                val fileName = contentResolver.displayName(photoUri)
-                    .sanitizeFileName()
-                val contentType = contentResolver.getType(photoUri) ?: "image/jpeg"
+                val preparedPhoto = contentResolver.preparePhotoUpload(photoUri)
 
                 output.writeUtf8("--$boundary\r\n")
                 output.writeUtf8(
                     "Content-Disposition: form-data; name=\"photo\"; " +
-                        "filename=\"$fileName\"\r\n"
+                        "filename=\"${preparedPhoto.fileName}\"\r\n"
                 )
-                output.writeUtf8("Content-Type: $contentType\r\n\r\n")
-                val input = contentResolver.openInputStream(photoUri)
-                    ?: throw IllegalArgumentException("Selected photo cannot be opened.")
-                input.use { it.copyTo(output) }
+                output.writeUtf8("Content-Type: ${preparedPhoto.contentType}\r\n\r\n")
+                output.write(preparedPhoto.bytes)
                 output.writeUtf8("\r\n--$boundary--\r\n")
                 output.flush()
             }
@@ -253,19 +248,6 @@ private fun DataOutputStream.writeTextPart(
 private fun DataOutputStream.writeUtf8(value: String) {
     write(value.toByteArray(StandardCharsets.UTF_8))
 }
-
-private fun ContentResolver.displayName(uri: Uri): String {
-    query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
-        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        if (nameIndex >= 0 && cursor.moveToFirst()) {
-            return cursor.getString(nameIndex)
-        }
-    }
-    return "riverguard-report.jpg"
-}
-
-private fun String.sanitizeFileName(): String =
-    replace("\r", "_").replace("\n", "_").replace("\"", "_")
 
 class ApiException(
     val statusCode: Int,
