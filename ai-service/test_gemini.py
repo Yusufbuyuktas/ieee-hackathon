@@ -10,7 +10,7 @@ api_key = os.getenv("GEMINI_API_KEY")
 # Kullanılacak Gemini modeli
 model_name = os.getenv(
     "GEMINI_MODEL",
-    "gemini-3.6-flash"
+    "gemini-2.5-flash"
 )
 
 
