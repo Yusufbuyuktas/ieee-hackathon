@@ -2,7 +2,14 @@ import React from 'react';
 import { Activity, Waves, Stethoscope, FileJson } from 'lucide-react';
 
 export default function Header({ activeTab, setActiveTab, apiOnline }) {
-  const isMockMode = import.meta.env.VITE_USE_MOCK !== 'false';
+  // apiService.js'teki İKİ ayrı flag'i okuyor (gözlemler ve vatandaş bildirimleri
+  // bağımsız olarak mock/canlı olabilir) — Header'ın eski tek "VITE_USE_MOCK"
+  // değişkenine bakması, apiService ile senkron olmadığı için yanlış rozet
+  // gösteriyordu. Artık aynı kaynaktan okuyor.
+  const isObservationsMock = import.meta.env.VITE_USE_MOCK_OBSERVATIONS === 'true';
+  const isCitizenReportsMock = import.meta.env.VITE_USE_MOCK_CITIZEN_REPORTS === 'true';
+  const isFullyMock = isObservationsMock && isCitizenReportsMock;
+  const isPartiallyMock = !isFullyMock && (isObservationsMock || isCitizenReportsMock);
 
   return (
     <header className="bg-slate-900/95 border-b border-slate-800 sticky top-0 z-50 backdrop-blur">
@@ -28,19 +35,30 @@ export default function Header({ activeTab, setActiveTab, apiOnline }) {
               </div>
             </div>
 
-            {/* Mobile Status Badge (Only on very small screens) */}
+            {/* Mobile Status Badge (Only on very small screens)
+                Öncelik sırası: tam mock > bağlantı koptu > kısmi mock > canlı > kontrol ediliyor.
+                Eskiden apiOnline önce kontrol edildiği için mock modda bile "Live" yazıyordu
+                (getLocations mock dalında da hata fırlatmadığı için apiOnline hep true oluyordu). */}
             <div className="sm:hidden">
-              {apiOnline === true ? (
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Live
-                </span>
-              ) : isMockMode ? (
+              {isFullyMock ? (
                 <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> Demo
                 </span>
-              ) : (
+              ) : apiOnline === false ? (
                 <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-rose-500/10 text-rose-400 border border-rose-500/30">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Offline
+                </span>
+              ) : isPartiallyMock ? (
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Partial
+                </span>
+              ) : apiOnline === true ? (
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Live
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-500/10 text-slate-400 border border-slate-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-pulse"></span> ...
                 </span>
               )}
             </div>
@@ -88,22 +106,29 @@ export default function Header({ activeTab, setActiveTab, apiOnline }) {
             </button>
           </nav>
 
-          {/* Desktop Status Badge */}
+          {/* Desktop Status Badge — aynı öncelik sırası, tam metinle */}
           <div className="hidden sm:flex items-center space-x-3 text-xs">
-            {isMockMode ? (
+            {isFullyMock ? (
               <div className="flex items-center space-x-1.5 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-2.5 py-1 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
                 <span>Mode: Research Benchmark</span>
-              </div>
-            ) : apiOnline === true ? (
-              <div className="flex items-center space-x-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span>Live API / FHIR Connected</span>
               </div>
             ) : apiOnline === false ? (
               <div className="flex items-center space-x-1.5 bg-rose-500/10 text-rose-400 border border-rose-500/30 px-2.5 py-1 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-rose-400"></span>
                 <span>API Unreachable</span>
+              </div>
+            ) : isPartiallyMock ? (
+              <div className="flex items-center space-x-1.5 bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-full">
+                <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                <span>
+                  Live API {isCitizenReportsMock ? '(Citizen Reports: Mock)' : '(Observations: Mock)'}
+                </span>
+              </div>
+            ) : apiOnline === true ? (
+              <div className="flex items-center space-x-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-full">
+                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>Live API / FHIR Connected</span>
               </div>
             ) : (
               <div className="flex items-center space-x-1.5 bg-slate-500/10 text-slate-400 border border-slate-500/30 px-2.5 py-1 rounded-full">

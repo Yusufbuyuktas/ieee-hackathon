@@ -132,11 +132,10 @@ export async function getCitizenReports() {
       const lon = item.longitude ?? item.lon ?? item.coordinates?.lon ?? 27.50;
       const category = (item.category || 'diger').toLowerCase();
       
-      const isVerified = 
-        item.aiValidationStatus === 'ONAYLANDI' ||
-        item.aiValidationStatus === 'APPROVED' ||
-        item.ai_validation_status === 'approved' ||
-        (item.aiConfidence != null && item.aiConfidence >= 0.75);
+      // Backend'in gerçek enum'u (AiValidationStatus.java): ONAYLANDI / INCELEMEDE / AI_SERVISI_ERISILEMEDI
+      // Jackson SNAKE_CASE alan adını (ai_validation_status) değiştirir ama enum DEĞERİNİ değiştirmez —
+      // değer her zaman büyük harfli Türkçe gelir ("ONAYLANDI"), "approved"/"APPROVED" asla gelmez.
+      const isVerified = item.ai_validation_status === 'ONAYLANDI';
 
       return {
         id: item.id || `CIT-LIVE-${index + 1}`,
