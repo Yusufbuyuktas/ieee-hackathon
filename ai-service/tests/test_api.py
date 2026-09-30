@@ -2,6 +2,7 @@
 import pytest
 
 from fastapi.testclient import TestClient
+from google.genai import errors
 
 import main
 
@@ -144,32 +145,28 @@ def test_forbidden_image_host():
 
 @pytest.mark.parametrize(
 
-    "category, consistent, confidence, expected",
+    "category, confidence, expected",
 
     [
         (
             "balik_olumu",
-            True,
             0.95,
             "approved"
         ),
 
         (
             "balik_olumu",
-            False,
-            0.95,
-            "inconsistent"
+            0.65,
+            "review"
         ),
 
         (
-            "kotu_koku",
-            True,
+            "balik_olumu",
             0.30,
-            "review"
+            "inconsistent"
         )
 
     ]
-
 )
 def test_moderation_endpoint(
 
@@ -177,7 +174,6 @@ def test_moderation_endpoint(
     mock_image_processing,
 
     category,
-    consistent,
     confidence,
     expected
 
@@ -192,8 +188,6 @@ def test_moderation_endpoint(
     ):
 
         return PhotoValidationResponse(
-
-            tutarli=consistent,
 
             guven_skoru=confidence,
 
@@ -230,9 +224,9 @@ def test_moderation_endpoint(
 
     assert data["moderation_status"] == expected
 
-    assert data["tutarli"] == consistent
-
     assert data["guven_skoru"] == confidence
+
+    assert data["model"] == main.GEMINI_MODEL
 
 
 # ==========================================
@@ -273,13 +267,15 @@ def test_invalid_ai_response(
     )
 
     assert response.status_code == 502
+    assert response.json()["detail"]["code"] == \
+    "AI_INVALID_RESPONSE"
 
 
 # ==========================================
-# TEST 7 — GEMINI ERİŞİM HATASI
+# TEST 7 — INTERNAL AI SERVICE HATASI
 # ==========================================
 
-def test_gemini_unavailable(
+def test_internal_ai_error(
 
     monkeypatch,
     mock_image_processing
@@ -292,7 +288,7 @@ def test_gemini_unavailable(
     ):
 
         raise RuntimeError(
-            "Gemini servisine erişilemiyor."
+            "Beklenmeyen internal hata"
         )
 
     monkeypatch.setattr(
@@ -312,4 +308,93 @@ def test_gemini_unavailable(
 
     )
 
+    assert response.status_code == 500
+
+    assert response.json()["detail"]["code"] == \
+        "AI_INTERNAL_ERROR"
+
+# ==========================================
+# TEST 8 — GEMINI RATE LIMIT
+# ==========================================
+
+def test_gemini_rate_limit(
+    monkeypatch,
+    mock_image_processing
+):
+
+    def fake_analyze_photo(
+        image_data,
+        category
+    ):
+        raise errors.ClientError(
+            429,
+            {
+                "error": {
+                    "code": 429,
+                    "message": "Resource exhausted",
+                    "status": "RESOURCE_EXHAUSTED"
+                }
+            }
+        )
+
+    monkeypatch.setattr(
+        main,
+        "analyze_photo",
+        fake_analyze_photo
+    )
+
+    response = client.post(
+        "/moderate-photo",
+        json={
+            "photo_url": PHOTO_URL,
+            "category": "balik_olumu"
+        }
+    )
+
+    assert response.status_code == 429
+
+    assert response.json()["detail"]["code"] == \
+        "AI_RATE_LIMIT"
+
+# ==========================================
+# TEST 9 — GEMINI PROVIDER HATASI
+# ==========================================
+
+def test_gemini_provider_unavailable(
+    monkeypatch,
+    mock_image_processing
+):
+
+    def fake_analyze_photo(
+        image_data,
+        category
+    ):
+        raise errors.ServerError(
+            503,
+            {
+                "error": {
+                    "code": 503,
+                    "message": "Service unavailable",
+                    "status": "UNAVAILABLE"
+                }
+            }
+        )
+
+    monkeypatch.setattr(
+        main,
+        "analyze_photo",
+        fake_analyze_photo
+    )
+
+    response = client.post(
+        "/moderate-photo",
+        json={
+            "photo_url": PHOTO_URL,
+            "category": "balik_olumu"
+        }
+    )
+
     assert response.status_code == 503
+
+    assert response.json()["detail"]["code"] == \
+        "AI_PROVIDER_UNAVAILABLE"

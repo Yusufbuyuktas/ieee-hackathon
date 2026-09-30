@@ -22,6 +22,7 @@ from pydantic import (
 
 from google import genai
 from google.genai import types
+from google.genai import errors
 
 
 # ==========================================
@@ -104,8 +105,6 @@ class PhotoValidationRequest(BaseModel):
 
 class PhotoValidationResponse(BaseModel):
 
-    tutarli: bool
-
     guven_skoru: float = Field(
         ge=0.0,
         le=1.0
@@ -113,9 +112,8 @@ class PhotoValidationResponse(BaseModel):
 
     aciklama: str
 
-class ModerationResponse(BaseModel):
 
-    tutarli: bool
+class ModerationResponse(BaseModel):
 
     guven_skoru: float = Field(
         ge=0.0,
@@ -125,6 +123,8 @@ class ModerationResponse(BaseModel):
     aciklama: str
 
     moderation_status: ModerationStatus
+
+    model: str
 
 # ==========================================
 # 3. FOTOĞRAF İNDİRME
@@ -309,8 +309,9 @@ Kurallar:
 1. Yalnızca fotoğrafta görülebilen
    kanıtlara dayan.
 
-2. Görselin seçilen kategoriyle tutarlı
-   olup olmadığını değerlendir.
+2. Fotoğrafın seçilen çevresel gözlem
+   kategorisini ne ölçüde desteklediğini
+   değerlendir.
 
 3. Fotoğrafta görülmeyen olayları
    gerçekleşmiş gibi varsayma.
@@ -325,18 +326,26 @@ Kurallar:
 
 6. Kötü koku fotoğraftan doğrudan
    doğrulanamaz. Bu kategoride
-   kesin görsel onay verme.
+   guven_skoru değerini 0.80 veya
+   üzerinde verme.
 
-7. Görsel belirsizse bunu açıklamada
-   belirt ve güven göstergesini düşür.
+7. Görsel belirsiz, düşük kaliteli veya
+   seçilen kategoriyle yalnızca kısmen
+   ilişkiliyse guven_skoru değerini düşür.
 
-8. Fotoğraf tamamen alakasızsa
-   tutarli alanını false yap.
+8. Fotoğraf seçilen kategoriyle tamamen
+   alakasızsa veya kategoriyi destekleyen
+   görsel kanıt yoksa düşük guven_skoru ver.
 
-9. guven_skoru alanında 0 ile 1
-   arasında bir değerlendirme göstergesi
-   üret. Bu değer bilimsel olarak
-   kalibre edilmiş olasılık değildir.
+9. guven_skoru alanında 0 ile 1 arasında
+   bir değerlendirme göstergesi üret.
+
+   Bu skor, fotoğraftaki görsel kanıtın
+   seçilen kategoriyle ne kadar güçlü
+   biçimde uyumlu olduğunu ifade eder.
+
+   Bu değer bilimsel olarak kalibre
+   edilmiş bir olasılık değildir.
 
 10. Açıklamanı kısa ve Türkçe yaz.
 
@@ -397,36 +406,16 @@ def analyze_photo(
 # ==========================================
 
 def determine_moderation_status(
-    result: PhotoValidationResponse,
-    category: ReportCategory
+    result: PhotoValidationResponse
 ) -> ModerationStatus:
 
-    # Fotoğraftan doğrudan doğrulanamayan
-    # veya belirsiz kategoriler
-
-    if category in (
-        ReportCategory.KOTU_KOKU,
-        ReportCategory.DIGER
-    ):
-
-        return ModerationStatus.REVIEW
-
-    # Modelin güven göstergesi düşükse
-    # insan incelemesine yönlendir
-
-    if result.guven_skoru < 0.80:
-
-        return ModerationStatus.REVIEW
-
-    # Yüksek güven göstergesiyle
-    # tutarlı olarak değerlendirilmişse
-
-    if result.tutarli:
+    if result.guven_skoru >= 0.80:
 
         return ModerationStatus.APPROVED
 
-    # Yüksek güven göstergesiyle
-    # tutarsız olarak değerlendirilmişse
+    if result.guven_skoru >= 0.50:
+
+        return ModerationStatus.REVIEW
 
     return ModerationStatus.INCONSISTENT
 
@@ -476,26 +465,61 @@ async def moderate_photo(
 
         raise HTTPException(
             status_code=502,
-            detail="AI değerlendirme cevabı geçersiz."
+            detail={
+                "code": "AI_INVALID_RESPONSE",
+                "message": "AI servisinden geçersiz bir değerlendirme cevabı alındı."
+            }
+        )
+
+    except errors.ClientError as exc:
+
+        if exc.code == 429:
+
+            raise HTTPException(
+                status_code=429,
+                detail={
+                    "code": "AI_RATE_LIMIT",
+                    "message": "AI servisinin kullanım limiti aşıldı."
+                }
+            )
+
+        raise HTTPException(
+            status_code=502,
+            detail={
+                "code": "AI_CLIENT_ERROR",
+                "message": "AI servisine gönderilen istek işlenemedi."
+            }
+        )
+
+    except errors.ServerError:
+
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": "AI_PROVIDER_UNAVAILABLE",
+                "message": "AI sağlayıcısına şu anda erişilemiyor."
+            }
         )
 
     except Exception:
 
         raise HTTPException(
-            status_code=503,
-            detail="AI servisine şu anda erişilemiyor."
+            status_code=500,
+            detail={
+                "code": "AI_INTERNAL_ERROR",
+                "message": "AI servisi içerisinde beklenmeyen bir hata oluştu."
+            }
         )
 
     # Moderasyon durumunu belirle
     status = determine_moderation_status(
-        result=result,
-        category=request.category
+    result=result
     )
 
     # Backend'e sonucu döndür
     return ModerationResponse(
-        tutarli=result.tutarli,
-        guven_skoru=result.guven_skoru,
-        aciklama=result.aciklama,
-        moderation_status=status
+    guven_skoru=result.guven_skoru,
+    aciklama=result.aciklama,
+    moderation_status=status,
+    model=GEMINI_MODEL
     )

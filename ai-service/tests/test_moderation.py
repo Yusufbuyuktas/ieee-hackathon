@@ -1,156 +1,140 @@
-
 import pytest
 
 from main import (
     PhotoValidationResponse,
-    ReportCategory,
     ModerationStatus,
     determine_moderation_status
 )
 
 
 # ==========================================
-# 1. TUTARLI FOTOĞRAF TESTİ
+# 1. APPROVED TESTİ
 # ==========================================
 
 def test_approved_report():
 
     result = PhotoValidationResponse(
-        tutarli=True,
         guven_skoru=0.95,
-        aciklama="Fotoğrafta ölü balıklar var."
+        aciklama="Fotoğrafta ölü balıklar görülüyor."
     )
 
     status = determine_moderation_status(
-        result=result,
-        category=ReportCategory.BALIK_OLUMU
+        result=result
     )
 
     assert status == ModerationStatus.APPROVED
 
 
 # ==========================================
-# 2. TUTARSIZ FOTOĞRAF TESTİ
+# 2. REVIEW TESTİ
+# ==========================================
+
+def test_review_report():
+
+    result = PhotoValidationResponse(
+        guven_skoru=0.65,
+        aciklama="Görsel kısmen kategoriyi destekliyor."
+    )
+
+    status = determine_moderation_status(
+        result=result
+    )
+
+    assert status == ModerationStatus.REVIEW
+
+
+# ==========================================
+# 3. INCONSISTENT TESTİ
 # ==========================================
 
 def test_inconsistent_report():
 
     result = PhotoValidationResponse(
-        tutarli=False,
-        guven_skoru=0.95,
-        aciklama="Fotoğrafta ölü balık yok."
+        guven_skoru=0.30,
+        aciklama="Görsel seçilen kategoriyi desteklemiyor."
     )
 
     status = determine_moderation_status(
-        result=result,
-        category=ReportCategory.BALIK_OLUMU
+        result=result
     )
 
     assert status == ModerationStatus.INCONSISTENT
 
 
 # ==========================================
-# 3. DÜŞÜK GÜVEN TESTİ
+# 4. APPROVED SINIR DEĞERİ
 # ==========================================
 
-def test_low_confidence_report():
+def test_approved_threshold():
 
     result = PhotoValidationResponse(
-        tutarli=True,
-        guven_skoru=0.45,
-        aciklama="Görsel belirsiz."
-    )
-
-    status = determine_moderation_status(
-        result=result,
-        category=ReportCategory.BULANIK_SU
-    )
-
-    assert status == ModerationStatus.REVIEW
-
-
-# ==========================================
-# 4. KÖTÜ KOKU TESTİ
-# ==========================================
-
-def test_bad_smell_report():
-
-    result = PhotoValidationResponse(
-        tutarli=True,
-        guven_skoru=0.99,
-        aciklama="Su görülüyor."
-    )
-
-    status = determine_moderation_status(
-        result=result,
-        category=ReportCategory.KOTU_KOKU
-    )
-
-    assert status == ModerationStatus.REVIEW
-
-
-# ==========================================
-# 5. DİĞER KATEGORİSİ TESTİ
-# ==========================================
-
-def test_other_category_report():
-
-    result = PhotoValidationResponse(
-        tutarli=True,
-        guven_skoru=0.95,
-        aciklama="Çevresel gözlem."
-    )
-
-    status = determine_moderation_status(
-        result=result,
-        category=ReportCategory.DIGER
-    )
-
-    assert status == ModerationStatus.REVIEW
-
-
-# ==========================================
-# 6. SINIR DEĞERİ TESTİ
-# ==========================================
-
-def test_exact_confidence_threshold():
-
-    result = PhotoValidationResponse(
-        tutarli=True,
         guven_skoru=0.80,
-        aciklama="Görsel tutarlı."
+        aciklama="Test"
     )
 
     status = determine_moderation_status(
-        result=result,
-        category=ReportCategory.BALIK_OLUMU
+        result=result
     )
 
     assert status == ModerationStatus.APPROVED
 
 
 # ==========================================
-# 7. SINIRIN ALTINDAKİ DEĞER TESTİ
+# 5. REVIEW ÜST SINIRI
 # ==========================================
 
-def test_below_confidence_threshold():
+def test_review_upper_boundary():
 
     result = PhotoValidationResponse(
-        tutarli=False,
         guven_skoru=0.79,
-        aciklama="Görsel tutarsız."
+        aciklama="Test"
     )
 
     status = determine_moderation_status(
-        result=result,
-        category=ReportCategory.BALIK_OLUMU
+        result=result
     )
 
     assert status == ModerationStatus.REVIEW
 
 
 # ==========================================
-# 8. GEÇERSİZ GÜVEN GÖSTERGESİ TESTİ
+# 6. REVIEW ALT SINIRI
+# ==========================================
+
+def test_review_lower_boundary():
+
+    result = PhotoValidationResponse(
+        guven_skoru=0.50,
+        aciklama="Test"
+    )
+
+    status = determine_moderation_status(
+        result=result
+    )
+
+    assert status == ModerationStatus.REVIEW
+
+
+# ==========================================
+# 7. INCONSISTENT ÜST SINIRI
+# ==========================================
+
+def test_inconsistent_boundary():
+
+    result = PhotoValidationResponse(
+        guven_skoru=0.49,
+        aciklama="Test"
+    )
+
+    status = determine_moderation_status(
+        result=result
+    )
+
+    assert status == ModerationStatus.INCONSISTENT
+
+
+# ==========================================
+# 8. GEÇERSİZ GÜVEN SKORU
 # ==========================================
 
 @pytest.mark.parametrize(
@@ -166,7 +150,6 @@ def test_invalid_confidence_score(
     with pytest.raises(ValidationError):
 
         PhotoValidationResponse(
-            tutarli=True,
             guven_skoru=invalid_score,
             aciklama="Test"
         )
