@@ -236,7 +236,36 @@ Response `200 OK`:
   ]
 }
 ```
+## 4. Vatandaş Bildirimi Durum Güncelleme
 
+**Durum:** Onaylandı  
+**Endpoint:** `PATCH /api/citizen-reports/{id}/status`  
+**Kim çağırır:** Belediye personeli
+
+Request:
+
+```json
+{
+  "status": "ONAYLANDI"
+}
+```
+
+Geçerli hedef durumlar:
+- `ONAYLANDI`
+- `TUTARSIZ`
+
+MVP kapsamında yalnızca `INCELEMEDE` durumundaki vatandaş bildirimleri belediye personeli tarafından `ONAYLANDI` veya `TUTARSIZ` durumuna geçirilebilir.
+
+Response `200 OK`:
+
+```json
+{
+  "id": "cit-uuid",
+  "ai_validation_status": "ONAYLANDI"
+}
+```
+
+Bulunamayan bir rapor için `404 Not Found`, geçersiz durum veya geçersiz durum geçişi için `400 Bad Request` döndürülür.
 ---
 
 ## 4. Risk Durumu Sorgulama

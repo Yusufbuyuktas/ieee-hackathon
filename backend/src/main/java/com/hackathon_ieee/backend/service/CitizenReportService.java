@@ -1,6 +1,7 @@
 package com.hackathon_ieee.backend.service;
 
 import com.hackathon_ieee.backend.dto.CitizenReportResponse;
+import com.hackathon_ieee.backend.dto.CitizenReportStatusUpdateResponse;
 import com.hackathon_ieee.backend.dto.CitizenReportListItemDto;
 import com.hackathon_ieee.backend.enums.AiValidationStatus;
 import com.hackathon_ieee.backend.enums.CitizenReportCategory;
@@ -9,6 +10,8 @@ import com.hackathon_ieee.backend.repository.CitizenReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Locale;
 import java.util.List;
@@ -59,6 +62,36 @@ public class CitizenReportService {
                         entity.getAiValidationStatus(), entity.getAiConfidence(), entity.getAiExplanation(),
                         entity.getFhirObservationId()))
                 .toList();
+    }
+
+    public CitizenReportStatusUpdateResponse updateStatus(
+            String id,
+            AiValidationStatus newStatus) {
+
+        CitizenReportEntity entity = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "citizen report not found: " + id));
+
+        if (entity.getAiValidationStatus() != AiValidationStatus.INCELEMEDE) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "only reports with INCELEMEDE status can be updated");
+        }
+
+        if (newStatus != AiValidationStatus.ONAYLANDI
+                && newStatus != AiValidationStatus.TUTARSIZ) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "status must be ONAYLANDI or TUTARSIZ");
+        }
+
+        entity.setAiValidationStatus(newStatus);
+        entity = repository.save(entity);
+
+        return new CitizenReportStatusUpdateResponse(
+                entity.getId(),
+                entity.getAiValidationStatus());
     }
 
     private CitizenReportCategory parseCategory(String value) {
