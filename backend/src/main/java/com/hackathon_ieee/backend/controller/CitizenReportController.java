@@ -2,6 +2,8 @@ package com.hackathon_ieee.backend.controller;
 
 import com.hackathon_ieee.backend.dto.CitizenReportResponse;
 import com.hackathon_ieee.backend.dto.CitizenReportListResponse;
+import com.hackathon_ieee.backend.dto.CitizenReportStatusUpdateRequest;
+import com.hackathon_ieee.backend.dto.CitizenReportStatusUpdateResponse;
 import com.hackathon_ieee.backend.service.CitizenReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,5 +32,13 @@ public class CitizenReportController {
             @RequestParam(value = "longitude", required = false) Double longitude,
             @RequestParam("timestamp") String timestamp) {
         return service.create(photo, category, note, latitude, longitude, timestamp);
+    }
+
+    @PatchMapping("/{id}/status")
+    public CitizenReportStatusUpdateResponse updateStatus(
+            @PathVariable String id,
+            @RequestBody CitizenReportStatusUpdateRequest request) {
+
+        return service.updateStatus(id, request.status());
     }
 }
