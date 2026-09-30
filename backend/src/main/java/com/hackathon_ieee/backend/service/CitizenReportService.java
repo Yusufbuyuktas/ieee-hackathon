@@ -17,7 +17,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class CitizenReportService {
-    private static final double APPROVAL_THRESHOLD = 0.80;
 
     private final CitizenReportRepository repository;
     private final FileStorageService fileStorageService;
@@ -25,7 +24,7 @@ public class CitizenReportService {
     private final FhirClientService fhirClientService;
 
     public CitizenReportResponse create(MultipartFile photo, String categoryValue, String note,
-                                        Double latitude, Double longitude, String timestamp) {
+            Double latitude, Double longitude, String timestamp) {
         CitizenReportCategory category = parseCategory(categoryValue);
         if (timestamp == null || timestamp.isBlank()) {
             throw new IllegalArgumentException("timestamp is required");
@@ -34,8 +33,7 @@ public class CitizenReportService {
         String filename = fileStorageService.store(photo);
         CitizenReportEntity entity = new CitizenReportEntity(
                 "cit-" + UUID.randomUUID(), "/uploads/" + filename, category,
-                note, latitude, longitude, timestamp
-        );
+                note, latitude, longitude, timestamp);
 
         AiModerationClient.Result aiResult = aiModerationClient.moderate(filename, aiCategory(category));
         if (aiResult == null) {
@@ -43,8 +41,8 @@ public class CitizenReportService {
         } else {
             entity.setAiConfidence(aiResult.guvenSkoru());
             entity.setAiExplanation(aiResult.aciklama());
-            entity.setAiValidationStatus(aiResult.tutarli() && aiResult.guvenSkoru() >= APPROVAL_THRESHOLD
-                    ? AiValidationStatus.ONAYLANDI : AiValidationStatus.INCELEMEDE);
+            entity.setAiValidationStatus(
+                    mapAiStatus(aiResult.moderationStatus()));
         }
 
         entity = repository.save(entity);
@@ -76,6 +74,28 @@ public class CitizenReportService {
         } catch (IllegalArgumentException exception) {
             throw new IllegalArgumentException("invalid category: " + value, exception);
         }
+    }
+
+    private AiValidationStatus mapAiStatus(String moderationStatus) {
+
+        if (moderationStatus == null) {
+            return AiValidationStatus.INCELEMEDE;
+        }
+
+        return switch (moderationStatus.toLowerCase(Locale.ROOT)) {
+
+            case "approved" ->
+                AiValidationStatus.ONAYLANDI;
+
+            case "review" ->
+                AiValidationStatus.INCELEMEDE;
+
+            case "inconsistent" ->
+                AiValidationStatus.TUTARSIZ;
+
+            default ->
+                AiValidationStatus.INCELEMEDE;
+        };
     }
 
     private String aiCategory(CitizenReportCategory category) {

@@ -26,39 +26,41 @@ public class AiModerationClient {
     public Result moderate(String photoFilename, String category) {
         Map<String, String> request = Map.of(
                 "photo_url", publicBaseUrl + "/uploads/" + photoFilename,
-                "category", category
-        );
+                "category", category);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         try {
             Response response = restTemplate.postForObject(
                     serviceUrl + "/moderate-photo",
                     new HttpEntity<>(request, headers),
-                    Response.class
-            );
+                    Response.class);
             if (response == null) {
                 throw new RestClientException("AI returned an empty response");
             }
-            return new Result(response.tutarli, response.guvenSkoru, response.aciklama, response.moderationStatus);
+            return new Result(
+                    response.guvenSkoru,
+                    response.aciklama,
+                    response.moderationStatus,
+                    response.model);
         } catch (RestClientException exception) {
             return null;
         }
     }
 
-    public record Result(boolean tutarli, double guvenSkoru, String aciklama, String moderationStatus) {
+    public record Result(double guvenSkoru, String aciklama, String moderationStatus, String model) {
     }
 
     private static class Response {
-        private boolean tutarli;
+
         @JsonProperty("guven_skoru")
         private double guvenSkoru;
+
         private String aciklama;
+
         @JsonProperty("moderation_status")
         private String moderationStatus;
 
-        public boolean isTutarli() {
-            return tutarli;
-        }
+        private String model;
 
         public double getGuvenSkoru() {
             return guvenSkoru;
@@ -70,6 +72,10 @@ public class AiModerationClient {
 
         public String getModerationStatus() {
             return moderationStatus;
+        }
+
+        public String getModel() {
+            return model;
         }
     }
 }
