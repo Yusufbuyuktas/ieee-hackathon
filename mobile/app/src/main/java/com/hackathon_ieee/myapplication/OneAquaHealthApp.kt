@@ -28,7 +28,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.hackathon_ieee.myapplication.feature.auth.AuthWelcomeScreen
 import com.hackathon_ieee.myapplication.feature.auth.LoginScreen
+import com.hackathon_ieee.myapplication.feature.auth.RegisterScreen
 import com.hackathon_ieee.myapplication.feature.auth.SplashScreen
 import com.hackathon_ieee.myapplication.feature.home.HomeScreen
 import com.hackathon_ieee.myapplication.feature.map.RiskMapScreen
@@ -56,7 +58,9 @@ private const val REPORT_STATUS_SCREEN = "report_status"
 private const val PROFILE_SCREEN = "profile"
 private const val MORE_SCREEN = "more"
 private const val SPLASH_STAGE = "splash"
+private const val AUTH_WELCOME_STAGE = "auth_welcome"
 private const val LOGIN_STAGE = "login"
+private const val REGISTER_STAGE = "register"
 private const val APP_STAGE = "app"
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -159,15 +163,57 @@ fun OneAquaHealthApp() {
     if (appStage == SPLASH_STAGE) {
         SplashScreen(
             onFinished = {
+                appStage = AUTH_WELCOME_STAGE
+            }
+        )
+        return
+    }
+
+    if (appStage == AUTH_WELCOME_STAGE) {
+        AuthWelcomeScreen(
+            onLogin = {
                 appStage = LOGIN_STAGE
+            },
+            onRegister = {
+                appStage = REGISTER_STAGE
             }
         )
         return
     }
 
     if (appStage == LOGIN_STAGE) {
+        BackHandler {
+            appStage = AUTH_WELCOME_STAGE
+        }
         LoginScreen(
+            onBack = {
+                appStage = AUTH_WELCOME_STAGE
+            },
+            onRegister = {
+                appStage = REGISTER_STAGE
+            },
             onSignIn = { email ->
+                signedInEmail = email
+                savedReports = localReportRepository.getReports(email)
+                currentScreen = HOME_SCREEN
+                appStage = APP_STAGE
+            }
+        )
+        return
+    }
+
+    if (appStage == REGISTER_STAGE) {
+        BackHandler {
+            appStage = AUTH_WELCOME_STAGE
+        }
+        RegisterScreen(
+            onBack = {
+                appStage = AUTH_WELCOME_STAGE
+            },
+            onLogin = {
+                appStage = LOGIN_STAGE
+            },
+            onRegistered = { email ->
                 signedInEmail = email
                 savedReports = localReportRepository.getReports(email)
                 currentScreen = HOME_SCREEN
@@ -378,7 +424,7 @@ fun OneAquaHealthApp() {
                             savedReports = emptyList()
                             reportsRefreshMessage = null
                             currentScreen = HOME_SCREEN
-                            appStage = LOGIN_STAGE
+                            appStage = AUTH_WELCOME_STAGE
                         },
                         modifier = Modifier.padding(innerPadding)
                     )

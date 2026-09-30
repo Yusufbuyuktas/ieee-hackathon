@@ -89,7 +89,21 @@ fun HomeScreen(
 
 @Composable
 private fun VisionCarousel() {
-    val pageCount = 3
+    val images = listOf(
+        R.drawable.ergene1,
+        R.drawable.ergene2,
+        R.drawable.ergene3,
+        R.drawable.ergene4,
+        R.drawable.ergene5
+    )
+    val descriptions = listOf(
+        "A wide view of the Ergene River and its surrounding landscape",
+        "Wastewater flowing through drainage pipes",
+        "An aerial view of the Ergene River near a historic bridge",
+        "Water conditions observed along the Ergene River",
+        "Environmental conditions in the Ergene River Basin"
+    )
+    val pageCount = images.size
     val pagerState = rememberPagerState(pageCount = { pageCount })
 
     Column(
@@ -102,30 +116,14 @@ private fun VisionCarousel() {
                 .fillMaxWidth()
                 .height(210.dp)
         ) { page ->
-            if (page == 0) {
-                Image(
-                    painter = painterResource(R.drawable.riverguard_home_hero),
-                    contentDescription = "A citizen documenting water conditions by the river",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(20.dp)),
-                    contentScale = ContentScale.Crop
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Visual coming soon",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
+            Image(
+                painter = painterResource(images[page]),
+                contentDescription = descriptions[page],
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(20.dp)),
+                contentScale = ContentScale.Crop
+            )
         }
 
         Row(

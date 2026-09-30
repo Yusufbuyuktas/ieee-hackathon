@@ -19,7 +19,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -34,39 +33,25 @@ import com.hackathon_ieee.myapplication.ui.components.PasswordVisibilityIcon
 import com.hackathon_ieee.myapplication.ui.components.SubtlePanel
 import com.hackathon_ieee.myapplication.ui.components.ThickBackIcon
 
-private const val DEMO_EMAIL = "demo@rg.com"
-private const val DEMO_PASSWORD = "1234"
-
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     onBack: () -> Unit,
-    onRegister: () -> Unit,
-    onSignIn: (String) -> Unit,
+    onLogin: () -> Unit,
+    onRegistered: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var email by rememberSaveable {
-        mutableStateOf(DEMO_EMAIL)
-    }
-    var password by remember {
-        mutableStateOf(DEMO_PASSWORD)
-    }
-    var passwordVisible by rememberSaveable {
-        mutableStateOf(false)
-    }
-    var showEmailError by remember {
-        mutableStateOf(false)
-    }
-    var showPasswordError by remember {
-        mutableStateOf(false)
-    }
-    var authenticationError by remember {
-        mutableStateOf(false)
-    }
+    var fullName by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    var showNameError by rememberSaveable { mutableStateOf(false) }
+    var showEmailError by rememberSaveable { mutableStateOf(false) }
+    var showPasswordError by rememberSaveable { mutableStateOf(false) }
 
     val normalizedEmail = email.trim()
     val isEmailValid = normalizedEmail.contains("@") &&
         normalizedEmail.substringAfter("@").contains(".") &&
-        normalizedEmail.substringAfter(".").isNotBlank()
+        normalizedEmail.substringAfterLast(".").isNotBlank()
 
     Column(
         modifier = modifier
@@ -77,18 +62,17 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
+
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
             Text(
-                text = "Sign in",
+                text = "Create account",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.primary
             )
 
             Text(
-                text = "Sign in to continue to water observations and reporting.",
+                text = "Create an account to continue to water observations and reporting.",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -99,22 +83,33 @@ fun LoginScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     OutlinedTextField(
+                        value = fullName,
+                        onValueChange = {
+                            fullName = it
+                            showNameError = false
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text(text = "Full name") },
+                        isError = showNameError,
+                        supportingText = if (showNameError) {
+                            { Text(text = "Please enter your full name.") }
+                        } else null,
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                    )
+
+                    OutlinedTextField(
                         value = email,
                         onValueChange = {
                             email = it
                             showEmailError = false
-                            authenticationError = false
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Email") },
                         isError = showEmailError,
                         supportingText = if (showEmailError) {
-                            {
-                                Text(text = "Please enter a valid email address.")
-                            }
-                        } else {
-                            null
-                        },
+                            { Text(text = "Please enter a valid email address.") }
+                        } else null,
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
@@ -127,18 +122,13 @@ fun LoginScreen(
                         onValueChange = {
                             password = it
                             showPasswordError = false
-                            authenticationError = false
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Password") },
                         isError = showPasswordError,
                         supportingText = if (showPasswordError) {
-                            {
-                                Text(text = "Please enter your password.")
-                            }
-                        } else {
-                            null
-                        },
+                            { Text(text = "Please enter a password.") }
+                        } else null,
                         singleLine = true,
                         visualTransformation = if (passwordVisible) {
                             VisualTransformation.None
@@ -160,40 +150,25 @@ fun LoginScreen(
                         )
                     )
 
-                    if (authenticationError) {
-                        Text(
-                            text = "Incorrect email or password.",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
-
                     Button(
                         onClick = {
+                            showNameError = fullName.isBlank()
                             showEmailError = !isEmailValid
                             showPasswordError = password.isBlank()
 
-                            if (isEmailValid && password.isNotBlank()) {
-                                if (
-                                    normalizedEmail == DEMO_EMAIL &&
-                                    password == DEMO_PASSWORD
-                                ) {
-                                    authenticationError = false
-                                    onSignIn(normalizedEmail)
-                                } else {
-                                    authenticationError = true
-                                }
+                            if (!showNameError && !showEmailError && !showPasswordError) {
+                                onRegistered(normalizedEmail)
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(text = "Sign In")
+                        Text(text = "Create Citizen Account")
                     }
                 }
             }
 
             Text(
-                text = "Demo sign-in only. No credentials are sent or stored.",
+                text = "Demo registration only. Your account will be connected when backend authentication is available.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -204,11 +179,11 @@ fun LoginScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Don’t have an account?",
+                    text = "Already have an account?",
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                TextButton(onClick = onRegister) {
-                    Text(text = "Create account")
+                TextButton(onClick = onLogin) {
+                    Text(text = "Log in")
                 }
             }
         }
