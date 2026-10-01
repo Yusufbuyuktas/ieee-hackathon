@@ -22,10 +22,23 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
 
+                        // Belediye personeli citizen report durumunu değiştirebilir
                         .requestMatchers(
                                 HttpMethod.PATCH,
                                 "/api/citizen-reports/*/status")
                         .hasRole("MUNICIPALITY_STAFF")
+
+                        // Klinik gözlem verileri yalnızca doktor tarafından görüntülenebilir
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/observations/**")
+                        .hasRole("DOCTOR")
+
+                        // Klinik risk değerlendirmeleri yalnızca doktor tarafından görüntülenebilir
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/risk-assessments/**")
+                        .hasRole("DOCTOR")
 
                         .anyRequest().permitAll());
 
