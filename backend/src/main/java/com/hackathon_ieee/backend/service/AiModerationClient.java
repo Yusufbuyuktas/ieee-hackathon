@@ -52,9 +52,12 @@ public class AiModerationClient {
 
     private static class Response {
 
-        @JsonProperty("guven_skoru")
+        private String category;
+
+        @JsonProperty("confidence_score")
         private double guvenSkoru;
 
+        @JsonProperty("explanation")
         private String aciklama;
 
         @JsonProperty("moderation_status")
@@ -76,6 +79,9 @@ public class AiModerationClient {
 
         public String getModel() {
             return model;
+        }
+        public String getCategory() {
+            return category;
         }
     }
 }

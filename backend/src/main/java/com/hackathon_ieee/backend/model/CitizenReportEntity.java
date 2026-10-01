@@ -10,6 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Getter
 @Setter
@@ -51,6 +54,10 @@ public class CitizenReportEntity {
 
     @Column(name = "fhir_observation_id")
     private String fhirObservationId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
     protected CitizenReportEntity() {
     }
