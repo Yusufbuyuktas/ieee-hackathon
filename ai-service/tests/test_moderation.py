@@ -19,7 +19,8 @@ def test_approved_report():
     )
 
     status = determine_moderation_status(
-        result=result
+        result=result,
+        category="balik_olumu"
     )
 
     assert status == ModerationStatus.APPROVED
@@ -37,7 +38,8 @@ def test_review_report():
     )
 
     status = determine_moderation_status(
-        result=result
+        result=result,
+        category="balik_olumu"
     )
 
     assert status == ModerationStatus.REVIEW
@@ -55,7 +57,8 @@ def test_inconsistent_report():
     )
 
     status = determine_moderation_status(
-        result=result
+        result=result,
+        category="balik_olumu"
     )
 
     assert status == ModerationStatus.INCONSISTENT
@@ -73,7 +76,8 @@ def test_approved_threshold():
     )
 
     status = determine_moderation_status(
-        result=result
+        result=result,
+        category="balik_olumu"
     )
 
     assert status == ModerationStatus.APPROVED
@@ -91,9 +95,9 @@ def test_review_upper_boundary():
     )
 
     status = determine_moderation_status(
-        result=result
+        result=result,
+        category="balik_olumu"
     )
-
     assert status == ModerationStatus.REVIEW
 
 
@@ -109,7 +113,8 @@ def test_review_lower_boundary():
     )
 
     status = determine_moderation_status(
-        result=result
+        result=result,
+        category="balik_olumu"
     )
 
     assert status == ModerationStatus.REVIEW
@@ -127,7 +132,8 @@ def test_inconsistent_boundary():
     )
 
     status = determine_moderation_status(
-        result=result
+        result=result,
+        category="balik_olumu"
     )
 
     assert status == ModerationStatus.INCONSISTENT
@@ -153,3 +159,17 @@ def test_invalid_confidence_score(
             guven_skoru=invalid_score,
             aciklama="Test"
         )
+        
+def test_kotu_koku_always_review():
+    result = {
+        "is_consistent": False,
+        "confidence_score": 0.1,
+        "reason": "Fotoğraftan kötü koku doğrulanamaz."
+    }
+
+    status = determine_moderation_status(
+        result=result,
+        category="kotu_koku"
+    )
+
+    assert status == ModerationStatus.REVIEW
