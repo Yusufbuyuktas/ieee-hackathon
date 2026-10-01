@@ -66,8 +66,8 @@ fun ReportFormScreen(
     onContinue: (
         photoUri: String,
         category: ReportCategory,
-        latitude: Double,
-        longitude: Double,
+        latitude: Double?,
+        longitude: Double?,
         note: String
     ) -> Unit,
     modifier: Modifier = Modifier
@@ -97,7 +97,7 @@ fun ReportFormScreen(
     }
 
     var locationMessage by rememberSaveable {
-        mutableStateOf("Location has not been captured yet.")
+        mutableStateOf("Location is optional. You can continue without it.")
     }
 
     val noteFocusRequester = androidx.compose.runtime.remember {
@@ -141,7 +141,7 @@ fun ReportFormScreen(
             requestCurrentLocation()
         } else {
             locationStateName = LocationUiState.ERROR.name
-            locationMessage = "Location permission was denied. Permission is required to submit a report."
+            locationMessage = "Location permission was denied. You can still submit the report."
         }
     }
 
@@ -239,7 +239,7 @@ fun ReportFormScreen(
         )
 
         Text(
-            text = "Location",
+            text = "Location (optional)",
             style = MaterialTheme.typography.titleMedium
         )
 
@@ -423,8 +423,6 @@ fun ReportFormScreen(
                 if (
                     photoUri != null &&
                     category != null &&
-                    currentLatitude != null &&
-                    currentLongitude != null &&
                     (!isOtherSelected || note.isNotBlank())
                 ) {
                     onContinue(
@@ -438,8 +436,6 @@ fun ReportFormScreen(
             },
             enabled = selectedPhotoUri != null &&
                 selectedCategory != null &&
-                latitude != null &&
-                longitude != null &&
                 !isRequiredDescriptionMissing,
             modifier = Modifier
                 .fillMaxWidth()

@@ -71,7 +71,7 @@ fun OneAquaHealthApp() {
     val localReportRepository = remember {
         LocalReportRepository(context)
     }
-    val api = remember { RiverGuardApi() }
+    val api = remember(context) { RiverGuardApi(context) }
     val coroutineScope = rememberCoroutineScope()
     var appStage by rememberSaveable {
         mutableStateOf(SPLASH_STAGE)
@@ -149,7 +149,7 @@ fun OneAquaHealthApp() {
 
         api.getCitizenReports().fold(
             onSuccess = { remoteReports ->
-                val syncedReports = mergeReports(localReports, remoteReports)
+                val syncedReports = mergeReports(email, localReports, remoteReports)
                 localReportRepository.replaceForOwner(email, syncedReports)
                 savedReports = syncedReports
             },
@@ -182,7 +182,25 @@ fun OneAquaHealthApp() {
     if (appStage == SPLASH_STAGE) {
         SplashScreen(
             onFinished = {
-                appStage = AUTH_WELCOME_STAGE
+                if (!api.hasSavedSession) {
+                    appStage = AUTH_WELCOME_STAGE
+                } else {
+                    coroutineScope.launch {
+                        api.getCurrentUser().fold(
+                            onSuccess = { user ->
+                                signedInEmail = user.email
+                                signedInFullName = user.fullName
+                                signedInRole = user.role
+                                savedReports = localReportRepository.getReports(user.email)
+                                currentScreen = HOME_SCREEN
+                                appStage = APP_STAGE
+                            },
+                            onFailure = {
+                                appStage = AUTH_WELCOME_STAGE
+                            }
+                        )
+                    }
+                }
             }
         )
         return
@@ -441,9 +459,7 @@ fun OneAquaHealthApp() {
 
                     if (
                         photoUri != null &&
-                        categoryName != null &&
-                        latitude != null &&
-                        longitude != null
+                        categoryName != null
                     ) {
                         ReportReviewScreen(
                             photoUri = photoUri,
@@ -560,23 +576,45 @@ private fun Throwable.toAuthenticationMessage(defaultMessage: String): String = 
 }
 
 private fun mergeReports(
+    ownerEmail: String,
     localReports: List<SavedCitizenReport>,
     remoteReports: List<CitizenReport>
 ): List<SavedCitizenReport> {
-    val remoteById = remoteReports.associateBy { it.id }
-    return localReports.map { localReport ->
-        val remoteReport = remoteById[localReport.id] ?: return@map localReport
-        localReport.copy(
+    val localById = localReports.associateBy { it.id }
+    val remoteIds = remoteReports.mapTo(mutableSetOf()) { it.id }
+    val syncedRemoteReports = remoteReports.map { remoteReport ->
+        val localReport = localById[remoteReport.id]
+        SavedCitizenReport(
+            id = remoteReport.id,
+            ownerEmail = ownerEmail,
             category = remoteReport.category.toCategoryLabel(),
             note = remoteReport.note,
             latitude = remoteReport.latitude,
             longitude = remoteReport.longitude,
+            submittedAtMillis = localReport?.submittedAtMillis
+                ?: remoteReport.timestamp.toReportEpochMillis(),
             aiValidationStatus = remoteReport.aiValidationStatus,
             aiMatchScore = remoteReport.aiMatchScore,
-            photoUrl = remoteReport.photoUrl
+            photoUrl = remoteReport.photoUrl,
+            aiExplanation = remoteReport.aiExplanation,
+            fhirObservationId = remoteReport.fhirObservationId
         )
-    }.sortedByDescending { it.submittedAtMillis }
+    }
+    val localOnlyReports = localReports.filterNot { it.id in remoteIds }
+    return (syncedRemoteReports + localOnlyReports)
+        .sortedByDescending { it.submittedAtMillis }
 }
+
+private fun String.toReportEpochMillis(): Long =
+    runCatching { java.time.Instant.parse(this).toEpochMilli() }
+        .recoverCatching { java.time.OffsetDateTime.parse(this).toInstant().toEpochMilli() }
+        .recoverCatching {
+            java.time.LocalDateTime.parse(this)
+                .atZone(java.time.ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli()
+        }
+        .getOrDefault(0L)
 
 private fun String.toCategoryLabel(): String = when (uppercase()) {
     "BULANIK", "BULANIK_SU" -> "Turbid water"

@@ -78,7 +78,7 @@ fun ReportStatusScreen(
                 ResultRow(label = "Status", value = presentation.statusLabel)
                 aiMatchScore?.let { matchScore ->
                     ResultRow(
-                        label = "AI match",
+                        label = "AI confidence",
                         value = String.format(
                             Locale.US,
                             "%.0f%%",

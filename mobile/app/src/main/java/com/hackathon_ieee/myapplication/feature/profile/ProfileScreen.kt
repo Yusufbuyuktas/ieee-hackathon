@@ -243,13 +243,23 @@ private fun ReportDetails(
         )
         DetailField("Status", presentation.label, presentation.color)
         report.aiMatchScore?.let {
-            DetailField("Photo match", formatMatchScore(it))
+            DetailField("AI confidence", formatMatchScore(it))
+        }
+        report.aiExplanation?.takeIf { it.isNotBlank() }?.let {
+            DetailField("AI explanation", it)
         }
         DetailField("Submitted", formatReportDate(report.submittedAtMillis))
         DetailField("Report ID", report.id)
+        report.fhirObservationId?.takeIf { it.isNotBlank() }?.let {
+            DetailField("FHIR observation ID", it)
+        }
         DetailField(
             "Location",
-            String.format(Locale.US, "%.6f, %.6f", report.latitude, report.longitude)
+            if (report.latitude != null && report.longitude != null) {
+                String.format(Locale.US, "%.6f, %.6f", report.latitude, report.longitude)
+            } else {
+                "Not provided"
+            }
         )
         DetailField("Note", report.note.ifBlank { "No additional note." })
         Spacer(modifier = Modifier.height(4.dp))

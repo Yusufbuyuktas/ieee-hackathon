@@ -76,9 +76,11 @@ data class CitizenReport(
     val photoUrl: String?,
     val category: String,
     val note: String,
-    val latitude: Double,
-    val longitude: Double,
+    val latitude: Double?,
+    val longitude: Double?,
     val timestamp: String,
     val aiValidationStatus: String,
-    val aiMatchScore: Double?
+    val aiMatchScore: Double?,
+    val aiExplanation: String?,
+    val fhirObservationId: String?
 )

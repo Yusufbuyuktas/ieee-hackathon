@@ -1,6 +1,7 @@
 package com.hackathon_ieee.myapplication.core.network
 
 import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
 import com.hackathon_ieee.myapplication.BuildConfig
 import kotlinx.coroutines.Dispatchers
@@ -14,10 +15,19 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 class RiverGuardApi(
+    context: Context,
     private val baseUrl: String = BuildConfig.API_BASE_URL
 ) {
+    private val sessionPreferences = context.applicationContext.getSharedPreferences(
+        "riverguard_auth_session",
+        Context.MODE_PRIVATE
+    )
+
     @Volatile
-    private var sessionCookie: String? = null
+    private var sessionCookie: String? = sessionPreferences.getString(SESSION_COOKIE_KEY, null)
+
+    val hasSavedSession: Boolean
+        get() = !sessionCookie.isNullOrBlank()
 
     suspend fun register(
         fullName: String,
@@ -27,7 +37,6 @@ class RiverGuardApi(
         postJsonObject(
             path = "/api/auth/register",
             payload = JSONObject().apply {
-                put("fullName", fullName.trim())
                 put("full_name", fullName.trim())
                 put("email", email.trim())
                 put("password", password)
@@ -44,6 +53,14 @@ class RiverGuardApi(
         loginRequest(email = email, password = password)
     }
 
+    suspend fun getCurrentUser(): Result<AuthUser> = runCatching {
+        getJsonObject("/api/auth/me").toAuthUser()
+    }.onFailure { error ->
+        if (error is ApiException && error.statusCode in setOf(401, 403)) {
+            clearSession()
+        }
+    }
+
     suspend fun logout(): Result<Unit> = runCatching {
         try {
             postJsonObject(
@@ -51,7 +68,7 @@ class RiverGuardApi(
                 payload = JSONObject()
             )
         } finally {
-            sessionCookie = null
+            clearSession()
         }
         Unit
     }
@@ -142,7 +159,7 @@ class RiverGuardApi(
     }
 
     suspend fun getCitizenReports(): Result<List<CitizenReport>> = runCatching {
-        val response = getJsonObject("/api/citizen-reports")
+        val response = getJsonObject("/api/citizen-reports/my")
         response.getJSONArray("results").mapObjects { item ->
             val validationStatus = item.optString("ai_validation_status")
             CitizenReport(
@@ -150,11 +167,13 @@ class RiverGuardApi(
                 photoUrl = item.nullableString("photo_url")?.toAbsoluteUrl(),
                 category = item.optString("category"),
                 note = item.optString("note"),
-                latitude = item.optDouble("latitude"),
-                longitude = item.optDouble("longitude"),
+                latitude = item.nullableDouble("latitude"),
+                longitude = item.nullableDouble("longitude"),
                 timestamp = item.optString("timestamp"),
                 aiValidationStatus = validationStatus,
-                aiMatchScore = item.toMatchScore(validationStatus)
+                aiMatchScore = item.toMatchScore(),
+                aiExplanation = item.nullableString("ai_explanation"),
+                fhirObservationId = item.nullableString("fhir_observation_id")
             )
         }
     }
@@ -164,8 +183,8 @@ class RiverGuardApi(
         photoUri: Uri,
         category: String,
         note: String,
-        latitude: Double,
-        longitude: Double,
+        latitude: Double?,
+        longitude: Double?,
         timestamp: String
     ): Result<CitizenReportSubmission> = runCatching {
         postCitizenReport(
@@ -184,8 +203,8 @@ class RiverGuardApi(
         photoUri: Uri,
         category: String,
         note: String,
-        latitude: Double,
-        longitude: Double,
+        latitude: Double?,
+        longitude: Double?,
         timestamp: String
     ): CitizenReportSubmission = withContext(Dispatchers.IO) {
         val boundary = "RiverGuardBoundary${System.currentTimeMillis()}"
@@ -209,8 +228,8 @@ class RiverGuardApi(
             DataOutputStream(connection.outputStream).use { output ->
                 output.writeTextPart(boundary, "category", category)
                 output.writeTextPart(boundary, "note", note)
-                output.writeTextPart(boundary, "latitude", latitude.toString())
-                output.writeTextPart(boundary, "longitude", longitude.toString())
+                latitude?.let { output.writeTextPart(boundary, "latitude", it.toString()) }
+                longitude?.let { output.writeTextPart(boundary, "longitude", it.toString()) }
                 output.writeTextPart(boundary, "timestamp", timestamp)
 
                 val preparedPhoto = contentResolver.preparePhotoUpload(photoUri)
@@ -246,7 +265,7 @@ class RiverGuardApi(
             CitizenReportSubmission(
                 id = response.getString("id"),
                 aiValidationStatus = validationStatus,
-                aiMatchScore = response.toMatchScore(validationStatus)
+                aiMatchScore = response.toMatchScore()
             )
         } finally {
             connection.disconnect()
@@ -326,7 +345,7 @@ class RiverGuardApi(
             }
 
             if (captureSession) {
-                sessionCookie = connection.headerFields.entries
+                val cookie = connection.headerFields.entries
                     .firstOrNull { (name, _) -> name?.equals("Set-Cookie", ignoreCase = true) == true }
                     ?.value
                     ?.firstOrNull()
@@ -336,6 +355,8 @@ class RiverGuardApi(
                         statusCode = responseCode,
                         message = "The server did not create a login session."
                     )
+                sessionCookie = cookie
+                sessionPreferences.edit().putString(SESSION_COOKIE_KEY, cookie).apply()
             }
 
             JSONObject(responseBody)
@@ -348,6 +369,15 @@ class RiverGuardApi(
         sessionCookie?.let { cookie ->
             connection.setRequestProperty("Cookie", cookie)
         }
+    }
+
+    private fun clearSession() {
+        sessionCookie = null
+        sessionPreferences.edit().remove(SESSION_COOKIE_KEY).apply()
+    }
+
+    private companion object {
+        const val SESSION_COOKIE_KEY = "session_cookie"
     }
 
     private fun String.toAbsoluteUrl(): String = when {
@@ -438,16 +468,9 @@ private fun JSONObject.nullableInt(name: String): Int? =
 private fun JSONObject.nullableString(name: String): String? =
     if (has(name) && !isNull(name)) getString(name) else null
 
-private fun JSONObject.toMatchScore(validationStatus: String): Double? {
+private fun JSONObject.toMatchScore(): Double? {
     nullableDouble("confidence_score")?.let { return it }
     nullableDouble("ai_match_score")?.let { return it }
     nullableDouble("aiMatchScore")?.let { return it }
-
-    return nullableDouble("ai_confidence")?.let { confidence ->
-        if (validationStatus == "INCELEMEDE" && confidence >= 0.80) {
-            1.0 - confidence
-        } else {
-            confidence
-        }
-    }
+    return nullableDouble("ai_confidence")
 }

@@ -9,12 +9,14 @@ data class SavedCitizenReport(
     val ownerEmail: String,
     val category: String,
     val note: String,
-    val latitude: Double,
-    val longitude: Double,
+    val latitude: Double?,
+    val longitude: Double?,
     val submittedAtMillis: Long,
     val aiValidationStatus: String,
     val aiMatchScore: Double?,
-    val photoUrl: String? = null
+    val photoUrl: String? = null,
+    val aiExplanation: String? = null,
+    val fhirObservationId: String? = null
 )
 
 class LocalReportRepository(context: Context) {
@@ -52,12 +54,14 @@ class LocalReportRepository(context: Context) {
                     .put("owner_email", item.ownerEmail)
                     .put("category", item.category)
                     .put("note", item.note)
-                    .put("latitude", item.latitude)
-                    .put("longitude", item.longitude)
+                    .put("latitude", item.latitude ?: JSONObject.NULL)
+                    .put("longitude", item.longitude ?: JSONObject.NULL)
                     .put("submitted_at_millis", item.submittedAtMillis)
                     .put("ai_validation_status", item.aiValidationStatus)
                     .put("ai_match_score", item.aiMatchScore ?: JSONObject.NULL)
                     .put("photo_url", item.photoUrl ?: JSONObject.NULL)
+                    .put("ai_explanation", item.aiExplanation ?: JSONObject.NULL)
+                    .put("fhir_observation_id", item.fhirObservationId ?: JSONObject.NULL)
             )
         }
 
@@ -77,15 +81,14 @@ class LocalReportRepository(context: Context) {
                         ownerEmail = item.getString("owner_email"),
                         category = item.getString("category"),
                         note = item.optString("note"),
-                        latitude = item.getDouble("latitude"),
-                        longitude = item.getDouble("longitude"),
+                        latitude = item.optionalDouble("latitude"),
+                        longitude = item.optionalDouble("longitude"),
                         submittedAtMillis = item.getLong("submitted_at_millis"),
                         aiValidationStatus = item.getString("ai_validation_status"),
                         aiMatchScore = when {
                             item.has("ai_match_score") && !item.isNull("ai_match_score") ->
                                 item.getDouble("ai_match_score")
-                            item.optString("ai_validation_status") == "ONAYLANDI" &&
-                                item.has("ai_confidence") && !item.isNull("ai_confidence") ->
+                            item.has("ai_confidence") && !item.isNull("ai_confidence") ->
                                 item.getDouble("ai_confidence")
                             else -> null
                         },
@@ -95,7 +98,9 @@ class LocalReportRepository(context: Context) {
                             item.getString("photo_url")
                         } else {
                             null
-                        }
+                        },
+                        aiExplanation = item.optionalString("ai_explanation"),
+                        fhirObservationId = item.optionalString("fhir_observation_id")
                     )
                 )
             }
@@ -106,3 +111,9 @@ class LocalReportRepository(context: Context) {
         const val REPORTS_KEY = "reports"
     }
 }
+
+private fun JSONObject.optionalString(name: String): String? =
+    if (has(name) && !isNull(name)) getString(name) else null
+
+private fun JSONObject.optionalDouble(name: String): Double? =
+    if (has(name) && !isNull(name)) getDouble(name) else null

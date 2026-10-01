@@ -45,15 +45,15 @@ import java.util.Locale
 fun ReportReviewScreen(
     photoUri: String,
     category: ReportCategory,
-    latitude: Double,
-    longitude: Double,
+    latitude: Double?,
+    longitude: Double?,
     note: String,
     onEdit: () -> Unit,
     onSubmitted: (CitizenReportSubmission) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val api = remember { RiverGuardApi() }
+    val api = remember(context) { RiverGuardApi(context) }
     val coroutineScope = rememberCoroutineScope()
     var isSubmitting by rememberSaveable { mutableStateOf(false) }
     var submissionError by rememberSaveable { mutableStateOf<String?>(null) }
@@ -91,10 +91,18 @@ fun ReportReviewScreen(
         }
 
         ReviewCard(title = "Location") {
-            LocationMap(
-                latitude = latitude,
-                longitude = longitude
-            )
+            if (latitude != null && longitude != null) {
+                LocationMap(
+                    latitude = latitude,
+                    longitude = longitude
+                )
+            } else {
+                Text(
+                    text = "Not provided",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
 
         ReviewCard(title = "Additional note") {
