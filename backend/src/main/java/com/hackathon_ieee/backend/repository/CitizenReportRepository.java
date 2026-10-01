@@ -6,5 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CitizenReportRepository extends JpaRepository<CitizenReportEntity, String> {
-	List<CitizenReportEntity> findAllByOrderByTimestampDesc();
+
+    List<CitizenReportEntity> findAllByOrderByTimestampDesc();
+
+    List<CitizenReportEntity> findByUserIdOrderByTimestampDesc(String userId);
 }

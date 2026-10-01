@@ -224,7 +224,13 @@ def test_moderation_endpoint(
 
     assert data["moderation_status"] == expected
 
-    assert data["guven_skoru"] == confidence
+    assert data["confidence_score"] == confidence
+
+    assert data["category"] == category
+    
+    assert data["explanation"] == "Test değerlendirmesi."
+    
+    assert "model" in data
 
     assert data["model"] == main.GEMINI_MODEL
 

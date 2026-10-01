@@ -116,12 +116,14 @@ class PhotoValidationResponse(BaseModel):
 
 class ModerationResponse(BaseModel):
 
-    guven_skoru: float = Field(
+    category: ReportCategory
+
+    confidence_score: float = Field(
         ge=0.0,
         le=1.0
     )
 
-    aciklama: str
+    explanation: str
 
     moderation_status: ModerationStatus
 
@@ -520,8 +522,9 @@ async def moderate_photo(
 
     # Backend'e sonucu döndür
     return ModerationResponse(
-    guven_skoru=result.guven_skoru,
-    aciklama=result.aciklama,
+    category=request.category,
+    confidence_score=result.guven_skoru,
+    explanation=result.aciklama,
     moderation_status=status,
     model=GEMINI_MODEL
     )

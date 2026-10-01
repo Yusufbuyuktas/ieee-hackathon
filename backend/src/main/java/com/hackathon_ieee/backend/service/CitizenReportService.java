@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+import com.hackathon_ieee.backend.model.UserEntity;
 
 import java.util.Locale;
 import java.util.List;
@@ -25,9 +26,10 @@ public class CitizenReportService {
     private final FileStorageService fileStorageService;
     private final AiModerationClient aiModerationClient;
     private final FhirClientService fhirClientService;
+    private final AuthService authService;
 
     public CitizenReportResponse create(MultipartFile photo, String categoryValue, String note,
-            Double latitude, Double longitude, String timestamp) {
+            Double latitude, Double longitude, String timestamp,String userEmail) {
         CitizenReportCategory category = parseCategory(categoryValue);
         if (timestamp == null || timestamp.isBlank()) {
             throw new IllegalArgumentException("timestamp is required");
@@ -37,6 +39,8 @@ public class CitizenReportService {
         CitizenReportEntity entity = new CitizenReportEntity(
                 "cit-" + UUID.randomUUID(), "/uploads/" + filename, category,
                 note, latitude, longitude, timestamp);
+        UserEntity user = authService.findByEmail(userEmail);
+        entity.setUser(user);
 
         AiModerationClient.Result aiResult = aiModerationClient.moderate(filename, aiCategory(category));
         if (aiResult == null) {
@@ -61,6 +65,19 @@ public class CitizenReportService {
                         entity.getLatitude(), entity.getLongitude(), entity.getTimestamp(),
                         entity.getAiValidationStatus(), entity.getAiConfidence(), entity.getAiExplanation(),
                         entity.getFhirObservationId()))
+                .toList();
+    }
+
+    public List<CitizenReportListItemDto> findMine(String userEmail) {
+
+        UserEntity user = authService.findByEmail(userEmail);
+
+        return repository.findByUserIdOrderByTimestampDesc(user.getId()).stream()
+                .map(entity -> new CitizenReportListItemDto(
+                        entity.getId(), entity.getPhotoUrl(), entity.getCategory(),
+                        entity.getNote(), entity.getLatitude(), entity.getLongitude(),
+                        entity.getTimestamp(), entity.getAiValidationStatus(), entity.getAiConfidence(),
+                        entity.getAiExplanation(), entity.getFhirObservationId()))
                 .toList();
     }
 
