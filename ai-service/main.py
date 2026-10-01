@@ -350,7 +350,7 @@ Kurallar:
    Bu değer bilimsel olarak kalibre
    edilmiş bir olasılık değildir.
 
-10. Açıklamanı kısa ve Türkçe yaz.
+10. Write the explanation briefly and in English.
 
 Yalnızca belirtilen JSON şemasına
 uygun cevap üret.

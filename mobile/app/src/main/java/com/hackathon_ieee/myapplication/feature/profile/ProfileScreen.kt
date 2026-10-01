@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -164,7 +165,10 @@ fun ProfileScreen(
         ) {
             ReportDetails(
                 report = report,
-                modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 32.dp)
+                modifier = Modifier
+                    .fillMaxHeight(0.92f)
+                    .verticalScroll(rememberScrollState())
+                    .padding(start = 24.dp, end = 24.dp, bottom = 32.dp)
             )
         }
     }
