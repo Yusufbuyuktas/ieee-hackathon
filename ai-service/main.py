@@ -3,6 +3,7 @@ import io
 import os
 
 from enum import Enum
+from unicodedata import category
 from urllib.parse import urlparse
 
 import httpx
@@ -405,16 +406,16 @@ def analyze_photo(
 # 7. MODERASYON KARAR MEKANİZMASI
 # ==========================================
 
-def determine_moderation_status(
-    result: PhotoValidationResponse
-) -> ModerationStatus:
+def determine_moderation_status(result, category):
+    # Kötü koku fotoğraftan doğrudan doğrulanamaz.
+    # Bu nedenle düşük görsel güven, tek başına tutarsızlık sayılmaz.
+    if category == "kotu_koku":
+        return ModerationStatus.REVIEW
 
     if result.guven_skoru >= 0.80:
-
         return ModerationStatus.APPROVED
 
     if result.guven_skoru >= 0.50:
-
         return ModerationStatus.REVIEW
 
     return ModerationStatus.INCONSISTENT
@@ -513,7 +514,8 @@ async def moderate_photo(
 
     # Moderasyon durumunu belirle
     status = determine_moderation_status(
-    result=result
+        result=result,
+        category=request.category
     )
 
     # Backend'e sonucu döndür
