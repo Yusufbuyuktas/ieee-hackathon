@@ -41,6 +41,7 @@ import com.hackathon_ieee.myapplication.feature.report.presentation.ReportFormSc
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportReviewScreen
 import com.hackathon_ieee.myapplication.feature.report.presentation.ReportStatusScreen
 import com.hackathon_ieee.myapplication.core.network.CitizenReport
+import com.hackathon_ieee.myapplication.core.network.ApiException
 import com.hackathon_ieee.myapplication.core.network.RiverGuardApi
 import com.hackathon_ieee.myapplication.core.storage.LocalReportRepository
 import com.hackathon_ieee.myapplication.core.storage.SavedCitizenReport
@@ -78,8 +79,26 @@ fun OneAquaHealthApp() {
     var signedInEmail by rememberSaveable {
         mutableStateOf("")
     }
+    var signedInFullName by rememberSaveable {
+        mutableStateOf("")
+    }
+    var signedInRole by rememberSaveable {
+        mutableStateOf("")
+    }
+    var authenticationError by rememberSaveable {
+        mutableStateOf<String?>(null)
+    }
+    var isAuthenticating by remember {
+        mutableStateOf(false)
+    }
     var currentScreen by rememberSaveable {
         mutableStateOf(HOME_SCREEN)
+    }
+    var isShowingAllLocations by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var isHomeDetailVisible by rememberSaveable {
+        mutableStateOf(false)
     }
     val screenStateHolder = rememberSaveableStateHolder()
 
@@ -172,9 +191,11 @@ fun OneAquaHealthApp() {
     if (appStage == AUTH_WELCOME_STAGE) {
         AuthWelcomeScreen(
             onLogin = {
+                authenticationError = null
                 appStage = LOGIN_STAGE
             },
             onRegister = {
+                authenticationError = null
                 appStage = REGISTER_STAGE
             }
         )
@@ -187,16 +208,39 @@ fun OneAquaHealthApp() {
         }
         LoginScreen(
             onBack = {
+                authenticationError = null
                 appStage = AUTH_WELCOME_STAGE
             },
             onRegister = {
+                authenticationError = null
                 appStage = REGISTER_STAGE
             },
-            onSignIn = { email ->
-                signedInEmail = email
-                savedReports = localReportRepository.getReports(email)
-                currentScreen = HOME_SCREEN
-                appStage = APP_STAGE
+            onSignIn = { email, password ->
+                coroutineScope.launch {
+                    isAuthenticating = true
+                    authenticationError = null
+                    api.login(email = email, password = password).fold(
+                        onSuccess = { user ->
+                            signedInEmail = user.email
+                            signedInFullName = user.fullName
+                            signedInRole = user.role
+                            savedReports = localReportRepository.getReports(user.email)
+                            currentScreen = HOME_SCREEN
+                            appStage = APP_STAGE
+                        },
+                        onFailure = { error ->
+                            authenticationError = error.toAuthenticationMessage(
+                                defaultMessage = "Sign in failed. Please try again."
+                            )
+                        }
+                    )
+                    isAuthenticating = false
+                }
+            },
+            isSubmitting = isAuthenticating,
+            authenticationError = authenticationError,
+            onInputChanged = {
+                authenticationError = null
             }
         )
         return
@@ -208,16 +252,43 @@ fun OneAquaHealthApp() {
         }
         RegisterScreen(
             onBack = {
+                authenticationError = null
                 appStage = AUTH_WELCOME_STAGE
             },
             onLogin = {
+                authenticationError = null
                 appStage = LOGIN_STAGE
             },
-            onRegistered = { email ->
-                signedInEmail = email
-                savedReports = localReportRepository.getReports(email)
-                currentScreen = HOME_SCREEN
-                appStage = APP_STAGE
+            onRegistered = { fullName, email, password ->
+                coroutineScope.launch {
+                    isAuthenticating = true
+                    authenticationError = null
+                    api.register(
+                        fullName = fullName,
+                        email = email,
+                        password = password
+                    ).fold(
+                        onSuccess = { user ->
+                            signedInEmail = user.email
+                            signedInFullName = user.fullName
+                            signedInRole = user.role
+                            savedReports = localReportRepository.getReports(user.email)
+                            currentScreen = HOME_SCREEN
+                            appStage = APP_STAGE
+                        },
+                        onFailure = { error ->
+                            authenticationError = error.toAuthenticationMessage(
+                                defaultMessage = "Account creation failed. Please try again."
+                            )
+                        }
+                    )
+                    isAuthenticating = false
+                }
+            },
+            isSubmitting = isAuthenticating,
+            registrationError = authenticationError,
+            onInputChanged = {
+                authenticationError = null
             }
         )
         return
@@ -237,67 +308,82 @@ fun OneAquaHealthApp() {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            Surface(
-                modifier = Modifier.zIndex(1f),
-                shape = RoundedCornerShape(
-                    bottomStart = 20.dp,
-                    bottomEnd = 20.dp
-                ),
-                color = MaterialTheme.colorScheme.surface,
-                shadowElevation = 15.dp
+            if (
+                !(currentScreen == HOME_SCREEN && isHomeDetailVisible)
             ) {
-                TopAppBar(
-                    modifier = Modifier.height(100.dp),
-                    title = {
-                        if (
-                            currentScreen == HOME_SCREEN ||
-                            currentScreen == MAP_SCREEN ||
-                            currentScreen == PROFILE_SCREEN ||
-                            currentScreen == MORE_SCREEN
-                        ) {
-                            RiverGuardWordmark(
-                                modifier = Modifier.width(180.dp)
-                            )
-                        } else {
-                            Text(
-                                text = when (currentScreen) {
-                                    REPORT_REVIEW_SCREEN -> "Review Report"
-                                    REPORT_STATUS_SCREEN -> "Report Status"
-                                    else -> "New Report"
-                                },
-                                style = MaterialTheme.typography.headlineSmall,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent,
-                        titleContentColor = MaterialTheme.colorScheme.onBackground,
-                        navigationIconContentColor = MaterialTheme.colorScheme.primary
+                Surface(
+                    modifier = Modifier.zIndex(1f),
+                    shape = RoundedCornerShape(
+                        bottomStart = 20.dp,
+                        bottomEnd = 20.dp
                     ),
-                    navigationIcon = {
-                        if (currentScreen == REPORT_REVIEW_SCREEN) {
-                            IconButton(
-                                onClick = {
-                                    currentScreen = REPORT_FORM_SCREEN
-                                }
+                    color = MaterialTheme.colorScheme.surface,
+                    shadowElevation = 15.dp
+                ) {
+                    TopAppBar(
+                        modifier = Modifier.height(100.dp),
+                        title = {
+                            if (
+                                currentScreen == HOME_SCREEN ||
+                                (currentScreen == MAP_SCREEN && !isShowingAllLocations) ||
+                                currentScreen == PROFILE_SCREEN ||
+                                currentScreen == MORE_SCREEN
                             ) {
-                                ThickBackIcon()
+                                RiverGuardWordmark(
+                                    modifier = Modifier.width(180.dp)
+                                )
+                            } else {
+                                Text(
+                                    text = when (currentScreen) {
+                                        MAP_SCREEN -> "Monitoring Locations"
+                                        REPORT_REVIEW_SCREEN -> "Review Report"
+                                        REPORT_STATUS_SCREEN -> "Report Status"
+                                        else -> "New Report"
+                                    },
+                                    style = MaterialTheme.typography.titleLarge,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.White
+                                )
+                            }
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color.Transparent,
+                            titleContentColor = MaterialTheme.colorScheme.onBackground,
+                            navigationIconContentColor = Color.White
+                        ),
+                        navigationIcon = {
+                            if (
+                                currentScreen == REPORT_REVIEW_SCREEN ||
+                                (currentScreen == MAP_SCREEN && isShowingAllLocations)
+                            ) {
+                                IconButton(
+                                    onClick = {
+                                        if (currentScreen == MAP_SCREEN) {
+                                            isShowingAllLocations = false
+                                        } else {
+                                            currentScreen = REPORT_FORM_SCREEN
+                                        }
+                                    }
+                                ) {
+                                    ThickBackIcon(color = Color.White)
+                                }
                             }
                         }
-                    }
-                )
+                    )
+                }
             }
         },
         bottomBar = {
             if (
                 currentScreen != REPORT_REVIEW_SCREEN &&
-                currentScreen != REPORT_STATUS_SCREEN
+                currentScreen != REPORT_STATUS_SCREEN &&
+                !(currentScreen == HOME_SCREEN && isHomeDetailVisible)
             ) {
                 RiverBottomBar(
                     selectedDestination = currentScreen.toBottomDestination(),
                     onDestinationSelected = { destination ->
+                        isShowingAllLocations = false
+                        isHomeDetailVisible = false
                         currentScreen = destination.toScreenName()
                     }
                 )
@@ -313,12 +399,22 @@ fun OneAquaHealthApp() {
             when (currentScreen) {
                 HOME_SCREEN -> {
                     HomeScreen(
-                        modifier = Modifier.padding(innerPadding)
+                        onDetailVisibilityChanged = { isHomeDetailVisible = it },
+                        onReportClick = { currentScreen = REPORT_FORM_SCREEN },
+                        modifier = if (isHomeDetailVisible) {
+                            Modifier.padding(bottom = innerPadding.calculateBottomPadding())
+                        } else {
+                            Modifier.padding(innerPadding)
+                        }
                     )
                 }
 
                 MAP_SCREEN -> {
                     RiskMapScreen(
+                        api = api,
+                        userRole = signedInRole,
+                        showAllLocations = isShowingAllLocations,
+                        onShowAllLocationsChange = { isShowingAllLocations = it },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -410,7 +506,9 @@ fun OneAquaHealthApp() {
 
                 PROFILE_SCREEN -> {
                     ProfileScreen(
+                        fullName = signedInFullName,
                         email = signedInEmail,
+                        role = signedInRole,
                         reports = savedReports,
                         isRefreshing = isReportsRefreshing,
                         refreshMessage = reportsRefreshMessage,
@@ -420,7 +518,13 @@ fun OneAquaHealthApp() {
                             }
                         },
                         onLogout = {
+                            coroutineScope.launch {
+                                api.logout()
+                            }
                             signedInEmail = ""
+                            signedInFullName = ""
+                            signedInRole = ""
+                            authenticationError = null
                             savedReports = emptyList()
                             reportsRefreshMessage = null
                             currentScreen = HOME_SCREEN
@@ -438,6 +542,21 @@ fun OneAquaHealthApp() {
             }
         }
     }
+}
+
+private fun Throwable.toAuthenticationMessage(defaultMessage: String): String = when (this) {
+    is ApiException -> when (statusCode) {
+        400 -> message ?: "Please check the information you entered."
+        401 -> "Incorrect email or password."
+        409 -> "An account with this email already exists."
+        else -> message ?: defaultMessage
+    }
+
+    is java.net.ConnectException,
+    is java.net.SocketTimeoutException,
+    is java.net.UnknownHostException -> "Could not connect to RiverGuard. Please try again."
+
+    else -> defaultMessage
 }
 
 private fun mergeReports(

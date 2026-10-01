@@ -16,6 +16,61 @@ import java.nio.charset.StandardCharsets
 class RiverGuardApi(
     private val baseUrl: String = BuildConfig.API_BASE_URL
 ) {
+    @Volatile
+    private var sessionCookie: String? = null
+
+    suspend fun register(
+        fullName: String,
+        email: String,
+        password: String
+    ): Result<AuthUser> = runCatching {
+        postJsonObject(
+            path = "/api/auth/register",
+            payload = JSONObject().apply {
+                put("fullName", fullName.trim())
+                put("full_name", fullName.trim())
+                put("email", email.trim())
+                put("password", password)
+            }
+        )
+
+        loginRequest(email = email, password = password)
+    }
+
+    suspend fun login(
+        email: String,
+        password: String
+    ): Result<AuthUser> = runCatching {
+        loginRequest(email = email, password = password)
+    }
+
+    suspend fun logout(): Result<Unit> = runCatching {
+        try {
+            postJsonObject(
+                path = "/api/auth/logout",
+                payload = JSONObject()
+            )
+        } finally {
+            sessionCookie = null
+        }
+        Unit
+    }
+
+    private suspend fun loginRequest(
+        email: String,
+        password: String
+    ): AuthUser {
+        val response = postJsonObject(
+            path = "/api/auth/login",
+            payload = JSONObject().apply {
+                put("email", email.trim())
+                put("password", password)
+            },
+            captureSession = true
+        )
+        return response.toAuthUser()
+    }
+
     suspend fun getLocations(): Result<List<MonitoringLocation>> = runCatching {
         val response = getJsonObject("/api/locations")
         response.getJSONArray("locations").mapObjects { item ->
@@ -145,6 +200,7 @@ class RiverGuardApi(
             connection.readTimeout = 120_000
             connection.setChunkedStreamingMode(0)
             connection.setRequestProperty("Accept", "application/json")
+            applySessionCookie(connection)
             connection.setRequestProperty(
                 "Content-Type",
                 "multipart/form-data; boundary=$boundary"
@@ -205,6 +261,7 @@ class RiverGuardApi(
             connection.connectTimeout = 8_000
             connection.readTimeout = 8_000
             connection.setRequestProperty("Accept", "application/json")
+            applySessionCookie(connection)
 
             val responseCode = connection.responseCode
             val responseBody = (
@@ -228,11 +285,95 @@ class RiverGuardApi(
         }
     }
 
+    private suspend fun postJsonObject(
+        path: String,
+        payload: JSONObject,
+        captureSession: Boolean = false
+    ): JSONObject = withContext(Dispatchers.IO) {
+        val connection = URL(baseUrl.trimEnd('/') + path).openConnection() as HttpURLConnection
+
+        try {
+            val requestBytes = payload.toString().toByteArray(StandardCharsets.UTF_8)
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.connectTimeout = 8_000
+            connection.readTimeout = 8_000
+            connection.setFixedLengthStreamingMode(requestBytes.size)
+            connection.setRequestProperty("Accept", "application/json")
+            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+            applySessionCookie(connection)
+
+            connection.outputStream.use { output ->
+                output.write(requestBytes)
+            }
+
+            val responseCode = connection.responseCode
+            val responseBody = (
+                if (responseCode in 200..299) {
+                    connection.inputStream
+                } else {
+                    connection.errorStream
+                }
+            )?.bufferedReader()?.use { reader -> reader.readText() }.orEmpty()
+
+            if (responseCode !in 200..299) {
+                throw ApiException(
+                    statusCode = responseCode,
+                    message = responseBody.toApiErrorMessage(
+                        fallback = "Request failed with HTTP $responseCode."
+                    )
+                )
+            }
+
+            if (captureSession) {
+                sessionCookie = connection.headerFields.entries
+                    .firstOrNull { (name, _) -> name?.equals("Set-Cookie", ignoreCase = true) == true }
+                    ?.value
+                    ?.firstOrNull()
+                    ?.substringBefore(';')
+                    ?.takeIf { it.isNotBlank() }
+                    ?: throw ApiException(
+                        statusCode = responseCode,
+                        message = "The server did not create a login session."
+                    )
+            }
+
+            JSONObject(responseBody)
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+    private fun applySessionCookie(connection: HttpURLConnection) {
+        sessionCookie?.let { cookie ->
+            connection.setRequestProperty("Cookie", cookie)
+        }
+    }
+
     private fun String.toAbsoluteUrl(): String = when {
         startsWith("http://") || startsWith("https://") -> this
         startsWith("/") -> baseUrl.trimEnd('/') + this
         else -> baseUrl.trimEnd('/') + "/" + this
     }
+}
+
+private fun JSONObject.toAuthUser(): AuthUser = AuthUser(
+    id = getString("id"),
+    fullName = optString("fullName").ifBlank { getString("full_name") },
+    email = getString("email"),
+    role = getString("role")
+)
+
+private fun String.toApiErrorMessage(fallback: String): String {
+    if (isBlank()) return fallback
+    return runCatching {
+        val response = JSONObject(this)
+        response.optString("detail").ifBlank {
+            response.optString("message").ifBlank {
+                response.optString("error").ifBlank { fallback }
+            }
+        }
+    }.getOrDefault(fallback)
 }
 
 private fun DataOutputStream.writeTextPart(

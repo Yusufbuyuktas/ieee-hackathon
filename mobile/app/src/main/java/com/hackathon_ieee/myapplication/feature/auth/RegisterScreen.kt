@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -31,13 +33,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.hackathon_ieee.myapplication.ui.components.PasswordVisibilityIcon
 import com.hackathon_ieee.myapplication.ui.components.SubtlePanel
-import com.hackathon_ieee.myapplication.ui.components.ThickBackIcon
 
 @Composable
 fun RegisterScreen(
     onBack: () -> Unit,
     onLogin: () -> Unit,
-    onRegistered: (String) -> Unit,
+    onRegistered: (String, String, String) -> Unit,
+    isSubmitting: Boolean,
+    registrationError: String?,
+    onInputChanged: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var fullName by rememberSaveable { mutableStateOf("") }
@@ -87,6 +91,7 @@ fun RegisterScreen(
                         onValueChange = {
                             fullName = it
                             showNameError = false
+                            onInputChanged()
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Full name") },
@@ -103,6 +108,7 @@ fun RegisterScreen(
                         onValueChange = {
                             email = it
                             showEmailError = false
+                            onInputChanged()
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Email") },
@@ -122,6 +128,7 @@ fun RegisterScreen(
                         onValueChange = {
                             password = it
                             showPasswordError = false
+                            onInputChanged()
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Password") },
@@ -150,28 +157,41 @@ fun RegisterScreen(
                         )
                     )
 
+                    if (registrationError != null) {
+                        Text(
+                            text = registrationError,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+
                     Button(
                         onClick = {
-                            showNameError = fullName.isBlank()
+                            val isNameValid = fullName.isNotBlank()
+                            val isPasswordValid = password.isNotBlank()
+                            showNameError = !isNameValid
                             showEmailError = !isEmailValid
-                            showPasswordError = password.isBlank()
+                            showPasswordError = !isPasswordValid
 
-                            if (!showNameError && !showEmailError && !showPasswordError) {
-                                onRegistered(normalizedEmail)
+                            if (isNameValid && isEmailValid && isPasswordValid) {
+                                onRegistered(fullName.trim(), normalizedEmail, password)
                             }
                         },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = !isSubmitting
                     ) {
-                        Text(text = "Create Citizen Account")
+                        if (isSubmitting) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                strokeWidth = 2.dp,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        } else {
+                            Text(text = "Create Citizen Account")
+                        }
                     }
                 }
             }
-
-            Text(
-                text = "Demo registration only. Your account will be connected when backend authentication is available.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -32,23 +34,22 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.hackathon_ieee.myapplication.ui.components.PasswordVisibilityIcon
 import com.hackathon_ieee.myapplication.ui.components.SubtlePanel
-import com.hackathon_ieee.myapplication.ui.components.ThickBackIcon
-
-private const val DEMO_EMAIL = "demo@rg.com"
-private const val DEMO_PASSWORD = "1234"
 
 @Composable
 fun LoginScreen(
     onBack: () -> Unit,
     onRegister: () -> Unit,
-    onSignIn: (String) -> Unit,
+    onSignIn: (String, String) -> Unit,
+    isSubmitting: Boolean,
+    authenticationError: String?,
+    onInputChanged: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var email by rememberSaveable {
-        mutableStateOf(DEMO_EMAIL)
+        mutableStateOf("")
     }
     var password by remember {
-        mutableStateOf(DEMO_PASSWORD)
+        mutableStateOf("")
     }
     var passwordVisible by rememberSaveable {
         mutableStateOf(false)
@@ -59,10 +60,6 @@ fun LoginScreen(
     var showPasswordError by remember {
         mutableStateOf(false)
     }
-    var authenticationError by remember {
-        mutableStateOf(false)
-    }
-
     val normalizedEmail = email.trim()
     val isEmailValid = normalizedEmail.contains("@") &&
         normalizedEmail.substringAfter("@").contains(".") &&
@@ -103,7 +100,7 @@ fun LoginScreen(
                         onValueChange = {
                             email = it
                             showEmailError = false
-                            authenticationError = false
+                            onInputChanged()
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Email") },
@@ -127,7 +124,7 @@ fun LoginScreen(
                         onValueChange = {
                             password = it
                             showPasswordError = false
-                            authenticationError = false
+                            onInputChanged()
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Password") },
@@ -160,9 +157,9 @@ fun LoginScreen(
                         )
                     )
 
-                    if (authenticationError) {
+                    if (authenticationError != null) {
                         Text(
-                            text = "Incorrect email or password.",
+                            text = authenticationError,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.error
                         )
@@ -174,29 +171,24 @@ fun LoginScreen(
                             showPasswordError = password.isBlank()
 
                             if (isEmailValid && password.isNotBlank()) {
-                                if (
-                                    normalizedEmail == DEMO_EMAIL &&
-                                    password == DEMO_PASSWORD
-                                ) {
-                                    authenticationError = false
-                                    onSignIn(normalizedEmail)
-                                } else {
-                                    authenticationError = true
-                                }
+                                onSignIn(normalizedEmail, password)
                             }
                         },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = !isSubmitting
                     ) {
-                        Text(text = "Sign In")
+                        if (isSubmitting) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                strokeWidth = 2.dp,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        } else {
+                            Text(text = "Sign In")
+                        }
                     }
                 }
             }
-
-            Text(
-                text = "Demo sign-in only. No credentials are sent or stored.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

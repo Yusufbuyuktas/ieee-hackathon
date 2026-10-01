@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.google.play.services.location)
     implementation(libs.maplibre.android)
     implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

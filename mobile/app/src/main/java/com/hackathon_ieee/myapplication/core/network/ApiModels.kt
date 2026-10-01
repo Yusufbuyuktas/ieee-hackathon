@@ -5,6 +5,13 @@ data class ApiCoordinates(
     val longitude: Double
 )
 
+data class AuthUser(
+    val id: String,
+    val fullName: String,
+    val email: String,
+    val role: String
+)
+
 data class MonitoringLocation(
     val name: String,
     val stationNo: Int?,

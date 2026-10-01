@@ -21,6 +21,8 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +48,9 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
+    fullName: String,
     email: String,
+    role: String,
     reports: List<SavedCitizenReport>,
     isRefreshing: Boolean,
     refreshMessage: String?,
@@ -55,106 +59,107 @@ fun ProfileScreen(
     modifier: Modifier = Modifier
 ) {
     var selectedReport by remember { mutableStateOf<SavedCitizenReport?>(null) }
+    val reportSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize()
     ) {
-        Surface(
-            modifier = Modifier.size(72.dp),
-            shape = CircleShape,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(contentAlignment = Alignment.Center) {
+            Surface(
+                modifier = Modifier.size(72.dp),
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Text(
+                        text = email.firstOrNull()?.uppercase() ?: "R",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 Text(
-                    text = email.firstOrNull()?.uppercase() ?: "R",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
+                    text = fullName.ifBlank { "RiverGuard Explorer" },
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Text(text = email, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    text = role.toRoleLabel(),
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-        }
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Text(
-                text = "RiverGuard Explorer",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.SemiBold
-            )
-            Text(text = email, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
                     text = "My Reports",
                     style = MaterialTheme.typography.titleMedium,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = androidx.compose.ui.graphics.Color.White
                 )
-                OutlinedButton(
-                    onClick = onRefresh,
-                    enabled = !isRefreshing
-                ) {
-                    Text(text = if (isRefreshing) "Refreshing…" else "Refresh")
+
+                refreshMessage?.let { message ->
+                    Text(
+                        text = message,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = RiverWarning
+                    )
                 }
-            }
 
-            refreshMessage?.let { message ->
-                Text(
-                    text = message,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = RiverWarning
-                )
-            }
-
-            if (reports.isEmpty()) {
-                SubtlePanel {
-                    Column(
-                        modifier = Modifier.padding(20.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Text(text = "No submitted reports yet.", fontSize = 15.sp)
-                        Text(
-                            text = "Reports submitted from this device will appear here.",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                if (reports.isEmpty()) {
+                    SubtlePanel {
+                        Column(
+                            modifier = Modifier.padding(20.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Text(text = "No submitted reports yet.", fontSize = 15.sp)
+                            Text(
+                                text = "Reports submitted from this device will appear here.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                } else {
+                    reports.forEach { report ->
+                        ReportListItem(
+                            report = report,
+                            onClick = { selectedReport = report }
                         )
                     }
                 }
-            } else {
-                reports.forEach { report ->
-                    ReportListItem(
-                        report = report,
-                        onClick = { selectedReport = report }
-                    )
-                }
             }
-        }
 
-        OutlinedButton(onClick = onLogout, modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Log Out")
+            OutlinedButton(onClick = onLogout, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Log Out")
+            }
         }
     }
 
     selectedReport?.let { report ->
         ModalBottomSheet(
             onDismissRequest = { selectedReport = null },
+            sheetState = reportSheetState,
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             ReportDetails(
@@ -176,17 +181,6 @@ private fun ReportListItem(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(7.dp)
         ) {
-            report.photoUrl?.let { photoUrl ->
-                AsyncImage(
-                    model = photoUrl,
-                    contentDescription = "Submitted report photo",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(132.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Crop
-                )
-            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -209,23 +203,11 @@ private fun ReportListItem(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = shortReportId(report.id),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                report.aiMatchScore?.let { matchScore ->
-                    Text(
-                        text = formatMatchScore(matchScore),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
+            Text(
+                text = "Tap to view report details",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
@@ -236,11 +218,12 @@ private fun ReportDetails(
     modifier: Modifier = Modifier
 ) {
     val presentation = report.aiValidationStatus.toReportStatus()
+    var photoLoadFailed by remember(report.photoUrl) { mutableStateOf(false) }
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        report.photoUrl?.let { photoUrl ->
+        report.photoUrl?.takeUnless { photoLoadFailed }?.let { photoUrl ->
             AsyncImage(
                 model = photoUrl,
                 contentDescription = "Submitted report photo",
@@ -248,7 +231,8 @@ private fun ReportDetails(
                     .fillMaxWidth()
                     .height(220.dp)
                     .clip(RoundedCornerShape(16.dp)),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                onError = { photoLoadFailed = true }
             )
         }
         Text(
@@ -324,5 +308,9 @@ private fun formatReportDate(timestamp: Long): String =
 private fun formatMatchScore(matchScore: Double): String =
     String.format(Locale.US, "%.0f%% match", matchScore.coerceIn(0.0, 1.0) * 100)
 
-private fun shortReportId(id: String): String =
-    if (id.length <= 20) id else "${id.take(12)}…${id.takeLast(6)}"
+private fun String.toRoleLabel(): String = when (this) {
+    "CITIZEN" -> "Citizen"
+    "DOCTOR" -> "Doctor"
+    "MUNICIPALITY_STAFF" -> "Municipality staff"
+    else -> replace('_', ' ').lowercase().replaceFirstChar { it.uppercase() }
+}
