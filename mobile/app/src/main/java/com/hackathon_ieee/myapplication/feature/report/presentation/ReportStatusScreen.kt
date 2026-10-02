@@ -34,9 +34,11 @@ fun ReportStatusScreen(
     aiValidationStatus: String,
     aiMatchScore: Double?,
     onBackHome: () -> Unit,
+    onSubmitAgain: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val presentation = aiValidationStatus.toStatusPresentation()
+    val requiresResubmission = aiValidationStatus == "AI_SERVISI_ERISILEMEDI"
 
     Column(
         modifier = modifier
@@ -65,26 +67,28 @@ fun ReportStatusScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        SubtlePanel {
-            Column(
-                modifier = Modifier.padding(18.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                ResultRow(
-                    label = "Report ID",
-                    value = reportId,
-                    singleLine = true
-                )
-                ResultRow(label = "Status", value = presentation.statusLabel)
-                aiMatchScore?.let { matchScore ->
+        if (!requiresResubmission) {
+            SubtlePanel {
+                Column(
+                    modifier = Modifier.padding(18.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
                     ResultRow(
-                        label = "AI confidence",
-                        value = String.format(
-                            Locale.US,
-                            "%.0f%%",
-                            matchScore.coerceIn(0.0, 1.0) * 100
-                        )
+                        label = "Report ID",
+                        value = reportId,
+                        singleLine = true
                     )
+                    ResultRow(label = "Status", value = presentation.statusLabel)
+                    aiMatchScore?.let { matchScore ->
+                        ResultRow(
+                            label = "AI confidence",
+                            value = String.format(
+                                Locale.US,
+                                "%.0f%%",
+                                matchScore.coerceIn(0.0, 1.0) * 100
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -92,10 +96,10 @@ fun ReportStatusScreen(
         Spacer(modifier = Modifier.height(28.dp))
 
         Button(
-            onClick = onBackHome,
+            onClick = if (requiresResubmission) onSubmitAgain else onBackHome,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Back to Home")
+            Text(if (requiresResubmission) "Submit Again" else "Back to Home")
         }
     }
 }
@@ -151,9 +155,9 @@ private fun String.toStatusPresentation(): StatusPresentation = when (this) {
         color = RiverDanger
     )
     "AI_SERVISI_ERISILEMEDI" -> StatusPresentation(
-        title = "Report Submitted",
-        statusLabel = "AI evaluation unavailable",
-        description = "Your observation was saved successfully, but automated evaluation is temporarily unavailable.",
+        title = "Please Try Again",
+        statusLabel = "Submission incomplete",
+        description = "We could not complete your report. Please submit it again.",
         color = RiverWarning
     )
     else -> StatusPresentation(
@@ -179,7 +183,8 @@ private fun ReportStatusScreenPreview() {
                 reportId = "cit-8f73b11d",
                 aiValidationStatus = "ONAYLANDI",
                 aiMatchScore = 0.87,
-                onBackHome = {}
+                onBackHome = {},
+                onSubmitAgain = {}
             )
         }
     }
@@ -200,7 +205,8 @@ private fun ReportStatusUnderReviewPreview() {
                 reportId = "cit-42c90ab1",
                 aiValidationStatus = "INCELEMEDE",
                 aiMatchScore = 0.64,
-                onBackHome = {}
+                onBackHome = {},
+                onSubmitAgain = {}
             )
         }
     }
@@ -221,7 +227,8 @@ private fun ReportStatusAiUnavailablePreview() {
                 reportId = "cit-71de903f",
                 aiValidationStatus = "AI_SERVISI_ERISILEMEDI",
                 aiMatchScore = null,
-                onBackHome = {}
+                onBackHome = {},
+                onSubmitAgain = {}
             )
         }
     }

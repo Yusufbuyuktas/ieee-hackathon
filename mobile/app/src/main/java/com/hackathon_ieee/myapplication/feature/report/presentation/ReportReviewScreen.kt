@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -21,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,8 +55,8 @@ fun ReportReviewScreen(
     val context = LocalContext.current
     val api = remember(context) { RiverGuardApi(context) }
     val coroutineScope = rememberCoroutineScope()
-    var isSubmitting by rememberSaveable { mutableStateOf(false) }
-    var submissionError by rememberSaveable { mutableStateOf<String?>(null) }
+    var isSubmitting by remember { mutableStateOf(false) }
+    var submissionError by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = modifier
@@ -148,25 +148,29 @@ fun ReportReviewScreen(
                             latitude = latitude,
                             longitude = longitude,
                             timestamp = timestamp
-                        ).onSuccess(onSubmitted).onFailure { error ->
+                        ).onSuccess { submission ->
+                            isSubmitting = false
+                            onSubmitted(submission)
+                        }.onFailure { error ->
                             submissionError = error.toSubmissionMessage()
                             isSubmitting = false
                         }
                     }
                 },
                 enabled = !isSubmitting,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+        ) {
                 if (isSubmitting) {
                     CircularProgressIndicator(
-                        modifier = Modifier.height(22.dp),
+                        modifier = Modifier.size(18.dp),
                         strokeWidth = 2.dp,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
+                    Spacer(modifier = Modifier.size(8.dp))
                     Text(
-                        text = "  Submitting Report…"
+                        text = "Submitting Report…"
                     )
                 } else {
                     Text(text = "Submit Report")

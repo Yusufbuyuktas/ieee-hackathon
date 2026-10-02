@@ -87,7 +87,7 @@ fun RiskLocationsMap(
                     )
                     style.addLayer(
                         CircleLayer(RISK_LAYER, RISK_SOURCE).withProperties(
-                            circleRadius(8f), circleColor("#FB7185"),
+                            circleRadius(8f), circleColor("#EF4444"),
                             circleStrokeWidth(2f), circleStrokeColor("#F8FAFC")
                         )
                     )
@@ -130,13 +130,19 @@ fun RiskLocationsMap(
         val readyMap = map ?: return@LaunchedEffect
         if (!styleLoaded) return@LaunchedEffect
         val positioned = locations.filter { it.coordinates != null }
-        val normal = positioned.filterNot { it.name in riskyLocationNames }
-        val risky = positioned.filter { it.name in riskyLocationNames }
+        val normal = positioned.filterNot { it.name.toLocationRiskKey() in riskyLocationNames }
+        val risky = positioned.filter { it.name.toLocationRiskKey() in riskyLocationNames }
+        val selectedIsRisky = selectedLocation?.name
+            ?.toLocationRiskKey()
+            ?.let { it in riskyLocationNames } == true
 
         readyMap.style?.getSourceAs<GeoJsonSource>(NORMAL_SOURCE)?.setGeoJson(normal.toFeatures())
         readyMap.style?.getSourceAs<GeoJsonSource>(RISK_SOURCE)?.setGeoJson(risky.toFeatures())
         readyMap.style?.getSourceAs<GeoJsonSource>(SELECTED_SOURCE)
             ?.setGeoJson(selectedLocation?.let(::singleFeature) ?: emptyFeatures())
+        readyMap.style?.getLayerAs<CircleLayer>(SELECTED_LAYER)?.setProperties(
+            circleColor(if (selectedIsRisky) "#EF4444" else "#34D399")
+        )
 
         val selectedCoordinates = selectedLocation?.coordinates
         if (selectedCoordinates != null) {

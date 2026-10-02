@@ -55,7 +55,9 @@ import com.hackathon_ieee.myapplication.ui.theme.RiverDanger
 import com.hackathon_ieee.myapplication.ui.theme.RiverSuccess
 import com.hackathon_ieee.myapplication.ui.theme.RiverWarning
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import java.text.Normalizer
 import java.util.Locale
 import kotlin.math.asin
 import kotlin.math.cos
@@ -79,6 +81,7 @@ fun RiskMapScreen(
     var locations by remember { mutableStateOf(emptyList<MonitoringLocation>()) }
     var observations by remember { mutableStateOf(emptyList<Observation>()) }
     var assessments by remember { mutableStateOf(emptyList<RiskAssessment>()) }
+    var publicRiskLocationNames by remember { mutableStateOf(emptySet<String>()) }
     var selectedLocation by remember { mutableStateOf<MonitoringLocation?>(null) }
     var riskStatus by remember { mutableStateOf<RiskStatus?>(null) }
     var isLoading by remember { mutableStateOf(true) }
@@ -89,8 +92,34 @@ fun RiskMapScreen(
     var refreshKey by remember { mutableIntStateOf(0) }
     var isPullRefreshing by remember { mutableStateOf(false) }
     val locationSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val riskyLocationNames = observations.filter { it.riskFlagged }
-        .mapTo(mutableSetOf()) { it.locationName }
+    val riskyLocationNames = remember(
+        locations,
+        observations,
+        assessments,
+        publicRiskLocationNames
+    ) {
+        buildSet {
+            addAll(publicRiskLocationNames)
+
+            observations
+                .filter { it.riskFlagged }
+                .forEach { add(it.locationName.toLocationRiskKey()) }
+
+            assessments
+                .filter { assessment ->
+                    assessment.sourceConcludedHighRisk ||
+                        assessment.riskLevel.lowercase(Locale.ROOT) in setOf("high", "critical")
+                }
+                .forEach { assessment ->
+                    add(assessment.locationName.toLocationRiskKey())
+                    assessment.stationNo?.let { stationNo ->
+                        locations
+                            .filter { it.stationNo == stationNo }
+                            .forEach { add(it.name.toLocationRiskKey()) }
+                    }
+                }
+        }
+    }
     val sortedLocations = remember(locations) {
         locations.sortedWith { first, second ->
             compareNaturally(
@@ -140,12 +169,25 @@ fun RiskMapScreen(
         errorMessage = null
         try {
             locations = api.getLocations().getOrThrow()
+            publicRiskLocationNames = coroutineScope {
+                locations.map { location ->
+                    async {
+                        api.getRiskStatus(location.name)
+                            .getOrNull()
+                            ?.takeIf { status ->
+                                status.riskLevel.lowercase(Locale.ROOT) in setOf("high", "critical")
+                            }
+                            ?.location
+                            ?.toLocationRiskKey()
+                    }
+                }.awaitAll().filterNotNull().toSet()
+            }
             if (canViewClinicalData) {
                 coroutineScope {
-                    val observationsRequest = async { api.getObservations().getOrThrow() }
-                    val assessmentsRequest = async { api.getRiskAssessments().getOrThrow() }
-                    observations = observationsRequest.await()
-                    assessments = assessmentsRequest.await()
+                    val observationsRequest = async { api.getObservations() }
+                    val assessmentsRequest = async { api.getRiskAssessments() }
+                    observations = observationsRequest.await().getOrDefault(emptyList())
+                    assessments = assessmentsRequest.await().getOrDefault(emptyList())
                 }
             } else {
                 observations = emptyList()
@@ -351,7 +393,7 @@ private fun LocationList(
     SubtlePanel {
         Column {
             locations.forEachIndexed { index, location ->
-                val isRisky = location.name in riskyLocationNames
+                val isRisky = location.name.toLocationRiskKey() in riskyLocationNames
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -606,6 +648,13 @@ private fun String.toEnglishRiskReason(parameter: String): String {
 }
 
 private val naturalSortParts = Regex("\\d+|\\D+")
+
+internal fun String.toLocationRiskKey(): String = Normalizer
+    .normalize(this, Normalizer.Form.NFD)
+    .replace(Regex("\\p{M}+"), "")
+    .replace('ı', 'i')
+    .lowercase(Locale.ROOT)
+    .filter(Char::isLetterOrDigit)
 
 private fun String.toEnglishLocationName(): String = when {
     startsWith("Ergene Havzasi - Kuyu ") -> {

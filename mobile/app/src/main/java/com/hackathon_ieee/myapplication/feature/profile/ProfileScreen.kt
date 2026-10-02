@@ -7,11 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -166,7 +166,7 @@ fun ProfileScreen(
             ReportDetails(
                 report = report,
                 modifier = Modifier
-                    .fillMaxHeight(0.92f)
+                    .wrapContentHeight()
                     .verticalScroll(rememberScrollState())
                     .padding(start = 24.dp, end = 24.dp, bottom = 32.dp)
             )
@@ -309,7 +309,7 @@ private fun String.toReportStatus(): ReportStatusPresentation = when (this) {
     "ONAYLANDI" -> ReportStatusPresentation("Approved", RiverSuccess)
     "INCELEMEDE" -> ReportStatusPresentation("Under review", RiverWarning)
     "TUTARSIZ" -> ReportStatusPresentation("Not verified", RiverDanger)
-    "AI_SERVISI_ERISILEMEDI" -> ReportStatusPresentation("AI unavailable", RiverWarning)
+    "AI_SERVISI_ERISILEMEDI" -> ReportStatusPresentation("Submission incomplete", RiverWarning)
     else -> ReportStatusPresentation(
         replace('_', ' ').lowercase().replaceFirstChar { it.uppercase() },
         MaterialTheme.colorScheme.primary

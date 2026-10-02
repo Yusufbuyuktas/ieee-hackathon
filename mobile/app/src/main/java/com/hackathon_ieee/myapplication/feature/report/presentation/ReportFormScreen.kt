@@ -97,7 +97,7 @@ fun ReportFormScreen(
     }
 
     var locationMessage by rememberSaveable {
-        mutableStateOf("Location is optional. You can continue without it.")
+        mutableStateOf("")
     }
 
     val noteFocusRequester = androidx.compose.runtime.remember {
@@ -141,7 +141,7 @@ fun ReportFormScreen(
             requestCurrentLocation()
         } else {
             locationStateName = LocationUiState.ERROR.name
-            locationMessage = "Location permission was denied. You can still submit the report."
+            locationMessage = "Location permission was denied."
         }
     }
 
@@ -239,7 +239,7 @@ fun ReportFormScreen(
         )
 
         Text(
-            text = "Location (optional)",
+            text = "Location",
             style = MaterialTheme.typography.titleMedium
         )
 
@@ -296,7 +296,9 @@ fun ReportFormScreen(
                     }
 
                     LocationUiState.IDLE -> {
-                        Text(text = locationMessage)
+                        if (locationMessage.isNotBlank()) {
+                            Text(text = locationMessage)
+                        }
                     }
                 }
 

@@ -120,6 +120,9 @@ fun OneAquaHealthApp() {
     var reportDraftVersion by rememberSaveable {
         mutableStateOf(0)
     }
+    var reportReviewVersion by rememberSaveable {
+        mutableStateOf(0)
+    }
     var submittedReportId by rememberSaveable {
         mutableStateOf<String?>(null)
     }
@@ -408,10 +411,10 @@ fun OneAquaHealthApp() {
             }
         }
     ) { innerPadding ->
-        val screenStateKey = if (currentScreen == REPORT_FORM_SCREEN) {
-            "$currentScreen-$reportDraftVersion"
-        } else {
-            currentScreen
+        val screenStateKey = when (currentScreen) {
+            REPORT_FORM_SCREEN -> "$currentScreen-$reportDraftVersion"
+            REPORT_REVIEW_SCREEN -> "$currentScreen-$reportReviewVersion"
+            else -> currentScreen
         }
         screenStateHolder.SaveableStateProvider(screenStateKey) {
             when (currentScreen) {
@@ -445,6 +448,7 @@ fun OneAquaHealthApp() {
                             reviewLatitude = latitude
                             reviewLongitude = longitude
                             reviewNote = note
+                            reportReviewVersion++
                             currentScreen = REPORT_REVIEW_SCREEN
                         },
                         modifier = Modifier.padding(innerPadding)
@@ -514,6 +518,9 @@ fun OneAquaHealthApp() {
                             aiMatchScore = submittedReportMatchScore,
                             onBackHome = {
                                 currentScreen = HOME_SCREEN
+                            },
+                            onSubmitAgain = {
+                                currentScreen = REPORT_FORM_SCREEN
                             },
                             modifier = Modifier.padding(innerPadding)
                         )

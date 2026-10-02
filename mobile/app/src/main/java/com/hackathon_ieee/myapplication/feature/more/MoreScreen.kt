@@ -261,7 +261,19 @@ internal fun StoryCarousel(
     val listState = rememberLazyListState()
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
     val visibleStoryIndex by remember {
-        derivedStateOf { listState.firstVisibleItemIndex.coerceIn(impactStories.indices) }
+        derivedStateOf {
+            val layoutInfo = listState.layoutInfo
+            val viewportCenter =
+                (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
+
+            layoutInfo.visibleItemsInfo
+                .minByOrNull { item ->
+                    kotlin.math.abs((item.offset + item.size / 2) - viewportCenter)
+                }
+                ?.index
+                ?.coerceIn(impactStories.indices)
+                ?: 0
+        }
     }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
