@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
 import Header from './components/layout/Header';
 import AlertBanner from './components/dashboard/AlertBanner';
 import KpiCards from './components/dashboard/KpiCards';
 import ErgeneMap from './components/map/ErgeneMap';
 import TrendChart from './components/dashboard/TrendChart';
 import RecentObservations from './components/dashboard/RecentObservations';
+import CitizenReportsManager from './components/dashboard/CitizenReportsManager';
 import ClinicalDecisionSupport from './components/clinical/ClinicalDecisionSupport';
 import FhirExplorer from './components/clinical/FhirExplorer';
 import {
@@ -16,20 +20,30 @@ import {
 } from './services/apiService';
 import { Loader2 } from 'lucide-react';
 
-export default function App() {
+function DashboardContent() {
+  const { user } = useAuth();
+  const [view, setView] = useState('landing');
   const [activeTab, setActiveTab] = useState('monitoring');
-  const [selectedParameter, setSelectedParameter] = useState('chromium'); // Default rich telemetry
-  const [sampleType, setSampleType] = useState('surface_water'); // 'surface_water' | 'groundwater' | 'sediment'
+  const [selectedParameter, setSelectedParameter] = useState('chromium');
+  const [sampleType, setSampleType] = useState('surface_water');
   
   const [locations, setLocations] = useState([]);
-  const [measurements, setMeasurements] = useState([]); // Surveillance tab: filtered by selected parameter
-  const [allMeasurements, setAllMeasurements] = useState([]); // FHIR Explorer: complete dataset across all 9 heavy metals
-  const [citizenReports, setCitizenReports] = useState([]); // Live crowdsourced citizen reports
+  const [measurements, setMeasurements] = useState([]);
+  const [allMeasurements, setAllMeasurements] = useState([]);
+  const [citizenReports, setCitizenReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [apiOnline, setApiOnline] = useState(null); // null: checking, true: connected, false: unreachable
+  const [apiOnline, setApiOnline] = useState(null);
 
-  // 1. Fetch monitoring stations (GET /api/locations) — acts as API health check
+  const handleLoginSuccess = (loggedInUser) => {
+    if (loggedInUser?.role === 'DOCTOR') {
+      setActiveTab('clinical');
+    } else {
+      setActiveTab('monitoring');
+    }
+    setView('app');
+  };
+
   useEffect(() => {
     getLocations()
       .then(locs => {
@@ -42,7 +56,6 @@ export default function App() {
       });
   }, []);
 
-  // 2. Fetch observations filtered by active parameter (GET /api/observations)
   useEffect(() => {
     setLoading(true);
     getAllMeasurements({ parameter: selectedParameter })
@@ -59,21 +72,18 @@ export default function App() {
       .finally(() => setLoading(false));
   }, [selectedParameter]);
 
-  // 3. Fetch comprehensive multi-metal dataset for HL7 FHIR Explorer
   useEffect(() => {
     getAllMeasurements({})
       .then(data => setAllMeasurements(data))
       .catch(err => console.error("Failed to load comprehensive FHIR observations:", err));
   }, []);
 
-  // 4. Fetch live citizen science reports (GET /api/citizen-reports)
   useEffect(() => {
     getCitizenReports()
       .then(reports => setCitizenReports(reports))
       .catch(err => console.error("Failed to load live citizen reports:", err));
   }, []);
 
-  // Metrics and longitudinal trends calculated against regulatory benchmarks
   const metrics = useMemo(() => 
     getDashboardMetrics(measurements, selectedParameter, sampleType, citizenReports.length),
     [measurements, selectedParameter, sampleType, citizenReports.length]
@@ -84,20 +94,36 @@ export default function App() {
     [measurements, selectedParameter, sampleType]
   );
 
+  if (view === 'landing') {
+    return <LandingPage onLoginClick={() => setView('login')} />;
+  }
+
+  if (view === 'login') {
+    return (
+      <LoginPage 
+        onSuccess={handleLoginSuccess} 
+        onBackClick={() => setView('landing')} 
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} apiOnline={apiOnline} />
+      <Header 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        apiOnline={apiOnline} 
+        onLogout={() => setView('landing')} 
+      />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        
-        {/* Error Notification */}
         {error && (
           <div className="mb-6 p-4 rounded-xl bg-rose-950/60 border border-rose-500/50 text-rose-200 text-xs">
             <strong>System Notice:</strong> {error} — Please verify backend services and network proxy connectivity.
           </div>
         )}
 
-        {/* TAB 1: Environmental Surveillance & GIS */}
+        {/* TAB 1: Environmental Surveillance & GIS (Municipality View) */}
         {activeTab === 'monitoring' && (
           <div className="space-y-6">
             <AlertBanner metrics={metrics} selectedParameter={selectedParameter} />
@@ -116,6 +142,12 @@ export default function App() {
                   citizenReports={citizenReports}
                   selectedParameter={selectedParameter}
                   sampleType={sampleType}
+                />
+
+                {/* B6 & B7: Belediye Yurttaş Bildirimleri Yönetim Masası */}
+                <CitizenReportsManager 
+                  reports={citizenReports} 
+                  onReportsUpdate={setCitizenReports} 
                 />
 
                 <TrendChart
@@ -145,8 +177,15 @@ export default function App() {
         {activeTab === 'fhir' && (
           <FhirExplorer measurements={allMeasurements} />
         )}
-
       </main>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <DashboardContent />
+    </AuthProvider>
   );
 }
