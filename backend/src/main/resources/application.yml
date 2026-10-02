@@ -1,4 +1,9 @@
 spring:
+  servlet:
+    session:
+      cookie:
+        same-site: ${SESSION_COOKIE_SAME_SITE:lax}
+        secure: ${SESSION_COOKIE_SECURE:false}
   jackson:
     property-naming-strategy: SNAKE_CASE
     mapper:
@@ -20,3 +25,7 @@ ai:
 storage:
   upload-dir: ${UPLOAD_DIR:/app/uploads}
   public-base-url: ${STORAGE_PUBLIC_BASE_URL:http://localhost:8080}
+
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://10.0.2.2:8080}

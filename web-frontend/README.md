@@ -1,5 +1,21 @@
 # React + Vite
 
+## API and session configuration
+
+The frontend uses `/api` by default. Vite proxies this path to the local backend at
+`http://localhost:8080`; the Vercel rewrite proxies it to the deployed backend. This
+keeps browser requests same-origin, so Vercel does not need to be added to the CORS
+allowlist for that setup. Leave `VITE_API_BASE_URL` unset or set it to `/api` in Vercel.
+For the HTTPS Vercel deployment, set `SESSION_COOKIE_SECURE=true` on the backend;
+`SameSite=Lax` can remain in place with this same-origin proxy setup.
+
+If the browser calls the backend directly from another origin, configure the backend's
+`CORS_ALLOWED_ORIGINS` environment variable with exact comma-separated origins (for
+example, `https://your-dashboard.vercel.app`). Do not use `*` with credentials.
+For direct cross-site session cookies, serve the backend over HTTPS and set
+`SESSION_COOKIE_SAME_SITE=none` and `SESSION_COOKIE_SECURE=true`. The defaults
+(`lax` and `false`) retain local HTTP development behavior.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
