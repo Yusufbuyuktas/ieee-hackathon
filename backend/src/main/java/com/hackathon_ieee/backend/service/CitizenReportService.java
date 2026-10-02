@@ -50,6 +50,7 @@ public class CitizenReportService {
             entity.setAiExplanation(aiResult.aciklama());
             entity.setAiValidationStatus(
                     mapAiStatus(aiResult.moderationStatus()));
+            entity.setAiModel(aiResult.model());
         }
 
         entity = repository.save(entity);
@@ -64,7 +65,7 @@ public class CitizenReportService {
                         entity.getId(), entity.getPhotoUrl(), entity.getCategory(), entity.getNote(),
                         entity.getLatitude(), entity.getLongitude(), entity.getTimestamp(),
                         entity.getAiValidationStatus(), entity.getAiConfidence(), entity.getAiExplanation(),
-                        entity.getFhirObservationId()))
+                        entity.getAiModel(), entity.getFhirObservationId()))
                 .toList();
     }
 
@@ -77,7 +78,7 @@ public class CitizenReportService {
                         entity.getId(), entity.getPhotoUrl(), entity.getCategory(),
                         entity.getNote(), entity.getLatitude(), entity.getLongitude(),
                         entity.getTimestamp(), entity.getAiValidationStatus(), entity.getAiConfidence(),
-                        entity.getAiExplanation(), entity.getFhirObservationId()))
+                        entity.getAiExplanation(), entity.getAiModel(), entity.getFhirObservationId()))
                 .toList();
     }
 

@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+const BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 /**
  * Helper: Güvenli JSON ayrıştırıcı (204 No Content veya boş gövdeli yanıtlarda patlamayı önler)

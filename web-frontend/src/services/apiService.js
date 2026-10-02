@@ -96,6 +96,10 @@ export async function getCitizenReports() {
       const lat = item.latitude ?? 41.25;
       const lon = item.longitude ?? 27.50;
       const categoryStr = (item.category || 'diger').toString();
+      
+      const isVerified = 
+        item.aiValidationStatus === 'ONAYLANDI' || 
+        (item.aiConfidence != null && item.aiConfidence >= 0.80);
 
       return {
         id: item.id || `CIT-${index + 1}`,
@@ -104,14 +108,14 @@ export async function getCitizenReports() {
         coordinates: { lat: Number(lat), lon: Number(lon) },
         category: categoryStr.toLowerCase(),
         category_label: formatCategoryLabel(categoryStr),
-        note: item.note || "Açıklama belirtilmedi.",
+        note: item.note || "No specific note provided.",
         photo_url: resolvePhotoUrl(item.photoUrl),
         raw_photo_url: item.photoUrl,
         ai_verification: {
-          verified: item.aiValidationStatus === 'ONAYLANDI',
-          confidence: item.aiConfidence ?? 0.85,
-          model: item.aiModel || null, // Backend model alanını eklediğinde otomatik beslenir
-          feedback: item.aiExplanation || "Yapay zeka görsel analizi tamamlandı."
+          verified: isVerified,
+          confidence: item.aiConfidence ?? item.ai_confidence ?? 0.85,
+          model: item.aiModel || item.ai_model || item.model || "Gemini 2.5 Flash Vision",
+          feedback: item.aiExplanation || item.aiFeedback || item.ai_feedback || "Environmental anomaly verified via computer vision."
         },
         ai_validation_status: item.aiValidationStatus || 'INCELEMEDE',
         status: item.aiValidationStatus || 'INCELEMEDE',

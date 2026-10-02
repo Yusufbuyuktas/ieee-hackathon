@@ -52,6 +52,9 @@ public class CitizenReportEntity {
     @Column(name = "ai_explanation", columnDefinition = "TEXT")
     private String aiExplanation;
 
+    @Column(name = "ai_model")
+    private String aiModel;
+
     @Column(name = "fhir_observation_id")
     private String fhirObservationId;
 
