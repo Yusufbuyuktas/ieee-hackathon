@@ -14,6 +14,7 @@ public record CitizenReportListItemDto(
         AiValidationStatus aiValidationStatus,
         Double aiConfidence,
         String aiExplanation,
+        String aiModel,
         String fhirObservationId
 ) {
 }

@@ -149,7 +149,7 @@ export async function getCitizenReports() {
         ai_verification: {
           verified: isVerified,
           confidence: item.aiConfidence ?? item.ai_confidence ?? 0.88,
-          model: item.aiModel || "Gemini-2.5-Flash-Vision",
+          model: item.ai_model || item.aiModel || "Gemini-2.5-Flash-Vision",
           feedback: item.aiFeedback || item.ai_feedback || "Environmental anomaly verified via computer vision."
         },
         status: item.status || "approved"

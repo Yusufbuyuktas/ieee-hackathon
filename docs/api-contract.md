@@ -202,6 +202,7 @@ Response `200 OK` (en yeni bildirim en üstte):
       "ai_validation_status": "ONAYLANDI",
       "ai_confidence": 0.87,
       "ai_explanation": "Fotoğraftaki içerik seçilen kategoriyle tutarlı.",
+      "ai_model": "Gemini-2.5-Flash-Vision",
       "fhir_observation_id": "observation-id"
     }
   ]
