@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 // Görseller assets klasöründen alınıyor
 import heroImg from '../assets/hero1.jpg';
-import wallpaperImg from '../assets/WALLPAPER.jpg';
+import wallpaperImg from '../assets/WALLPAPER.webp';
 import pipelineImg from '../assets/pipeline.jpg'; 
 
 import { 
@@ -203,16 +203,16 @@ export default function LandingPage({ onLoginClick }) {
         {/* MOBİL İÇİN ETKİLEŞİMLİ KAYDIRMA ALANI */}
         <div className="relative w-full">
           
-          {/* Mobilde kullanıcıya yatay kaydırma rehberi */}
-          <div className="md:hidden flex items-center justify-between px-4 mb-3">
-            <span className="inline-flex items-center gap-1.5 bg-slate-900/90 border border-cyan-500/30 text-cyan-300 text-xs px-3 py-1.5 rounded-full font-mono shadow-md backdrop-blur-md animate-pulse">
-              <span>Sağa kaydırarak adımları inceleyin</span>
-              <MoveRight className="w-3.5 h-3.5" />
-            </span>
-            <span className="text-[11px] font-mono text-slate-400">
-              1. Aşama → 3. Aşama
-            </span>
-          </div>
+          {/* Mobile horizontal scroll guide */}
+<div className="md:hidden flex items-center justify-between px-4 mb-3">
+  <span className="inline-flex items-center gap-1.5 bg-slate-900/90 border border-cyan-500/30 text-cyan-300 text-xs px-3 py-1.5 rounded-full font-mono shadow-md backdrop-blur-md animate-pulse">
+    <span>Scroll right to explore stages</span>
+    <MoveRight className="w-3.5 h-3.5" />
+  </span>
+  <span className="text-[11px] font-mono text-slate-400">
+    Stage 01 → Stage 03
+  </span>
+</div>
 
           {/* Görsel Scroll Taşıyıcısı (Mobilde overflow-x-auto, Masaüstünde tam sığma) */}
           <div 

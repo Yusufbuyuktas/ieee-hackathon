@@ -21,7 +21,7 @@ import {
 import { Loader2 } from 'lucide-react';
 
 function DashboardContent() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [view, setView] = useState('landing');
   const [activeTab, setActiveTab] = useState('monitoring');
   const [selectedParameter, setSelectedParameter] = useState('chromium');
@@ -44,7 +44,22 @@ function DashboardContent() {
     setView('app');
   };
 
+  // Kullanıcı oturumu varsa doğrudan panele yönlendir
   useEffect(() => {
+    if (user && view === 'landing') {
+      if (user.role === 'DOCTOR') {
+        setActiveTab('clinical');
+      } else {
+        setActiveTab('monitoring');
+      }
+      setView('app');
+    }
+  }, [user, view]);
+
+  // 1. GENEL VERİLER: Yalnızca Dashboard'a girildiğinde (view === 'app') yüklenir
+  useEffect(() => {
+    if (view !== 'app') return;
+
     getLocations()
       .then(locs => {
         setLocations(locs);
@@ -54,9 +69,20 @@ function DashboardContent() {
         console.error("Failed to load monitoring stations:", err);
         setApiOnline(false);
       });
-  }, []);
 
+    getAllMeasurements({})
+      .then(data => setAllMeasurements(data))
+      .catch(err => console.error("Failed to load comprehensive FHIR observations:", err));
+
+    getCitizenReports()
+      .then(reports => setCitizenReports(reports))
+      .catch(err => console.error("Failed to load live citizen reports:", err));
+  }, [view]);
+
+  // 2. TELEMETRİ VERİLERİ: Dashboard'a girildiğinde VE parametre her değiştiğinde yüklenir
   useEffect(() => {
+    if (view !== 'app') return;
+
     setLoading(true);
     getAllMeasurements({ parameter: selectedParameter })
       .then(data => {
@@ -70,19 +96,7 @@ function DashboardContent() {
         setApiOnline(false);
       })
       .finally(() => setLoading(false));
-  }, [selectedParameter]);
-
-  useEffect(() => {
-    getAllMeasurements({})
-      .then(data => setAllMeasurements(data))
-      .catch(err => console.error("Failed to load comprehensive FHIR observations:", err));
-  }, []);
-
-  useEffect(() => {
-    getCitizenReports()
-      .then(reports => setCitizenReports(reports))
-      .catch(err => console.error("Failed to load live citizen reports:", err));
-  }, []);
+  }, [selectedParameter, view]);
 
   const metrics = useMemo(() => 
     getDashboardMetrics(measurements, selectedParameter, sampleType, citizenReports.length),
@@ -93,6 +107,15 @@ function DashboardContent() {
     getTrendData(measurements, selectedParameter, sampleType),
     [measurements, selectedParameter, sampleType]
   );
+
+  // Oturum durumu doğrulanırken Landing Page'in anlık parlamasını (flash) engelle
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+      </div>
+    );
+  }
 
   if (view === 'landing') {
     return <LandingPage onLoginClick={() => setView('login')} />;
@@ -144,8 +167,6 @@ function DashboardContent() {
                   sampleType={sampleType}
                 />
 
-                
-
                 <TrendChart
                   trendData={trendData}
                   selectedParameter={selectedParameter}
@@ -159,13 +180,14 @@ function DashboardContent() {
                   citizenReports={citizenReports}
                   selectedParameter={selectedParameter}
                 />
-                {/* B6 & B7: Belediye Yurttaş Bildirimleri Yönetim Masası */}
-                <CitizenReportsManager 
-                  reports={citizenReports} 
-                  onReportsUpdate={setCitizenReports} 
-                />
               </>
             )}
+
+            {/* Bağımsız Yurttaş Bildirim Masası */}
+            <CitizenReportsManager 
+              reports={citizenReports} 
+              onReportsUpdate={setCitizenReports} 
+            />
           </div>
         )}
 

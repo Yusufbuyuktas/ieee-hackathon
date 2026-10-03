@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 // Arka plan görseli assets klasöründen alınıyor
-import wallpaperImg from '../assets/WALLPAPER.jpg';
+import wallpaperImg from '../assets/WALLPAPER.webp';
 
 import { 
   Waves, 
@@ -95,13 +95,16 @@ export default function LoginPage({ onSuccess, onBackClick }) {
           </div>
         )}
 
-        {/* Form Alanı */}
+        {/* Form Alanı (Erişilebilir Label/Input Eşleşmeleri) */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">Institutional Email</label>
+            <label htmlFor="login-email" className="block text-xs font-medium text-slate-300 mb-1.5">
+              Institutional Email
+            </label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
               <input
+                id="login-email"
                 type="email"
                 required
                 value={email}
@@ -113,10 +116,13 @@ export default function LoginPage({ onSuccess, onBackClick }) {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">Password</label>
+            <label htmlFor="login-password" className="block text-xs font-medium text-slate-300 mb-1.5">
+              Password
+            </label>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
               <input
+                id="login-password"
                 type="password"
                 required
                 value={password}
@@ -136,30 +142,32 @@ export default function LoginPage({ onSuccess, onBackClick }) {
           </button>
         </form>
 
-        {/* Jüri & Demo Hızlı Giriş Butonları */}
-        <div className="mt-6 pt-5 border-t border-slate-800 text-center">
-          <p className="text-[11px] text-slate-400 mb-2.5 font-medium">
-            Demo / Jury Fast-Track Access:
-          </p>
-          <div className="grid grid-cols-2 gap-2.5">
-            <button
-              type="button"
-              onClick={() => handleDemoLogin('MUNICIPALITY_STAFF')}
-              className="flex items-center justify-center space-x-1.5 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-500/40 px-3 py-2 rounded-xl text-xs text-slate-200 transition-all cursor-pointer group"
-            >
-              <ShieldAlert className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
-              <span>Municipality Staff</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDemoLogin('DOCTOR')}
-              className="flex items-center justify-center space-x-1.5 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-rose-500/40 px-3 py-2 rounded-xl text-xs text-slate-200 transition-all cursor-pointer group"
-            >
-              <Stethoscope className="w-3.5 h-3.5 text-rose-400 group-hover:scale-110 transition-transform" />
-              <span>Clinician (Doctor)</span>
-            </button>
+        {/* Jüri & Demo Hızlı Giriş Butonları (Yalnızca Yerel Geliştirmede Görünür) */}
+        {import.meta.env.DEV && (
+          <div className="mt-6 pt-5 border-t border-slate-800 text-center">
+            <p className="text-[11px] text-slate-400 mb-2.5 font-medium">
+              Demo / Jury Fast-Track Access:
+            </p>
+            <div className="grid grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => handleDemoLogin('MUNICIPALITY_STAFF')}
+                className="flex items-center justify-center space-x-1.5 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-500/40 px-3 py-2 rounded-xl text-xs text-slate-200 transition-all cursor-pointer group"
+              >
+                <ShieldAlert className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
+                <span>Municipality Staff</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDemoLogin('DOCTOR')}
+                className="flex items-center justify-center space-x-1.5 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-rose-500/40 px-3 py-2 rounded-xl text-xs text-slate-200 transition-all cursor-pointer group"
+              >
+                <Stethoscope className="w-3.5 h-3.5 text-rose-400 group-hover:scale-110 transition-transform" />
+                <span>Clinician (Doctor)</span>
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
       </div>
     </div>
