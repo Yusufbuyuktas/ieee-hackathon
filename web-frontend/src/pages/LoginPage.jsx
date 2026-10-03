@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 // Arka plan görseli assets klasöründen alınıyor
-import wallpaperImg from '../assets/wallpaper.webp';
+import wallpaperImg from '../assets/WALLPAPER.webp';
 
 import { 
   Waves, 
