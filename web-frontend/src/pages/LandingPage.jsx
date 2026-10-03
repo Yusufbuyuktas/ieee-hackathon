@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 // Görseller assets klasöründen alınıyor
 import heroImg from '../assets/hero1.jpg';
-import wallpaperImg from '../assets/WALLPAPER.jpg';
+import wallpaperImg from '../assets/WALLPAPER.webp';
 import pipelineImg from '../assets/pipeline.jpg'; 
 
 import { 

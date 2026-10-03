@@ -21,7 +21,7 @@ import {
 import { Loader2 } from 'lucide-react';
 
 function DashboardContent() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [view, setView] = useState('landing');
   const [activeTab, setActiveTab] = useState('monitoring');
   const [selectedParameter, setSelectedParameter] = useState('chromium');
@@ -44,7 +44,7 @@ function DashboardContent() {
     setView('app');
   };
 
-  // Kullanıcı oturumu zaten açıksa (sayfa yenilendiğinde) doğrudan panele yönlendir
+  // Kullanıcı oturumu varsa doğrudan panele yönlendir
   useEffect(() => {
     if (user && view === 'landing') {
       if (user.role === 'DOCTOR') {
@@ -54,7 +54,7 @@ function DashboardContent() {
       }
       setView('app');
     }
-  }, [user]);
+  }, [user, view]);
 
   // 1. GENEL VERİLER: Yalnızca Dashboard'a girildiğinde (view === 'app') yüklenir
   useEffect(() => {
@@ -107,6 +107,15 @@ function DashboardContent() {
     getTrendData(measurements, selectedParameter, sampleType),
     [measurements, selectedParameter, sampleType]
   );
+
+  // Oturum durumu doğrulanırken Landing Page'in anlık parlamasını (flash) engelle
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+      </div>
+    );
+  }
 
   if (view === 'landing') {
     return <LandingPage onLoginClick={() => setView('login')} />;
@@ -171,13 +180,14 @@ function DashboardContent() {
                   citizenReports={citizenReports}
                   selectedParameter={selectedParameter}
                 />
-
-                <CitizenReportsManager 
-                  reports={citizenReports} 
-                  onReportsUpdate={setCitizenReports} 
-                />
               </>
             )}
+
+            {/* Bağımsız Yurttaş Bildirim Masası */}
+            <CitizenReportsManager 
+              reports={citizenReports} 
+              onReportsUpdate={setCitizenReports} 
+            />
           </div>
         )}
 
