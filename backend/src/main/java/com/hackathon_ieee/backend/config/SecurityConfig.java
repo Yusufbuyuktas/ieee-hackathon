@@ -37,9 +37,10 @@ public class SecurityConfig {
                                 "/api/citizen-reports/*/status")
                         .hasRole("MUNICIPALITY_STAFF")
 
-                        // 5. Çevresel telemetriler doktor ve belediye personeline açıktır
+                        // 5. Çevresel gözlem telemetrileri hem doktor hem belediye personeline açıktır
                         .requestMatchers(
                                 HttpMethod.GET,
+                                "/api/observations",
                                 "/api/observations/**")
                         .hasAnyRole("DOCTOR", "MUNICIPALITY_STAFF")
 
