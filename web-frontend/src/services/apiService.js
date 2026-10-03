@@ -97,9 +97,15 @@ export async function getCitizenReports() {
       const lon = item.longitude ?? 27.50;
       const categoryStr = (item.category || 'diger').toString();
       
-      const isVerified = 
-        item.aiValidationStatus === 'ONAYLANDI' || 
-        (item.aiConfidence != null && item.aiConfidence >= 0.80);
+      // Backend snake_case alanları (öncelikli) ve camelCase yedekleri
+      const status = item.ai_validation_status || item.aiValidationStatus || 'INCELEMEDE';
+      const confidence = item.ai_confidence ?? item.aiConfidence ?? 0.85;
+      const photo = item.photo_url || item.photoUrl || null;
+      const explanation = item.ai_explanation || item.aiExplanation || null;
+      const fhirId = item.fhir_observation_id || item.fhirObservationId || null;
+      const model = item.ai_model || item.aiModel || item.model || "Gemini 2.5 Flash Vision";
+
+      const isVerified = status === 'ONAYLANDI' || (confidence != null && confidence >= 0.80);
 
       return {
         id: item.id || `CIT-${index + 1}`,
@@ -109,18 +115,18 @@ export async function getCitizenReports() {
         category: categoryStr.toLowerCase(),
         category_label: formatCategoryLabel(categoryStr),
         note: item.note || "No specific note provided.",
-        photo_url: resolvePhotoUrl(item.photoUrl),
-        raw_photo_url: item.photoUrl,
+        photo_url: resolvePhotoUrl(photo),
+        raw_photo_url: photo,
         ai_verification: {
           verified: isVerified,
-          confidence: item.aiConfidence ?? item.ai_confidence ?? 0.85,
-          model: item.aiModel || item.ai_model || item.model || "Gemini 2.5 Flash Vision",
-          feedback: item.aiExplanation || item.aiFeedback || item.ai_feedback || "Environmental anomaly verified via computer vision."
+          confidence: confidence,
+          model: model,
+          feedback: explanation || "Environmental anomaly verified via computer vision."
         },
-        ai_validation_status: item.aiValidationStatus || 'INCELEMEDE',
-        status: item.aiValidationStatus || 'INCELEMEDE',
-        ai_explanation: item.aiExplanation,
-        fhir_observation_id: item.fhirObservationId
+        ai_validation_status: status,
+        status: status,
+        ai_explanation: explanation,
+        fhir_observation_id: fhirId
       };
     });
   } catch (err) {
