@@ -37,6 +37,7 @@ services:
       FHIR_SERVER_URL: http://hapi-fhir:8080/fhir
       AI_SERVICE_URL: http://ai-service:8000
       STORAGE_PUBLIC_BASE_URL: http://backend:8080
+      CORS_ALLOWED_ORIGINS: "${CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://10.0.2.2:8080}"
     volumes:
       - ./data:/app/data:ro
       - uploads_data:/app/uploads
