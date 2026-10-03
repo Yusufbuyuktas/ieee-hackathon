@@ -76,7 +76,7 @@ export async function getAllMeasurements({ parameter, from, to } = {}) {
 // --- 3. TOXICOLOGICAL RISK STATUS QUERY ---
 export async function getRiskStatus(locationName) {
   if (!locationName) return null;
-  return apiGet('/risk-status', { location: locationName });
+  return apiGet('/risk-assessments', { location: locationName });
 }
 
 // --- 4. USEPA HEALTH RISK ASSESSMENTS ---
