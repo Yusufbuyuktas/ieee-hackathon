@@ -1,9 +1,14 @@
 spring:
+  application:
+    name: backend
   servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
     session:
       cookie:
-        same-site: ${SESSION_COOKIE_SAME_SITE:lax}
-        secure: ${SESSION_COOKIE_SECURE:false}
+        same-site: ${SESSION_COOKIE_SAME_SITE:none}
+        secure: ${SESSION_COOKIE_SECURE:true}
   jackson:
     property-naming-strategy: SNAKE_CASE
     mapper:
@@ -28,4 +33,4 @@ storage:
 
 app:
   cors:
-    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://10.0.2.2:8080}
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000,http://10.0.2.2:8080,https://ieee-hackathon-omega.vercel.app}

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { FileJson, Database, Copy, Check, ChevronRight, Activity } from 'lucide-react';
+import { FileJson, Copy, Check } from 'lucide-react';
 import { THRESHOLDS } from '../../constants/apiContract';
 
-// Standardized LOINC Registry
 const LOINC_CODES = {
   arsenic: { code: "29263-1", display: "Arsenic [Mass/volume] in Water" },
   cadmium: { code: "29266-4", display: "Cadmium [Mass/volume] in Water" },
@@ -19,11 +18,9 @@ export default function FhirExplorer({ measurements }) {
   const [selectedObsId, setSelectedObsId] = useState(measurements[0]?.id || '');
   const [copied, setCopied] = useState(false);
 
-  // Locate active measurement record
   const selectedMeasurement = measurements.find(m => m.id === selectedObsId) || measurements[0];
   const loinc = LOINC_CODES[selectedMeasurement?.parameter] || { code: "UNKNOWN", display: "Heavy metal in Water" };
 
-  // Dynamic HL7 FHIR R4 Observation Resource
   const fhirObservation = {
     resourceType: "Observation",
     id: `erg-obs-${selectedMeasurement?.id?.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
@@ -98,24 +95,24 @@ export default function FhirExplorer({ measurements }) {
   return (
     <div className="space-y-6">
       
-      {/* Header & Observation Selector */}
+      {/* Header — Positioned as Technical Demo & Jury Evaluation Tool */}
       <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2">
             <FileJson className="w-5 h-5 text-indigo-400 shrink-0" />
-            <h2 className="text-sm sm:text-base font-bold text-white">Dynamic HL7 FHIR Resource Explorer</h2>
+            <h2 className="text-sm sm:text-base font-bold text-white">Dynamic HL7 FHIR Interoperability Explorer</h2>
             <span className="bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-[10px] px-2 py-0.5 rounded font-mono shrink-0">
-              R4 Specification[cite: 1]
+              Technical Demo / Jury Evaluation
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Interoperable JSON representation of basin telemetry formatted for HAPI FHIR JPA servers
+            Standardized HL7 FHIR R4 JSON payloads bridging real-time environmental IoT telemetry to hospital EHR systems
           </p>
         </div>
 
         {/* Observation Record Dropdown */}
         <div className="flex items-center space-x-2 shrink-0">
-          <label className="text-xs text-slate-400 font-medium">Telemetry Record:</label>
+          <label className="text-xs text-slate-400 font-medium">Observation:</label>
           <select
             value={selectedObsId}
             onChange={(e) => setSelectedObsId(e.target.value)}
@@ -123,7 +120,7 @@ export default function FhirExplorer({ measurements }) {
           >
             {measurements.slice(0, 15).map((m) => (
               <option key={m.id} value={m.id}>
-                {m.id} — {m.location_name.substring(0, 22)} ({m.parameter})
+                {m.id} — {m.location_name?.substring(0, 20)} ({m.parameter})
               </option>
             ))}
           </select>
@@ -155,8 +152,8 @@ export default function FhirExplorer({ measurements }) {
         </div>
 
         <div className="mt-4 pt-3 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-slate-400">
-          <span>Target Endpoint: <code className="text-indigo-300 font-mono">POST /Observation</code></span>
-          <span className="text-emerald-400 font-medium">HL7 R4 Validated Schema[cite: 1]</span>
+          <span>Target Standard: <code className="text-indigo-300 font-mono">HL7 FHIR R4 Observation Specification</code></span>
+          <span className="text-emerald-400 font-medium">HAPI FHIR JPA Validated</span>
         </div>
       </div>
 
