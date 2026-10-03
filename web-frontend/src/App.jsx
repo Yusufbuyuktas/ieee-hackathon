@@ -44,7 +44,22 @@ function DashboardContent() {
     setView('app');
   };
 
+  // Kullanıcı oturumu zaten açıksa (sayfa yenilendiğinde) doğrudan panele yönlendir
   useEffect(() => {
+    if (user && view === 'landing') {
+      if (user.role === 'DOCTOR') {
+        setActiveTab('clinical');
+      } else {
+        setActiveTab('monitoring');
+      }
+      setView('app');
+    }
+  }, [user]);
+
+  // 1. GENEL VERİLER: Yalnızca Dashboard'a girildiğinde (view === 'app') yüklenir
+  useEffect(() => {
+    if (view !== 'app') return;
+
     getLocations()
       .then(locs => {
         setLocations(locs);
@@ -54,9 +69,20 @@ function DashboardContent() {
         console.error("Failed to load monitoring stations:", err);
         setApiOnline(false);
       });
-  }, []);
 
+    getAllMeasurements({})
+      .then(data => setAllMeasurements(data))
+      .catch(err => console.error("Failed to load comprehensive FHIR observations:", err));
+
+    getCitizenReports()
+      .then(reports => setCitizenReports(reports))
+      .catch(err => console.error("Failed to load live citizen reports:", err));
+  }, [view]);
+
+  // 2. TELEMETRİ VERİLERİ: Dashboard'a girildiğinde VE parametre her değiştiğinde yüklenir
   useEffect(() => {
+    if (view !== 'app') return;
+
     setLoading(true);
     getAllMeasurements({ parameter: selectedParameter })
       .then(data => {
@@ -70,19 +96,7 @@ function DashboardContent() {
         setApiOnline(false);
       })
       .finally(() => setLoading(false));
-  }, [selectedParameter]);
-
-  useEffect(() => {
-    getAllMeasurements({})
-      .then(data => setAllMeasurements(data))
-      .catch(err => console.error("Failed to load comprehensive FHIR observations:", err));
-  }, []);
-
-  useEffect(() => {
-    getCitizenReports()
-      .then(reports => setCitizenReports(reports))
-      .catch(err => console.error("Failed to load live citizen reports:", err));
-  }, []);
+  }, [selectedParameter, view]);
 
   const metrics = useMemo(() => 
     getDashboardMetrics(measurements, selectedParameter, sampleType, citizenReports.length),
@@ -144,8 +158,6 @@ function DashboardContent() {
                   sampleType={sampleType}
                 />
 
-                
-
                 <TrendChart
                   trendData={trendData}
                   selectedParameter={selectedParameter}
@@ -159,7 +171,7 @@ function DashboardContent() {
                   citizenReports={citizenReports}
                   selectedParameter={selectedParameter}
                 />
-                {/* B6 & B7: Belediye Yurttaş Bildirimleri Yönetim Masası */}
+
                 <CitizenReportsManager 
                   reports={citizenReports} 
                   onReportsUpdate={setCitizenReports} 
