@@ -66,8 +66,8 @@ fun ReportFormScreen(
     onContinue: (
         photoUri: String,
         category: ReportCategory,
-        latitude: Double,
-        longitude: Double,
+        latitude: Double?,
+        longitude: Double?,
         note: String
     ) -> Unit,
     modifier: Modifier = Modifier
@@ -97,7 +97,7 @@ fun ReportFormScreen(
     }
 
     var locationMessage by rememberSaveable {
-        mutableStateOf("Location has not been captured yet.")
+        mutableStateOf("")
     }
 
     val noteFocusRequester = androidx.compose.runtime.remember {
@@ -141,13 +141,15 @@ fun ReportFormScreen(
             requestCurrentLocation()
         } else {
             locationStateName = LocationUiState.ERROR.name
-            locationMessage = "Location permission was denied. Permission is required to submit a report."
+            locationMessage = "Location permission was denied."
         }
     }
 
     val selectedCategory = selectedCategoryName?.let { categoryName ->
         ReportCategory.valueOf(categoryName)
     }
+    val isOtherSelected = selectedCategory == ReportCategory.OTHER
+    val isRequiredDescriptionMissing = isOtherSelected && note.isBlank()
 
     Column(
         modifier = modifier
@@ -220,7 +222,11 @@ fun ReportFormScreen(
                         )
 
                         Text(
-                            text = category.displayName,
+                            text = if (category == ReportCategory.OTHER) {
+                                "${category.displayName} — description required"
+                            } else {
+                                category.displayName
+                            },
                             modifier = Modifier.padding(start = 8.dp)
                         )
                     }
@@ -290,7 +296,9 @@ fun ReportFormScreen(
                     }
 
                     LocationUiState.IDLE -> {
-                        Text(text = locationMessage)
+                        if (locationMessage.isNotBlank()) {
+                            Text(text = locationMessage)
+                        }
                     }
                 }
 
@@ -328,7 +336,11 @@ fun ReportFormScreen(
         )
 
         Text(
-            text = "Additional note",
+            text = if (isOtherSelected) {
+                "Description (required)"
+            } else {
+                "Additional note"
+            },
             style = MaterialTheme.typography.titleMedium
         )
 
@@ -368,13 +380,32 @@ fun ReportFormScreen(
             ),
             label = {
                 Text(
-                    text = "Describe your observation"
+                    text = if (isOtherSelected) {
+                        "Describe your observation (required)"
+                    } else {
+                        "Describe your observation"
+                    }
                 )
             },
+            placeholder = {
+                if (isOtherSelected) {
+                    Text("Tell us what you observed")
+                }
+            },
+            isError = isRequiredDescriptionMissing,
             supportingText = {
-                Text(
-                    text = "${note.length}/500"
-                )
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    if (isRequiredDescriptionMissing) {
+                        Text(
+                            text = "A description is required when Other is selected.",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                    Text(
+                        text = "${note.length}/500",
+                        modifier = Modifier.align(Alignment.End)
+                    )
+                }
             },
             minLines = 4,
             maxLines = 7
@@ -394,8 +425,7 @@ fun ReportFormScreen(
                 if (
                     photoUri != null &&
                     category != null &&
-                    currentLatitude != null &&
-                    currentLongitude != null
+                    (!isOtherSelected || note.isNotBlank())
                 ) {
                     onContinue(
                         photoUri,
@@ -408,8 +438,7 @@ fun ReportFormScreen(
             },
             enabled = selectedPhotoUri != null &&
                 selectedCategory != null &&
-                latitude != null &&
-                longitude != null,
+                !isRequiredDescriptionMissing,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)

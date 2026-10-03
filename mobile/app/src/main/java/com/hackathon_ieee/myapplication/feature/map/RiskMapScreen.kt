@@ -23,12 +23,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,12 +51,13 @@ import com.hackathon_ieee.myapplication.core.network.RiskAssessment
 import com.hackathon_ieee.myapplication.core.network.RiskStatus
 import com.hackathon_ieee.myapplication.core.network.RiverGuardApi
 import com.hackathon_ieee.myapplication.ui.components.SubtlePanel
-import com.hackathon_ieee.myapplication.ui.components.ThickBackIcon
 import com.hackathon_ieee.myapplication.ui.theme.RiverDanger
 import com.hackathon_ieee.myapplication.ui.theme.RiverSuccess
 import com.hackathon_ieee.myapplication.ui.theme.RiverWarning
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import java.text.Normalizer
 import java.util.Locale
 import kotlin.math.asin
 import kotlin.math.cos
@@ -66,14 +67,21 @@ import kotlin.math.sqrt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RiskMapScreen(modifier: Modifier = Modifier) {
+fun RiskMapScreen(
+    api: RiverGuardApi,
+    userRole: String,
+    showAllLocations: Boolean,
+    onShowAllLocationsChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
-    val api = remember { RiverGuardApi() }
     val locationProvider = remember { LocationProvider(context) }
+    val canViewClinicalData = userRole == "DOCTOR"
 
     var locations by remember { mutableStateOf(emptyList<MonitoringLocation>()) }
     var observations by remember { mutableStateOf(emptyList<Observation>()) }
     var assessments by remember { mutableStateOf(emptyList<RiskAssessment>()) }
+    var publicRiskLocationNames by remember { mutableStateOf(emptySet<String>()) }
     var selectedLocation by remember { mutableStateOf<MonitoringLocation?>(null) }
     var riskStatus by remember { mutableStateOf<RiskStatus?>(null) }
     var isLoading by remember { mutableStateOf(true) }
@@ -81,16 +89,48 @@ fun RiskMapScreen(modifier: Modifier = Modifier) {
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var locationMessage by remember { mutableStateOf<String?>(null) }
     var showLocationDetails by remember { mutableStateOf(false) }
-    var showAllLocations by remember { mutableStateOf(false) }
     var refreshKey by remember { mutableIntStateOf(0) }
-    val riskyLocationNames = observations.filter { it.riskFlagged }
-        .mapTo(mutableSetOf()) { it.locationName }
+    var isPullRefreshing by remember { mutableStateOf(false) }
+    val locationSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val riskyLocationNames = remember(
+        locations,
+        observations,
+        assessments,
+        publicRiskLocationNames
+    ) {
+        buildSet {
+            addAll(publicRiskLocationNames)
+
+            observations
+                .filter { it.riskFlagged }
+                .forEach { add(it.locationName.toLocationRiskKey()) }
+
+            assessments
+                .filter { assessment ->
+                    assessment.sourceConcludedHighRisk ||
+                        assessment.riskLevel.lowercase(Locale.ROOT) in setOf("high", "critical")
+                }
+                .forEach { assessment ->
+                    add(assessment.locationName.toLocationRiskKey())
+                    assessment.stationNo?.let { stationNo ->
+                        locations
+                            .filter { it.stationNo == stationNo }
+                            .forEach { add(it.name.toLocationRiskKey()) }
+                    }
+                }
+        }
+    }
     val sortedLocations = remember(locations) {
-        locations.sortedBy { it.name.lowercase(Locale.ROOT) }
+        locations.sortedWith { first, second ->
+            compareNaturally(
+                first.name.toEnglishLocationName(),
+                second.name.toEnglishLocationName()
+            )
+        }
     }
 
     BackHandler(enabled = showAllLocations) {
-        showAllLocations = false
+        onShowAllLocationsChange(false)
     }
 
     fun selectNearest(deviceLocation: DeviceLocation) {
@@ -106,7 +146,7 @@ fun RiskMapScreen(modifier: Modifier = Modifier) {
             val distance = distanceKm(
                 deviceLocation.latitude, deviceLocation.longitude, point.latitude, point.longitude
             )
-            locationMessage = "Nearest point: ${nearest.name} (${formatNumber(distance)} km away)"
+            locationMessage = "Nearest point: ${nearest.name.toEnglishLocationName()} (${formatNumber(distance)} km away)"
         }
     }
 
@@ -124,17 +164,34 @@ fun RiskMapScreen(modifier: Modifier = Modifier) {
         else locationMessage = "Location permission is needed to find the nearest point."
     }
 
-    LaunchedEffect(refreshKey) {
+    LaunchedEffect(refreshKey, canViewClinicalData) {
         isLoading = true
         errorMessage = null
         try {
-            coroutineScope {
-                val locationsRequest = async { api.getLocations().getOrThrow() }
-                val observationsRequest = async { api.getObservations().getOrThrow() }
-                val assessmentsRequest = async { api.getRiskAssessments().getOrThrow() }
-                locations = locationsRequest.await()
-                observations = observationsRequest.await()
-                assessments = assessmentsRequest.await()
+            locations = api.getLocations().getOrThrow()
+            publicRiskLocationNames = coroutineScope {
+                locations.map { location ->
+                    async {
+                        api.getRiskStatus(location.name)
+                            .getOrNull()
+                            ?.takeIf { status ->
+                                status.riskLevel.lowercase(Locale.ROOT) in setOf("high", "critical")
+                            }
+                            ?.location
+                            ?.toLocationRiskKey()
+                    }
+                }.awaitAll().filterNotNull().toSet()
+            }
+            if (canViewClinicalData) {
+                coroutineScope {
+                    val observationsRequest = async { api.getObservations() }
+                    val assessmentsRequest = async { api.getRiskAssessments() }
+                    observations = observationsRequest.await().getOrDefault(emptyList())
+                    assessments = assessmentsRequest.await().getOrDefault(emptyList())
+                }
+            } else {
+                observations = emptyList()
+                assessments = emptyList()
             }
             if (selectedLocation == null || locations.none { it.name == selectedLocation?.name }) {
                 selectedLocation = locations.firstOrNull()
@@ -143,6 +200,7 @@ fun RiskMapScreen(modifier: Modifier = Modifier) {
             errorMessage = "RiverGuard data could not be reached. Check that the backend is running and try again."
         } finally {
             isLoading = false
+            isPullRefreshing = false
         }
     }
 
@@ -154,7 +212,7 @@ fun RiskMapScreen(modifier: Modifier = Modifier) {
             .onSuccess { riskStatus = it }
             .onFailure { error ->
                 if (error !is ApiException || error.statusCode != 404) {
-                    locationMessage = "Risk status for ${location.name} could not be loaded."
+                    locationMessage = "Risk status for ${location.name.toEnglishLocationName()} could not be loaded."
                 }
             }
         isRiskLoading = false
@@ -164,7 +222,11 @@ fun RiskMapScreen(modifier: Modifier = Modifier) {
         AllLocationsPage(
             locations = sortedLocations,
             riskyLocationNames = riskyLocationNames,
-            onBack = { showAllLocations = false },
+            isRefreshing = isPullRefreshing,
+            onRefresh = {
+                isPullRefreshing = true
+                refreshKey++
+            },
             onLocationClick = { location ->
                 selectedLocation = location
                 locationMessage = null
@@ -173,15 +235,27 @@ fun RiskMapScreen(modifier: Modifier = Modifier) {
             modifier = modifier
         )
     } else {
-        Column(
-            modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+        PullToRefreshBox(
+            isRefreshing = isPullRefreshing,
+            onRefresh = {
+                isPullRefreshing = true
+                refreshKey++
+            },
+            modifier = modifier.fillMaxSize()
         ) {
-            Text(
-                text = "Basin Risk Overview",
+            Column(
+                modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Text(
+                text = if (canViewClinicalData) {
+                    "Basin Risk Overview"
+                } else {
+                    "Basin Monitoring Overview"
+                },
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary
+                color = androidx.compose.ui.graphics.Color.White
             )
             Text(
                 text = "Explore monitoring data across the Ergene Basin and focus on locations that need attention.",
@@ -192,8 +266,10 @@ fun RiskMapScreen(modifier: Modifier = Modifier) {
                 isLoading -> LoadingState()
                 errorMessage != null -> ErrorState(checkNotNull(errorMessage)) { refreshKey++ }
                 else -> {
-                    OverviewPanel(locations, observations)
-                    LatestAlertPanel(observations)
+                    if (canViewClinicalData) {
+                        OverviewPanel(locations, observations)
+                        LatestAlertPanel(observations)
+                    }
 
                     SectionTitle("Monitoring Map")
                     if (locations.any { it.coordinates != null }) {
@@ -241,7 +317,7 @@ fun RiskMapScreen(modifier: Modifier = Modifier) {
                         )
                         if (sortedLocations.size > 3) {
                             TextButton(
-                                onClick = { showAllLocations = true },
+                                onClick = { onShowAllLocationsChange(true) },
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
                             ) {
                                 Text("See All Locations")
@@ -249,19 +325,17 @@ fun RiskMapScreen(modifier: Modifier = Modifier) {
                         }
                     }
 
-                    OutlinedButton(
-                        onClick = { refreshKey++ },
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    ) { Text("Refresh Data") }
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
     }
 
     if (showLocationDetails && selectedLocation != null) {
         ModalBottomSheet(
             onDismissRequest = { showLocationDetails = false },
+            sheetState = locationSheetState,
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             SelectedLocationPanel(
@@ -283,41 +357,30 @@ fun RiskMapScreen(modifier: Modifier = Modifier) {
 private fun AllLocationsPage(
     locations: List<MonitoringLocation>,
     riskyLocationNames: Set<String>,
-    onBack: () -> Unit,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
     onLocationClick: (MonitoringLocation) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize()
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            IconButton(onClick = onBack) {
-                ThickBackIcon()
-            }
-            Text(
-                text = "Monitoring Locations",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary
+            LocationList(
+                locations = locations,
+                riskyLocationNames = riskyLocationNames,
+                onLocationClick = onLocationClick
             )
+            Spacer(modifier = Modifier.height(8.dp))
         }
-        Text(
-            text = "All monitoring points are listed alphabetically.",
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        LocationList(
-            locations = locations,
-            riskyLocationNames = riskyLocationNames,
-            onLocationClick = onLocationClick
-        )
-        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
@@ -330,7 +393,7 @@ private fun LocationList(
     SubtlePanel {
         Column {
             locations.forEachIndexed { index, location ->
-                val isRisky = location.name in riskyLocationNames
+                val isRisky = location.name.toLocationRiskKey() in riskyLocationNames
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -349,7 +412,7 @@ private fun LocationList(
                     )
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = location.name,
+                            text = location.name.toEnglishLocationName(),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Medium
                         )
@@ -377,6 +440,7 @@ private fun LocationList(
         }
     }
 }
+
 
 @Composable
 private fun OverviewPanel(locations: List<MonitoringLocation>, observations: List<Observation>) {
@@ -423,30 +487,54 @@ private fun SelectedLocationPanel(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(location?.name ?: "No location selected", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-            location?.stationNo?.let { Text("Station $it", style = MaterialTheme.typography.bodySmall) }
+            Text(
+                location?.name?.toEnglishLocationName() ?: "No location selected",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            location?.stationNo?.let {
+                Text("Station number: $it", style = MaterialTheme.typography.bodySmall)
+            }
             if (location?.sampleTypes?.isNotEmpty() == true) {
-                Text("Samples: ${location.sampleTypes.joinToString()}", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                val sampleTypeLabel = if (location.sampleTypes.size == 1) {
+                    "Sample type"
+                } else {
+                    "Sample types"
+                }
+                Text(
+                    "$sampleTypeLabel: ${location.sampleTypes.joinToString { it.toDisplayLabel() }}",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
             when {
                 isLoading -> CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
                 status != null -> {
                     Text(
-                        text = status.riskLevel.ifBlank { "Flagged risk" },
+                        text = status.riskLevel.toRiskLevelLabel(),
                         color = riskColor(status.riskLevel),
                         fontWeight = FontWeight.Bold
                     )
-                    Text("${status.parameter}: ${formatNullable(status.value)} ${status.unit}".trim())
+                    Text("${status.parameter.toDisplayLabel()}: ${formatNullable(status.value)} ${status.unit}".trim())
                     status.threshold?.let { Text("Threshold: ${formatNumber(it)} ${status.unit}".trim()) }
-                    if (status.reason.isNotBlank()) Text(status.reason, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    if (status.standard.isNotBlank()) Text("Standard: ${status.standard}", style = MaterialTheme.typography.bodySmall)
+                    if (status.reason.isNotBlank()) {
+                        Text(
+                            status.reason.toEnglishRiskReason(status.parameter),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    if (status.standard.isNotBlank()) {
+                        Text(
+                            "Standard: ${status.standard.replace('_', ' ')}",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
                 else -> Text("No active flagged risk was returned for this location.", color = RiverSuccess)
             }
             assessment?.let {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text("Health Risk Assessment", fontWeight = FontWeight.SemiBold)
-                Text("Level: ${it.riskLevel.ifBlank { "Not classified" }}", color = riskColor(it.riskLevel))
+                Text("Level: ${it.riskLevel.toRiskLevelLabel()}", color = riskColor(it.riskLevel))
                 it.totalHazardIndex?.child?.let { value -> Text("Child hazard index: ${formatNumber(value)}") }
                 it.totalHazardIndex?.adult?.let { value -> Text("Adult hazard index: ${formatNumber(value)}") }
                 it.basisNote?.takeIf(String::isNotBlank)?.let { note ->
@@ -467,8 +555,12 @@ private fun LatestAlertPanel(observations: List<Observation>) {
         } else {
             SubtlePanel {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(alert.locationName, fontWeight = FontWeight.SemiBold, color = RiverDanger)
-                    Text("${alert.parameter}: ${formatNullable(alert.value)} ${alert.unit}".trim())
+                    Text(
+                        alert.locationName.toEnglishLocationName(),
+                        fontWeight = FontWeight.SemiBold,
+                        color = RiverDanger
+                    )
+                    Text("${alert.parameter.toDisplayLabel()}: ${formatNullable(alert.value)} ${alert.unit}".trim())
                     Text(
                         alert.timestamp.displayTimestamp(),
                         style = MaterialTheme.typography.bodySmall,
@@ -528,6 +620,102 @@ private fun riskColor(level: String) = when {
 private fun formatNullable(value: Double?): String = value?.let(::formatNumber) ?: "Not reported"
 private fun formatNumber(value: Double): String = String.format(Locale.US, "%.2f", value)
 private fun String.displayTimestamp(): String = replace('T', ' ').substringBeforeLast('.').removeSuffix("Z")
+
+private fun String.toDisplayLabel(): String =
+    replace('_', ' ')
+        .lowercase(Locale.ROOT)
+        .replaceFirstChar { character -> character.titlecase(Locale.ROOT) }
+
+private fun String.toRiskLevelLabel(): String = when (trim().lowercase(Locale.ROOT)) {
+    "low" -> "Low risk"
+    "medium" -> "Moderate risk"
+    "high" -> "High risk"
+    "critical" -> "Critical risk"
+    "" -> "Not classified"
+    else -> toDisplayLabel()
+}
+
+private fun String.toEnglishRiskReason(parameter: String): String {
+    val normalized = lowercase(Locale.ROOT)
+    return if (
+        normalized.startsWith("olculen ") ||
+        normalized.startsWith("ölçülen ")
+    ) {
+        "The measured ${parameter.toDisplayLabel().lowercase(Locale.ROOT)} level exceeds the applicable threshold."
+    } else {
+        this
+    }
+}
+
+private val naturalSortParts = Regex("\\d+|\\D+")
+
+internal fun String.toLocationRiskKey(): String = Normalizer
+    .normalize(this, Normalizer.Form.NFD)
+    .replace(Regex("\\p{M}+"), "")
+    .replace('ı', 'i')
+    .lowercase(Locale.ROOT)
+    .filter(Char::isLetterOrDigit)
+
+private fun String.toEnglishLocationName(): String = when {
+    startsWith("Ergene Havzasi - Kuyu ") -> {
+        "Ergene Basin – Well ${substringAfterLast(' ')}"
+    }
+
+    this == "St 1 - Saray Buyukyoncali (Ergene Menba / Referans)" ->
+        "Station 1 – Saray Büyük Yoncalı (Ergene Headwaters / Reference)"
+
+    this == "St 1 - yag fabrikasi yani (Corlu/Cerkezkoy ust havza)" ->
+        "Station 1 – Near the Oil Factory (Çorlu/Çerkezköy Upper Basin)"
+
+    this == "St 2 - Cerkezkoy OSB Desari Alti" ->
+        "Station 2 – Downstream of Çerkezköy OIZ Discharge"
+
+    this == "St 2 - koy ici, sanayiden uzak" ->
+        "Station 2 – Village Center, Away from Industry"
+
+    this == "St 3 - Corlu Cayi Ulas Mevkii" ->
+        "Station 3 – Çorlu Stream, Ulaş Area"
+
+    this == "St 3 - organize sanayi bolgesi icinde" ->
+        "Station 3 – Within the Organized Industrial Zone"
+
+    this == "St 4 - Muratli Karasogutleme Koprusu" ->
+        "Station 4 – Muratlı Karasöğütleme Bridge"
+
+    this == "St 4 - organize sanayi bolgesi icinde" ->
+        "Station 4 – Within the Organized Industrial Zone"
+
+    this == "St 5 - Adasarhanli yakini, Meric ile birlesmeden once (mansap)" ->
+        "Station 5 – Near Adasarhanlı, Before the Meriç Confluence (Downstream)"
+
+    this == "St 5 - Luleburgaz Buyukkaristiran Mevkii" ->
+        "Station 5 – Lüleburgaz Büyükkarıştıran Area"
+
+    this == "St 8 - Uzunkopru DSI Koprusu" ->
+        "Station 8 – Uzunköprü DSİ Bridge"
+
+    else -> this
+}
+
+private fun compareNaturally(first: String, second: String): Int {
+    val firstParts = naturalSortParts.findAll(first).map { it.value }.toList()
+    val secondParts = naturalSortParts.findAll(second).map { it.value }.toList()
+
+    for (index in 0 until minOf(firstParts.size, secondParts.size)) {
+        val firstPart = firstParts[index]
+        val secondPart = secondParts[index]
+        val firstNumber = firstPart.toLongOrNull()
+        val secondNumber = secondPart.toLongOrNull()
+        val comparison = if (firstNumber != null && secondNumber != null) {
+            firstNumber.compareTo(secondNumber)
+        } else {
+            firstPart.compareTo(secondPart, ignoreCase = true)
+        }
+        if (comparison != 0) return comparison
+    }
+
+    return firstParts.size.compareTo(secondParts.size)
+}
 
 private fun distanceKm(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
     val earthRadiusKm = 6371.0

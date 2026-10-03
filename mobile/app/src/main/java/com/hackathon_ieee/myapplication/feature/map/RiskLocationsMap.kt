@@ -26,6 +26,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.findViewTreeLifecycleOwner
+import com.hackathon_ieee.myapplication.core.map.OpenFreeMapStyleUrl
 import com.hackathon_ieee.myapplication.core.network.MonitoringLocation
 import com.hackathon_ieee.myapplication.ui.theme.RiverDanger
 import com.hackathon_ieee.myapplication.ui.theme.RiverPrimary
@@ -45,7 +46,6 @@ import org.maplibre.geojson.Feature
 import org.maplibre.geojson.FeatureCollection
 import org.maplibre.geojson.Point
 
-private const val MAP_STYLE_URL = "https://tiles.openfreemap.org/styles/liberty"
 private const val NORMAL_SOURCE = "monitoring-normal-source"
 private const val RISK_SOURCE = "monitoring-risk-source"
 private const val SELECTED_SOURCE = "monitoring-selected-source"
@@ -74,26 +74,27 @@ fun RiskLocationsMap(
             onCreate(null)
             getMapAsync { readyMap ->
                 map = readyMap
-                readyMap.setStyle(MAP_STYLE_URL) { style ->
+                readyMap.setMaxZoomPreference(18.0)
+                readyMap.setStyle(OpenFreeMapStyleUrl) { style ->
                     style.addSource(GeoJsonSource(NORMAL_SOURCE, emptyFeatures()))
                     style.addSource(GeoJsonSource(RISK_SOURCE, emptyFeatures()))
                     style.addSource(GeoJsonSource(SELECTED_SOURCE, emptyFeatures()))
                     style.addLayer(
                         CircleLayer(NORMAL_LAYER, NORMAL_SOURCE).withProperties(
-                            circleRadius(7f), circleColor("#1C77C3"),
-                            circleStrokeWidth(2f), circleStrokeColor("#E2E8F0")
+                            circleRadius(7f), circleColor("#22D3EE"),
+                            circleStrokeWidth(2f), circleStrokeColor("#F8FAFC")
                         )
                     )
                     style.addLayer(
                         CircleLayer(RISK_LAYER, RISK_SOURCE).withProperties(
-                            circleRadius(8f), circleColor("#E63946"),
-                            circleStrokeWidth(2f), circleStrokeColor("#E2E8F0")
+                            circleRadius(8f), circleColor("#EF4444"),
+                            circleStrokeWidth(2f), circleStrokeColor("#F8FAFC")
                         )
                     )
                     style.addLayer(
                         CircleLayer(SELECTED_LAYER, SELECTED_SOURCE).withProperties(
-                            circleRadius(11f), circleColor("#02C39A"),
-                            circleStrokeWidth(3f), circleStrokeColor("#FFFFFF")
+                            circleRadius(11f), circleColor("#34D399"),
+                            circleStrokeWidth(3f), circleStrokeColor("#F8FAFC")
                         )
                     )
                     styleLoaded = true
@@ -129,13 +130,19 @@ fun RiskLocationsMap(
         val readyMap = map ?: return@LaunchedEffect
         if (!styleLoaded) return@LaunchedEffect
         val positioned = locations.filter { it.coordinates != null }
-        val normal = positioned.filterNot { it.name in riskyLocationNames }
-        val risky = positioned.filter { it.name in riskyLocationNames }
+        val normal = positioned.filterNot { it.name.toLocationRiskKey() in riskyLocationNames }
+        val risky = positioned.filter { it.name.toLocationRiskKey() in riskyLocationNames }
+        val selectedIsRisky = selectedLocation?.name
+            ?.toLocationRiskKey()
+            ?.let { it in riskyLocationNames } == true
 
         readyMap.style?.getSourceAs<GeoJsonSource>(NORMAL_SOURCE)?.setGeoJson(normal.toFeatures())
         readyMap.style?.getSourceAs<GeoJsonSource>(RISK_SOURCE)?.setGeoJson(risky.toFeatures())
         readyMap.style?.getSourceAs<GeoJsonSource>(SELECTED_SOURCE)
             ?.setGeoJson(selectedLocation?.let(::singleFeature) ?: emptyFeatures())
+        readyMap.style?.getLayerAs<CircleLayer>(SELECTED_LAYER)?.setProperties(
+            circleColor(if (selectedIsRisky) "#EF4444" else "#34D399")
+        )
 
         val selectedCoordinates = selectedLocation?.coordinates
         if (selectedCoordinates != null) {
@@ -167,23 +174,23 @@ fun RiskLocationsMap(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "Blue: Monitored",
+                text = "Cyan: Monitored",
                 style = MaterialTheme.typography.labelSmall,
                 color = RiverPrimary
             )
             Text(
-                text = "Red: Flagged",
+                text = "Rose: Flagged",
                 style = MaterialTheme.typography.labelSmall,
                 color = RiverDanger
             )
             Text(
-                text = "Teal: Selected",
+                text = "Emerald: Selected",
                 style = MaterialTheme.typography.labelSmall,
                 color = RiverSuccess
             )
         }
         Text(
-            text = "Map Data © OpenStreetMap Contributors",
+            text = "Map data © OpenStreetMap contributors · OpenFreeMap",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

@@ -21,7 +21,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -36,34 +35,27 @@ import com.hackathon_ieee.myapplication.ui.components.PasswordVisibilityIcon
 import com.hackathon_ieee.myapplication.ui.components.SubtlePanel
 
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     onBack: () -> Unit,
-    onRegister: () -> Unit,
-    onSignIn: (String, String) -> Unit,
+    onLogin: () -> Unit,
+    onRegistered: (String, String, String) -> Unit,
     isSubmitting: Boolean,
-    authenticationError: String?,
+    registrationError: String?,
     onInputChanged: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var email by rememberSaveable {
-        mutableStateOf("")
-    }
-    var password by remember {
-        mutableStateOf("")
-    }
-    var passwordVisible by rememberSaveable {
-        mutableStateOf(false)
-    }
-    var showEmailError by remember {
-        mutableStateOf(false)
-    }
-    var showPasswordError by remember {
-        mutableStateOf(false)
-    }
+    var fullName by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    var showNameError by rememberSaveable { mutableStateOf(false) }
+    var showEmailError by rememberSaveable { mutableStateOf(false) }
+    var showPasswordError by rememberSaveable { mutableStateOf(false) }
+
     val normalizedEmail = email.trim()
     val isEmailValid = normalizedEmail.contains("@") &&
         normalizedEmail.substringAfter("@").contains(".") &&
-        normalizedEmail.substringAfter(".").isNotBlank()
+        normalizedEmail.substringAfterLast(".").isNotBlank()
 
     Column(
         modifier = modifier
@@ -74,18 +66,17 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
+
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
             Text(
-                text = "Sign in",
+                text = "Create account",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.primary
             )
 
             Text(
-                text = "Sign in to continue to water observations and reporting.",
+                text = "Create an account to continue to water observations and reporting.",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -95,6 +86,23 @@ fun LoginScreen(
                     modifier = Modifier.padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    OutlinedTextField(
+                        value = fullName,
+                        onValueChange = {
+                            fullName = it
+                            showNameError = false
+                            onInputChanged()
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text(text = "Full name") },
+                        isError = showNameError,
+                        supportingText = if (showNameError) {
+                            { Text(text = "Please enter your full name.") }
+                        } else null,
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                    )
+
                     OutlinedTextField(
                         value = email,
                         onValueChange = {
@@ -106,12 +114,8 @@ fun LoginScreen(
                         label = { Text(text = "Email") },
                         isError = showEmailError,
                         supportingText = if (showEmailError) {
-                            {
-                                Text(text = "Please enter a valid email address.")
-                            }
-                        } else {
-                            null
-                        },
+                            { Text(text = "Please enter a valid email address.") }
+                        } else null,
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
@@ -130,12 +134,8 @@ fun LoginScreen(
                         label = { Text(text = "Password") },
                         isError = showPasswordError,
                         supportingText = if (showPasswordError) {
-                            {
-                                Text(text = "Please enter your password.")
-                            }
-                        } else {
-                            null
-                        },
+                            { Text(text = "Please enter a password.") }
+                        } else null,
                         singleLine = true,
                         visualTransformation = if (passwordVisible) {
                             VisualTransformation.None
@@ -157,9 +157,9 @@ fun LoginScreen(
                         )
                     )
 
-                    if (authenticationError != null) {
+                    if (registrationError != null) {
                         Text(
-                            text = authenticationError,
+                            text = registrationError,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.error
                         )
@@ -167,11 +167,14 @@ fun LoginScreen(
 
                     Button(
                         onClick = {
+                            val isNameValid = fullName.isNotBlank()
+                            val isPasswordValid = password.isNotBlank()
+                            showNameError = !isNameValid
                             showEmailError = !isEmailValid
-                            showPasswordError = password.isBlank()
+                            showPasswordError = !isPasswordValid
 
-                            if (isEmailValid && password.isNotBlank()) {
-                                onSignIn(normalizedEmail, password)
+                            if (isNameValid && isEmailValid && isPasswordValid) {
+                                onRegistered(fullName.trim(), normalizedEmail, password)
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
@@ -184,7 +187,7 @@ fun LoginScreen(
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
                         } else {
-                            Text(text = "Sign In")
+                            Text(text = "Create Citizen Account")
                         }
                     }
                 }
@@ -196,11 +199,11 @@ fun LoginScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Don’t have an account?",
+                    text = "Already have an account?",
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                TextButton(onClick = onRegister) {
-                    Text(text = "Create account")
+                TextButton(onClick = onLogin) {
+                    Text(text = "Log in")
                 }
             }
         }

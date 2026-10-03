@@ -5,6 +5,13 @@ data class ApiCoordinates(
     val longitude: Double
 )
 
+data class AuthUser(
+    val id: String,
+    val fullName: String,
+    val email: String,
+    val role: String
+)
+
 data class MonitoringLocation(
     val name: String,
     val stationNo: Int?,
@@ -56,4 +63,24 @@ data class RiskAssessment(
     val sourceType: String,
     val citation: String?,
     val fhirRiskAssessmentId: String?
+)
+
+data class CitizenReportSubmission(
+    val id: String,
+    val aiValidationStatus: String,
+    val aiMatchScore: Double?
+)
+
+data class CitizenReport(
+    val id: String,
+    val photoUrl: String?,
+    val category: String,
+    val note: String,
+    val latitude: Double?,
+    val longitude: Double?,
+    val timestamp: String,
+    val aiValidationStatus: String,
+    val aiMatchScore: Double?,
+    val aiExplanation: String?,
+    val fhirObservationId: String?
 )
