@@ -144,11 +144,7 @@ function DashboardContent() {
                   sampleType={sampleType}
                 />
 
-                {/* B6 & B7: Belediye Yurttaş Bildirimleri Yönetim Masası */}
-                <CitizenReportsManager 
-                  reports={citizenReports} 
-                  onReportsUpdate={setCitizenReports} 
-                />
+                
 
                 <TrendChart
                   trendData={trendData}
@@ -162,6 +158,11 @@ function DashboardContent() {
                   measurements={measurements}
                   citizenReports={citizenReports}
                   selectedParameter={selectedParameter}
+                />
+                {/* B6 & B7: Belediye Yurttaş Bildirimleri Yönetim Masası */}
+                <CitizenReportsManager 
+                  reports={citizenReports} 
+                  onReportsUpdate={setCitizenReports} 
                 />
               </>
             )}
