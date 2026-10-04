@@ -122,25 +122,23 @@ export default function LandingPage({ onLoginClick }) {
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="#mobile-download"
-              onClick={(e) => {
-                e.preventDefault();
-                alert("RiverGuard Citizen Mobile Client (Android APK) is packaging for field deployment.");
-              }}
-              className="w-full sm:w-auto flex items-center justify-center space-x-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-7 py-3.5 rounded-xl text-sm transition-all shadow-xl shadow-cyan-950 hover:shadow-cyan-400/40 cursor-pointer group"
-            >
-              <Smartphone className="w-4 h-4 group-hover:rotate-6 transition-transform" />
-              <span>Get Mobile Field App</span>
-            </a>
+  <a
+    href="https://drive.google.com/uc?export=download&id=18dd-oHfefdbVVAIVgVjXmSSH7-U-nKzG"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="w-full sm:w-auto flex items-center justify-center space-x-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-7 py-3.5 rounded-xl text-sm transition-all shadow-xl shadow-cyan-950 hover:shadow-cyan-400/40 cursor-pointer group"
+  >
+    <Smartphone className="w-4 h-4 group-hover:rotate-6 transition-transform" />
+    <span>Get Mobile Field App</span>
+  </a>
 
-            <button
-              onClick={onLoginClick}
-              className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-slate-950/90 hover:bg-slate-900 text-white border border-slate-700/80 hover:border-slate-500 px-7 py-3.5 rounded-xl text-sm font-semibold transition-all shadow-xl shadow-black/70 backdrop-blur-md cursor-pointer"
-            >
-              <span>Clinician & Staff Sign In</span>
-            </button>
-          </div>
+  <button
+    onClick={onLoginClick}
+    className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-slate-950/90 hover:bg-slate-900 text-white border border-slate-700/80 hover:border-slate-500 px-7 py-3.5 rounded-xl text-sm font-semibold transition-all shadow-xl shadow-black/70 backdrop-blur-md cursor-pointer"
+  >
+    <span>Clinician & Staff Sign In</span>
+  </button>
+</div>
 
           <div className="mt-16 flex flex-col items-center justify-center">
             <button 
