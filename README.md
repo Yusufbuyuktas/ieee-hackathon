@@ -1,3 +1,11 @@
+<img width="806" height="404" alt="image" src="https://github.com/user-attachments/assets/9b77f1d7-13b3-47bc-b56d-4eacb3cfa919" />
+<img width="739" height="573" alt="image" src="https://github.com/user-attachments/assets/3ea19861-dc2b-4a08-abe3-047eb494c108" />
+<img width="766" height="573" alt="image" src="https://github.com/user-attachments/assets/8cc20074-d966-49d9-b675-4d98ee8f91f9" />
+
+
+
+
+
 Inspiration
 Environmental harm is often noticed by local communities before it is formally recorded, yet observations such as water discoloration, unusual odors or fish mortality rarely become structured evidence. We selected the Ergene Basin because its intensive industrial and agricultural activity makes water-quality monitoring especially important.
 
